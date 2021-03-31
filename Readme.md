@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Aleksandr Gorbatov](https://up.htmlacademy.ru/ecmascript/14/user/81283).
-* Наставник: `Неизвестно`.
+* Наставник: [Алексей Михеев](https://htmlacademy.ru/profile/id454457).
 
 ---
 
