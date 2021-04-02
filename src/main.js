@@ -1,3 +1,4 @@
+import { COUNTER, position } from './const.js';
 import { createSiteHeaderMenuTemplate } from './view/menu.js';
 import { createSiteHeaderInfoTemplate } from './view/info.js';
 import { createSiteHeaderNavigationTemplate } from './view/navigation.js';
@@ -7,17 +8,6 @@ import { createSiteMainSortingTemplate } from './view/sorting.js';
 import { createSitePointListTemplate } from './view/point-list.js';
 import { createSitePointTemplate } from './view/point.js';
 import { createSitePointEditTemplate } from './view/point-edit.js';
-
-// Перечисление возможных позиций добавляемого элемента относительно элемента
-const position = {
-  BEFORE_BEGIN: 'beforebegin', // до самого element (до открывающего тега)
-  AFTER_BEGIN: 'afterbegin', // сразу после открывающего тега  element (перед первым потомком)
-  BEFORE_END: 'beforeend', // сразу перед закрывающим тегом element (после последнего потомка)
-  AFTER_END: 'afterend', // после element (после закрывающего тега)
-};
-
-// Количество точек на главной
-const COUNTER = 3;
 
 // Функция для отображения данных на странице
 const render = (container, template, place = position.BEFORE_END) => {
