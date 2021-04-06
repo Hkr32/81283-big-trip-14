@@ -10,18 +10,18 @@ export const position = {
 };
 
 //
-export const eventTypes = {
-  taxi: 'Taxi',
-  bus: 'Bus',
-  train: 'Train',
-  ship: 'Ship',
-  transport: 'Transport',
-  drive: 'Drive',
-  flight: 'Flight',
-  checkIn: 'Check-in',
-  sightseeing: 'Sightseeing',
-  restaurant: 'Restaurant',
-};
+export const eventTypes = [
+  'Taxi',
+  'Bus',
+  'Train',
+  'Ship',
+  'Transport',
+  'Drive',
+  'Flight',
+  'Check-in',
+  'Sightseeing',
+  'Restaurant',
+];
 
 export const eventCities = [
   'Amsterdam',
@@ -35,22 +35,27 @@ export const eventCities = [
 
 export const eventOffers = [
   {
+    name: 'luggage',
     title: 'Add luggage',
     price: 50,
   },
   {
+    name: 'comfort',
     title: 'Switch to comfort class',
     price: 80,
   },
   {
+    name: 'meal',
     title: 'Add meal',
     price: 15,
   },
   {
+    name: 'seats',
     title: 'Choose seats',
     price: 5,
   },
   {
+    name: 'train',
     title: 'Travel by train',
     price: 40,
   },

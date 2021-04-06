@@ -26,10 +26,9 @@ const generateOffers = () => {
 
 // Тип
 const generateType = () => {
-  const eventTypesKeys = Object.keys(eventTypes);
-  const randomIndex = getRandomInteger(0, eventTypesKeys.length - 1);
+  const randomIndex = getRandomInteger(0, eventTypes.length - 1);
 
-  return eventTypes[eventTypesKeys[randomIndex]];
+  return eventTypes[randomIndex];
 };
 
 // Город
