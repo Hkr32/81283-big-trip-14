@@ -1,4 +1,4 @@
-import { COUNTER, position } from './const.js';
+import { POINT_COUNTER, position } from './const.js';
 import { createSiteHeaderMenuTemplate } from './view/menu.js';
 import { createSiteHeaderInfoTemplate } from './view/info.js';
 import { createSiteHeaderNavigationTemplate } from './view/navigation.js';
@@ -8,6 +8,12 @@ import { createSiteMainSortingTemplate } from './view/sorting.js';
 import { createSitePointListTemplate } from './view/point-list.js';
 import { createSitePointTemplate } from './view/point.js';
 import { createSitePointEditTemplate } from './view/point-edit.js';
+
+
+import { generatePoint } from './mock/point.js';
+
+const points = new Array(POINT_COUNTER).fill().map(generatePoint);
+console.log(points);
 
 // Функция для отображения данных на странице
 const render = (container, template, place = position.BEFORE_END) => {
@@ -38,8 +44,8 @@ render(siteMainEventsElement, createSiteMainSortingTemplate());
 render(siteMainEventsElement, createSitePointListTemplate());
 //Добавляем точки в список
 const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
-for (let i = 0; i < COUNTER; i++) {
-  render(siteMainPointListElement, createSitePointTemplate());
+for (let i = 0; i < POINT_COUNTER; i++) {
+  render(siteMainPointListElement, createSitePointTemplate(points[i]));
 }
 // Добавляем форму редактирования в начало списка
 render(siteMainPointListElement, createSitePointEditTemplate(), position.AFTER_BEGIN);
