@@ -1,3 +1,6 @@
+// @todo Удалить после того как будут реальные данные
+import { generatePoint } from './mock/point.js';
+
 import { POINT_COUNTER, position } from './const.js';
 import { createSiteHeaderMenuTemplate } from './view/menu.js';
 import { createSiteHeaderInfoTemplate } from './view/info.js';
@@ -8,12 +11,6 @@ import { createSiteMainSortingTemplate } from './view/sorting.js';
 import { createSitePointListTemplate } from './view/point-list.js';
 import { createSitePointTemplate } from './view/point.js';
 import { createSitePointEditTemplate } from './view/point-edit.js';
-
-
-import { generatePoint } from './mock/point.js';
-
-const points = new Array(POINT_COUNTER).fill().map(generatePoint);
-console.log(points);
 
 // Функция для отображения данных на странице
 const render = (container, template, place = position.BEFORE_END) => {
@@ -42,6 +39,8 @@ const siteMainEventsElement = siteMainElement.querySelector('.trip-events');
 render(siteMainEventsElement, createSiteMainSortingTemplate());
 // Добавляем шаблон для точек
 render(siteMainEventsElement, createSitePointListTemplate());
+// Генерируем случайный набор точек
+const points = new Array(POINT_COUNTER).fill().map(generatePoint);
 //Добавляем точки в список
 const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
 for (let i = 0; i < POINT_COUNTER; i++) {
