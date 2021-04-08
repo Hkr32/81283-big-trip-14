@@ -1,5 +1,5 @@
 // Количество точек на главной
-export const POINT_COUNTER = 15;
+export const POINT_COUNTER = 20;
 
 // Перечисление возможных позиций добавляемого элемента относительно элемента
 export const position = {

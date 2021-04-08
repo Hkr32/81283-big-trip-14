@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { dateFormat, dateToISO, dateDiff } from '../utils.js';
 
 const createSitePointOffersTemplate = (offers) => {
   return `<h4 class="visually-hidden">Offers:</h4>
@@ -20,18 +20,18 @@ export const createSitePointTemplate = (point) => {
 
   return `<li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="${dayjs(dateFrom).format('YYYY-MM-DD')}">${ dayjs(dateFrom).format('MMM D') }</time>
+      <time class="event__date" datetime="${dateFormat(dateFrom)}">${ dateFormat(dateFrom, 'MMM D') }</time>
       <div class="event__type">
-        <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+        <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
       </div>
       <h3 class="event__title">${type} ${city}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="${dayjs(dateFrom).toISOString()}">${ dayjs(dateFrom).format('HH:mm') }</time>
+          <time class="event__start-time" datetime="${dateToISO(dateFrom)}">${ dateFormat(dateFrom, 'HH:mm') }</time>
           &mdash;
-          <time class="event__end-time" datetime="${dayjs(dateTo).toISOString()}">${dayjs(dateTo).format('HH:mm')}</time>
+          <time class="event__end-time" datetime="${dateToISO(dateTo)}">${dateFormat(dateTo, 'HH:mm')}</time>
         </p>
-        <p class="event__duration">${dayjs(dateFrom).diff(dayjs(dateTo), 'hour')}H ${dayjs(dateFrom).diff(dayjs(dateTo), 'minute')}M</p>
+        <p class="event__duration">${dateDiff(dateFrom, dateTo)}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${ basePrice }</span>
