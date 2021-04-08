@@ -19,13 +19,16 @@ const render = (container, template, place = position.BEFORE_END) => {
   container.insertAdjacentHTML(place, template);
 };
 
+// Генерируем случайный набор точек
+const points = new Array(POINT_COUNTER).fill().map(generatePoint);
+console.log(points);
 // Хедер страницы
 const siteHeaderElement = document.querySelector('.page-header');
 // Добавляем шаблон для маршрута и стоимости
 const siteHeaderTripMainElement = siteHeaderElement.querySelector('.trip-main');
 render(siteHeaderTripMainElement, createSiteHeaderInfoTemplate(), position.AFTER_BEGIN);
 const siteHeaderInfoElement = siteHeaderElement.querySelector('.trip-info');
-render(siteHeaderInfoElement, createSiteHeaderNavigationTemplate(), position.AFTER_BEGIN);
+render(siteHeaderInfoElement, createSiteHeaderNavigationTemplate(points), position.AFTER_BEGIN);
 render(siteHeaderInfoElement, createSiteHeaderCostTemplate());
 // Добавляем меню
 const siteHeaderMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
@@ -41,8 +44,6 @@ const siteMainEventsElement = siteMainElement.querySelector('.trip-events');
 render(siteMainEventsElement, createSiteMainSortingTemplate());
 // Добавляем шаблон для точек
 render(siteMainEventsElement, createSitePointListTemplate());
-// Генерируем случайный набор точек
-const points = new Array(POINT_COUNTER).fill().map(generatePoint);
 //Добавляем точки в список
 const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
 for (let i = 0; i < POINT_COUNTER; i++) {

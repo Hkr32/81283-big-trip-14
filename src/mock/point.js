@@ -4,12 +4,13 @@ import { getRandomInteger } from '../utils.js';
 import { destinations, offers } from './const.js';
 import { types } from '../const.js';
 
-// Случайная дата
-const generateDate = () => {
-  const maxDaysGap = 7;
-  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+let counter = -7;
 
-  return dayjs().add(daysGap, 'day').toDate();
+// Дата
+const generateConsistentlyDate = (date = dayjs()) => {
+  counter++;
+
+  return dayjs(date).add(counter, 'day').add(getRandomInteger(0, 23), 'hour').add(getRandomInteger(0, 59), 'minute').toDate();
 };
 
 // Случайный вариант назначения
@@ -44,6 +45,8 @@ export const generatePoint = () => {
     pictures: photos = [],
   } = generateDestination();
 
+  const from = generateConsistentlyDate();
+
   return {
     type: type,
     city: city,
@@ -51,8 +54,8 @@ export const generatePoint = () => {
     destination: destination,
     photos: photos,
     basePrice: getRandomInteger(10, 20, 10),
-    dateFrom: generateDate(),
-    dateTo: generateDate(),
+    dateFrom: from,
+    dateTo: generateConsistentlyDate(from),
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };
 };
