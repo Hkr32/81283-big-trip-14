@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
-import { eventOffers, eventTypes, eventCities } from '../const.js';
+import { types } from '../const.js';
 
 const createSitePointTypesTemplate = (types) => {
   return `<div class="event__type-list">
     <fieldset class="event__type-group">
       <legend class="visually-hidden">Event type</legend>
       ${types.map((type) => `<div class="event__type-item">
-        <input id="event-type-${type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}">
-        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
+        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+        <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
       </div>`).join('')}
     </fieldset>
   </div>`;
@@ -21,9 +21,9 @@ const createSitePointCitiesTemplate = (cities) => {
   </datalist>`;
 };
 
-const createSitePointOffersTemplate = (directoryOffers, offers) => {
+const createSitePointOffersTemplate = (offers) => {
   return `<div class="event__available-offers">
-    ${directoryOffers.map(({ name, title, price }) => `<div class="event__offer-selector">
+    ${offers.map(({ name, title, price }) => `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${name}-1" type="checkbox" name="event-offer-${name}" ${offers.includes(name) ? 'checked' : ''}>
       <label class="event__offer-label" for="event-offer-${name}-1">
         <span class="event__offer-title">${title}</span>
@@ -36,20 +36,49 @@ const createSitePointOffersTemplate = (directoryOffers, offers) => {
 
 const createSitePointPhotosTemplate = (photos) => {
   return `<div class="event__photos-tape">
-    ${photos.map((photo) => `<img class="event__photo" src="${photo}" alt="Event photo">`).join('')}
+    ${photos.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`).join('')}
   </div>`;
 };
 
-export const createSitePointEditTemplate = (point = {}) => {
+const getOffersByType = (offers, type) => {
+  const offer = offers.filter((offer) => {
+    return offer.type === type;
+  });
+
+  return offer[0].offers;
+};
+const getDestinationByCity = (destinations, city) => {
+  const destination = destinations.filter((destination) => {
+    return destination.name === city;
+  });
+
+  return destination[0];
+};
+
+export const createSitePointEditTemplate = (destinationsExternal, offersExternal, cities, point = {}) => {
+  // const {
+  //   type = '',
+  //   city = '',
+  //   offers = [],
+  //   destination = '',
+  //   photos = [],
+  //   basePrice = '',
+  //   dateFrom = '',
+  //   dateTo = '',
+  //   isFavorite = false,
+  // } = point;
+
+  // Тестовые данные
+  const dest = getDestinationByCity(destinationsExternal, 'Amsterdam');
   const {
-    type = '',
-    city = '',
-    offers = [],
-    destination = '',
-    photos = [],
-    basePrice = '',
-    dateFrom = '',
-    dateTo = '',
+    type = 'taxi',
+    city = 'Amsterdam',
+    offers = getOffersByType(offersExternal, 'taxi'),
+    destination = dest.description,
+    photos = dest.pictures,
+    basePrice = 100,
+    dateFrom = '2021-04-01T09:00',
+    dateTo = '2021-04-02T15:10',
     isFavorite = false,
   } = point;
 
@@ -58,9 +87,9 @@ export const createSitePointEditTemplate = (point = {}) => {
     alt: type ? 'Event type icon' : '',
   };
 
-  const typesTemplate = createSitePointTypesTemplate(eventTypes);
-  const citiesTemplate = createSitePointCitiesTemplate(eventCities);
-  const offersTemplate = createSitePointOffersTemplate(eventOffers, offers);
+  const typesTemplate = createSitePointTypesTemplate(types);
+  const citiesTemplate = createSitePointCitiesTemplate(cities);
+  const offersTemplate = createSitePointOffersTemplate(offers);
   const photosTemplate = createSitePointPhotosTemplate(photos);
 
   return `<li class="trip-events__item">

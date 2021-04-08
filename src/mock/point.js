@@ -1,64 +1,55 @@
 import dayjs from 'dayjs';
 
 import { getRandomInteger } from '../utils.js';
-import { eventDestinations, eventOffers, eventTypes, eventCities, eventPhotosUrl } from '../const.js';
+import { destinations, offers } from './const.js';
+import { types } from '../const.js';
 
+// Случайная дата
 const generateDate = () => {
-  const maxDaysGap = 2;
+  const maxDaysGap = 7;
   const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
 
   return dayjs().add(daysGap, 'day').toDate();
 };
 
-// Случайное описание
-const generateDestinations = () => {
-  const randomIndex = getRandomInteger(0, eventDestinations.length - 1);
+// Случайный вариант назначения
+const generateDestination = () => {
+  const randomIndex = getRandomInteger(0, destinations.length - 1);
 
-  return eventDestinations[randomIndex];
+  return destinations[randomIndex];
 };
 
-// Набор предложений
-const generateOffers = () => {
-  const randomIndex = getRandomInteger(0, eventOffers.length - 1);
+// Предложение по его типу
+const getOffers = (offers, type) => {
+  const offerByType = offers.filter((offer) => {
+    return offer.type === type;
+  });
 
-  return eventOffers.slice(randomIndex, eventOffers.length - 1);
+  return offerByType[0].offers;
 };
 
 // Тип
 const generateType = () => {
-  const randomIndex = getRandomInteger(0, eventTypes.length - 1);
+  const randomIndex = getRandomInteger(0, types.length - 1);
 
-  return eventTypes[randomIndex];
-};
-
-// Город
-const generateCity = () => {
-  const randomIndex = getRandomInteger(0, eventCities.length - 1);
-
-  return eventCities[randomIndex];
-};
-
-// Фото
-const generatePhotos = () => {
-  const randomCounter = getRandomInteger(1, 5);
-
-  const photos = [];
-
-  for (let i = 0; i < randomCounter; i++) {
-    photos.push(eventPhotosUrl + getRandomInteger(10, 100));
-  }
-
-  return photos;
+  return types[randomIndex];
 };
 
 // Генератор точки
 export const generatePoint = () => {
+  const type = generateType();
+  const {
+    name: city = '',
+    description: destination = '',
+    pictures: photos = [],
+  } = generateDestination();
+
   return {
-    type: generateType(),
-    city: generateCity(),
-    offers: generateOffers(),
-    destination: generateDestinations(),
-    photos: generatePhotos(),
+    type: type,
+    city: city,
+    offers: getOffers(offers, type),
+    destination: destination,
+    photos: photos,
     basePrice: getRandomInteger(10, 20, 10),
     dateFrom: generateDate(),
     dateTo: generateDate(),

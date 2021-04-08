@@ -1,7 +1,9 @@
 // @todo Удалить после того как будут реальные данные
 import { generatePoint } from './mock/point.js';
 
-import { POINT_COUNTER, position } from './const.js';
+import { POINT_COUNTER, position, cities } from './const.js';
+import { offers, destinations } from './mock/const.js';
+
 import { createSiteHeaderMenuTemplate } from './view/menu.js';
 import { createSiteHeaderInfoTemplate } from './view/info.js';
 import { createSiteHeaderNavigationTemplate } from './view/navigation.js';
@@ -47,4 +49,4 @@ for (let i = 0; i < POINT_COUNTER; i++) {
   render(siteMainPointListElement, createSitePointTemplate(points[i]));
 }
 // Добавляем форму редактирования в начало списка
-render(siteMainPointListElement, createSitePointEditTemplate(), position.AFTER_BEGIN);
+render(siteMainPointListElement, createSitePointEditTemplate(destinations, offers, cities), position.AFTER_BEGIN);
