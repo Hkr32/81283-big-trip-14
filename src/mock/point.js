@@ -39,20 +39,18 @@ const generateType = () => {
 // Генератор точки
 export const generatePoint = () => {
   const type = generateType();
-  const {
-    name: city = '',
-    description: destination = '',
-    pictures: photos = [],
-  } = generateDestination();
+  // const {
+  //   name: city = '',
+  //   description: destination = '',
+  //   pictures: photos = [],
+  // } = generateDestination();
 
   const from = generateConsistentlyDate();
 
   return {
     type: type,
-    city: city,
     offers: getOffers(offers, type),
-    destination: destination,
-    photos: photos,
+    destination: generateDestination(),
     basePrice: getRandomInteger(10, 20, 10),
     dateFrom: from,
     dateTo: generateConsistentlyDate(from),

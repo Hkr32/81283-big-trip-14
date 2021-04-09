@@ -58,10 +58,12 @@ const getDestinationByCity = (destinations, city) => {
 export const createSitePointEditTemplate = (destinationsExternal, offersExternal, point = {}) => {
   // const {
   //   type = '',
-  //   city = '',
   //   offers = [],
-  //   destination = '',
-  //   photos = [],
+  //   destination: {
+  //     description: description = '',
+  //     name: city = '',
+  //     pictures: photos = [],
+  //   } = {},
   //   basePrice = '',
   //   dateFrom = '',
   //   dateTo = '',
@@ -69,13 +71,15 @@ export const createSitePointEditTemplate = (destinationsExternal, offersExternal
   // } = point;
 
   // Тестовые данные
-  const dest = getDestinationByCity(destinationsExternal, 'Amsterdam');
+  const dest = getDestinationByCity(destinationsExternal, 'Utrecht');
   const {
     type = 'taxi',
-    city = 'Amsterdam',
     offers = getOffersByType(offersExternal, 'taxi'),
-    destination = dest.description,
-    photos = dest.pictures,
+    destination: {
+      description: description = dest.description,
+      name: city = dest.name,
+      pictures: pictures = dest.pictures,
+    } = {},
     basePrice = 100,
     dateFrom = '2021-04-01T09:00',
     dateTo = '2021-04-02T15:10',
@@ -94,7 +98,7 @@ export const createSitePointEditTemplate = (destinationsExternal, offersExternal
   const typesTemplate = createSitePointTypesTemplate(types);
   const citiesTemplate = createSitePointCitiesTemplate(cities);
   const offersTemplate = createSitePointOffersTemplate(offers);
-  const photosTemplate = createSitePointPhotosTemplate(photos);
+  const photosTemplate = createSitePointPhotosTemplate(pictures);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -146,7 +150,7 @@ export const createSitePointEditTemplate = (destinationsExternal, offersExternal
 
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${destination}</p>
+          <p class="event__destination-description">${description}</p>
 
           <div class="event__photos-container">
             ${photosTemplate}
