@@ -1,3 +1,9 @@
+// @todo Удалить после того как будут реальные данные
+import { generatePoint } from './mock/point.js';
+
+import { POINT_COUNTER, position } from './const.js';
+import { offers, destinations } from './mock/const.js';
+
 import { createSiteHeaderMenuTemplate } from './view/menu.js';
 import { createSiteHeaderInfoTemplate } from './view/info.js';
 import { createSiteHeaderNavigationTemplate } from './view/navigation.js';
@@ -8,21 +14,13 @@ import { createSitePointListTemplate } from './view/point-list.js';
 import { createSitePointTemplate } from './view/point.js';
 import { createSitePointEditTemplate } from './view/point-edit.js';
 
-// Перечисление возможных позиций добавляемого элемента относительно элемента
-const position = {
-  BEFORE_BEGIN: 'beforebegin', // до самого element (до открывающего тега)
-  AFTER_BEGIN: 'afterbegin', // сразу после открывающего тега  element (перед первым потомком)
-  BEFORE_END: 'beforeend', // сразу перед закрывающим тегом element (после последнего потомка)
-  AFTER_END: 'afterend', // после element (после закрывающего тега)
-};
-
-// Количество точек на главной
-const COUNTER = 3;
-
 // Функция для отображения данных на странице
 const render = (container, template, place = position.BEFORE_END) => {
   container.insertAdjacentHTML(place, template);
 };
+
+// Генерируем случайный набор точек
+const points = new Array(POINT_COUNTER).fill().map(generatePoint);
 
 // Хедер страницы
 const siteHeaderElement = document.querySelector('.page-header');
@@ -30,8 +28,8 @@ const siteHeaderElement = document.querySelector('.page-header');
 const siteHeaderTripMainElement = siteHeaderElement.querySelector('.trip-main');
 render(siteHeaderTripMainElement, createSiteHeaderInfoTemplate(), position.AFTER_BEGIN);
 const siteHeaderInfoElement = siteHeaderElement.querySelector('.trip-info');
-render(siteHeaderInfoElement, createSiteHeaderNavigationTemplate(), position.AFTER_BEGIN);
-render(siteHeaderInfoElement, createSiteHeaderCostTemplate());
+render(siteHeaderInfoElement, createSiteHeaderNavigationTemplate(points), position.AFTER_BEGIN);
+render(siteHeaderInfoElement, createSiteHeaderCostTemplate(points));
 // Добавляем меню
 const siteHeaderMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
 render(siteHeaderMenuElement, createSiteHeaderMenuTemplate());
@@ -48,8 +46,8 @@ render(siteMainEventsElement, createSiteMainSortingTemplate());
 render(siteMainEventsElement, createSitePointListTemplate());
 //Добавляем точки в список
 const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
-for (let i = 0; i < COUNTER; i++) {
-  render(siteMainPointListElement, createSitePointTemplate());
+for (let i = 0; i < POINT_COUNTER; i++) {
+  render(siteMainPointListElement, createSitePointTemplate(points[i]));
 }
 // Добавляем форму редактирования в начало списка
-render(siteMainPointListElement, createSitePointEditTemplate(), position.AFTER_BEGIN);
+render(siteMainPointListElement, createSitePointEditTemplate(destinations, offers), position.AFTER_BEGIN);
