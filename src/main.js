@@ -33,7 +33,7 @@ const siteHeaderTripMainElement = siteHeaderElement.querySelector('.trip-main');
 render(siteHeaderTripMainElement, createSiteHeaderInfoTemplate(), position.AFTER_BEGIN);
 const siteHeaderInfoElement = siteHeaderElement.querySelector('.trip-info');
 render(siteHeaderInfoElement, createSiteHeaderNavigationTemplate(points), position.AFTER_BEGIN);
-render(siteHeaderInfoElement, createSiteHeaderCostTemplate());
+render(siteHeaderInfoElement, createSiteHeaderCostTemplate(points));
 // Добавляем меню
 const siteHeaderMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
 render(siteHeaderMenuElement, createSiteHeaderMenuTemplate());
