@@ -8,7 +8,7 @@ const generateTrip = (points) => {
 
   points.map((point, index, points) => {
     if (index === 0) {
-      trip.title += point.city;
+      trip.title += point.destination.name;
       trip.date += dateFormat(point.dateFrom, 'D MMM');
     }
 
@@ -17,11 +17,11 @@ const generateTrip = (points) => {
     }
 
     if (index === 1 && points.length === 3) {
-      trip.title += ' &mdash; ' + point.city;
+      trip.title += ' &mdash; ' + point.destination.name;
     }
 
     if (index !== 0 && index === points.length - 1) {
-      trip.title += ' &mdash; ' + point.city;
+      trip.title += ' &mdash; ' + point.destination.name;
       trip.date += '&nbsp;&mdash;&nbsp;' + dateFormat(point.dateTo, 'D MMM');
     }
   });

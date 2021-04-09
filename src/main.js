@@ -22,10 +22,6 @@ const render = (container, template, place = position.BEFORE_END) => {
 // Генерируем случайный набор точек
 const points = new Array(POINT_COUNTER).fill().map(generatePoint);
 
-
-console.log(points);
-
-
 // Хедер страницы
 const siteHeaderElement = document.querySelector('.page-header');
 // Добавляем шаблон для маршрута и стоимости
