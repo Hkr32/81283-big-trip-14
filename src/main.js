@@ -1,7 +1,7 @@
 // @todo Удалить после того как будут реальные данные
 import { generatePoint } from './mock/point.js';
 
-import { POINT_COUNTER, position, cities } from './const.js';
+import { POINT_COUNTER, position } from './const.js';
 import { offers, destinations } from './mock/const.js';
 
 import { createSiteHeaderMenuTemplate } from './view/menu.js';
@@ -21,7 +21,11 @@ const render = (container, template, place = position.BEFORE_END) => {
 
 // Генерируем случайный набор точек
 const points = new Array(POINT_COUNTER).fill().map(generatePoint);
+
+
 console.log(points);
+
+
 // Хедер страницы
 const siteHeaderElement = document.querySelector('.page-header');
 // Добавляем шаблон для маршрута и стоимости
@@ -50,4 +54,4 @@ for (let i = 0; i < POINT_COUNTER; i++) {
   render(siteMainPointListElement, createSitePointTemplate(points[i]));
 }
 // Добавляем форму редактирования в начало списка
-render(siteMainPointListElement, createSitePointEditTemplate(destinations, offers, cities), position.AFTER_BEGIN);
+render(siteMainPointListElement, createSitePointEditTemplate(destinations, offers), position.AFTER_BEGIN);

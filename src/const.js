@@ -36,14 +36,3 @@ export const types = [
   Type.SIGHTSEEING,
   Type.RESTAURANT,
 ];
-
-//
-export const cities = [
-  'Amsterdam',
-  'Rotterdam',
-  'The Hague',
-  'Utrecht',
-  'Eindhoven',
-  'Groningen',
-  'Tilburg',
-];

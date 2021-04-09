@@ -55,7 +55,7 @@ const getDestinationByCity = (destinations, city) => {
   return destination[0];
 };
 
-export const createSitePointEditTemplate = (destinationsExternal, offersExternal, cities, point = {}) => {
+export const createSitePointEditTemplate = (destinationsExternal, offersExternal, point = {}) => {
   // const {
   //   type = '',
   //   city = '',
@@ -86,6 +86,10 @@ export const createSitePointEditTemplate = (destinationsExternal, offersExternal
     src: type ? ('img/icons/' + type.toLowerCase() + '.png') : '',
     alt: type ? 'Event type icon' : '',
   };
+
+  const cities = destinationsExternal.map((dest) => {
+    return dest.name;
+  });
 
   const typesTemplate = createSitePointTypesTemplate(types);
   const citiesTemplate = createSitePointCitiesTemplate(cities);
