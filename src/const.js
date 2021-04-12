@@ -36,3 +36,5 @@ export const types = [
   Type.SIGHTSEEING,
   Type.RESTAURANT,
 ];
+
+export const defaultType = Type.TAXI;

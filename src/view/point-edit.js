@@ -1,5 +1,5 @@
 import { dateFormat } from '../utils.js';
-import { types } from '../const.js';
+import { types, defaultType } from '../const.js';
 
 const createSitePointTypesTemplate = (types) => {
   return `<div class="event__type-list">
@@ -73,8 +73,8 @@ export const createSitePointEditTemplate = (destinationsExternal, offersExternal
   // Тестовые данные
   const dest = getDestinationByCity(destinationsExternal, 'Utrecht');
   const {
-    type = 'taxi',
-    offers = getOffersByType(offersExternal, 'taxi'),
+    type = defaultType,
+    offers = getOffersByType(offersExternal, defaultType),
     destination: {
       description: description = dest.description,
       name: city = dest.name,
