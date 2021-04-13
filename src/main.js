@@ -13,7 +13,7 @@ import SiteHeaderFilterView from './view/filter.js';
 import SiteMainSortingView from './view/sorting.js';
 import SitePointListView from './view/point-list.js';
 import SitePointView from './view/point.js';
-import { createSitePointEditTemplate } from './view/point-edit.js';
+import SitePointEditView from './view/point-edit.js';
 
 // Генерируем случайный набор точек
 const points = new Array(POINT_COUNTER).fill().map(generatePoint);
@@ -52,4 +52,4 @@ for (let i = 0; i < POINT_COUNTER; i++) {
 }
 
 // Добавляем форму редактирования в начало списка
-renderTemplate(siteMainPointListElement, createSitePointEditTemplate(destinations, offers), position.AFTER_BEGIN);
+renderElement(siteMainPointListElement, new SitePointEditView(destinations, offers).getElement(), position.AFTER_BEGIN);

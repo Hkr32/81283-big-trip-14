@@ -1,4 +1,4 @@
-import { dateFormat } from '../utils.js';
+import { createElement, dateFormat } from '../utils.js';
 import { types, defaultType } from '../const.js';
 
 const createSitePointTypesTemplate = (types) => {
@@ -55,7 +55,7 @@ const getDestinationByCity = (destinations, city) => {
   return destination[0];
 };
 
-export const createSitePointEditTemplate = (destinationsExternal, offersExternal, point = {}) => {
+const createSitePointEditTemplate = (destinationsExternal, offersExternal, point = {}) => {
   // const {
   //   type = '',
   //   offers = [],
@@ -160,3 +160,27 @@ export const createSitePointEditTemplate = (destinationsExternal, offersExternal
     </form>
   </li>`;
 };
+
+export default class SitePointEdit {
+  constructor(destinations, offers) {
+    this._element = null;
+    this._destinations = destinations;
+    this._offers = offers;
+  }
+
+  getTemplate() {
+    return createSitePointEditTemplate(this._destinations, this._offers);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
