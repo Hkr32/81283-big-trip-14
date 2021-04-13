@@ -1,3 +1,4 @@
+import { createElement } from '../utils.js';
 import { dateFormat, dateToISO, dateDiff } from '../utils.js';
 
 const createSitePointOffersTemplate = (offers) => {
@@ -49,3 +50,26 @@ export const createSitePointTemplate = (point) => {
     </div>
   </li>`;
 };
+
+export default class SitePoint {
+  constructor(point) {
+    this._element = null;
+    this._point = point;
+  }
+
+  getTemplate() {
+    return createSitePointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
