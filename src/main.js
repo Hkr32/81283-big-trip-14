@@ -10,7 +10,7 @@ import SiteHeaderNavigationView from './view/navigation.js';
 import SiteHeaderCostView from './view/cost.js';
 import SiteHeaderMenuView from './view/menu.js';
 import SiteHeaderFilterView from './view/filter.js';
-import { createSiteMainSortingTemplate } from './view/sorting.js';
+import SiteMainSortingView from './view/sorting.js';
 import { createSitePointListTemplate } from './view/point-list.js';
 import { createSitePointTemplate } from './view/point.js';
 import { createSitePointEditTemplate } from './view/point-edit.js';
@@ -39,14 +39,18 @@ renderElement(siteHeaderFilterElement, new SiteHeaderFilterView().getElement());
 // Контент страницы
 const siteMainElement = document.querySelector('.page-main');
 const siteMainEventsElement = siteMainElement.querySelector('.trip-events');
+
 // Добавляем сортировку
-renderTemplate(siteMainEventsElement, createSiteMainSortingTemplate());
+renderElement(siteMainEventsElement, new SiteMainSortingView().getElement());
+
 // Добавляем шаблон для точек
 renderTemplate(siteMainEventsElement, createSitePointListTemplate());
+
 //Добавляем точки в список
 const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
 for (let i = 0; i < POINT_COUNTER; i++) {
   renderTemplate(siteMainPointListElement, createSitePointTemplate(points[i]));
 }
+
 // Добавляем форму редактирования в начало списка
 renderTemplate(siteMainPointListElement, createSitePointEditTemplate(destinations, offers), position.AFTER_BEGIN);
