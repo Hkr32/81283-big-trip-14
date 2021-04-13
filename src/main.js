@@ -9,7 +9,7 @@ import SiteHeaderInfoView from './view/info.js';
 import SiteHeaderNavigationView from './view/navigation.js';
 import SiteHeaderCostView from './view/cost.js';
 import SiteHeaderMenuView from './view/menu.js';
-import { createSiteHeaderFilterTemplate } from './view/filter.js';
+import SiteHeaderFilterView from './view/filter.js';
 import { createSiteMainSortingTemplate } from './view/sorting.js';
 import { createSitePointListTemplate } from './view/point-list.js';
 import { createSitePointTemplate } from './view/point.js';
@@ -34,7 +34,7 @@ renderElement(siteHeaderMenuElement, new SiteHeaderMenuView().getElement());
 
 // Добавляем фильтры
 const siteHeaderFilterElement = siteHeaderElement.querySelector('.trip-controls__filters');
-renderTemplate(siteHeaderFilterElement, createSiteHeaderFilterTemplate());
+renderElement(siteHeaderFilterElement, new SiteHeaderFilterView().getElement());
 
 // Контент страницы
 const siteMainElement = document.querySelector('.page-main');
