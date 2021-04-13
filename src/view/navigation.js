@@ -1,3 +1,4 @@
+import { createElement } from '../utils.js';
 import { dateFormat } from '../utils.js';
 
 const generateTrip = (points) => {
@@ -29,7 +30,7 @@ const generateTrip = (points) => {
   return trip;
 };
 
-export const createSiteHeaderNavigationTemplate = (points) => {
+const createSiteHeaderNavigationTemplate = (points) => {
   const trip = generateTrip(points);
 
   return `<div class="trip-info__main">
@@ -38,3 +39,26 @@ export const createSiteHeaderNavigationTemplate = (points) => {
     <p class="trip-info__dates">${trip.date}</p>
   </div>`;
 };
+
+export default class SiteHeaderNavigation {
+  constructor(points) {
+    this._element = null;
+    this._points = points;
+  }
+
+  getTemplate() {
+    return createSiteHeaderNavigationTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
