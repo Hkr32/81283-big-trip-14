@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { position } from './const.js';
 
 export const dateDiff = (dateFrom, dateTo) => {
   const MINUTE_IN_DAY = 1440;
@@ -42,4 +43,29 @@ export const getRandomInteger = (min = 0, max = 1, coefficient = 1) => {
   const upper = Math.floor(Math.max(min, max));
 
   return (Math.floor(lower + Math.random() * (upper - lower + 1)) * coefficient);
+};
+
+// Создание элемента
+export const createElement = (template) => {
+  const newElement = document.createElement('div'); // 1
+  newElement.innerHTML = template; // 2
+
+  return newElement.firstChild; // 3
+};
+
+// Рендер элемента
+export const renderElement = (container, element, place = position.BEFORE_END) => {
+  switch (place) {
+    case position.AFTER_BEGIN:
+      container.prepend(element);
+      break;
+    case position.BEFORE_END:
+      container.append(element);
+      break;
+  }
+};
+
+// Функция для отображения данных на странице
+export const renderTemplate = (container, template, place = position.BEFORE_END) => {
+  container.insertAdjacentHTML(place, template);
 };
