@@ -47,10 +47,10 @@ export const getRandomInteger = (min = 0, max = 1, coefficient = 1) => {
 
 // Создание элемента
 export const createElement = (template) => {
-  const newElement = document.createElement('div'); // 1
-  newElement.innerHTML = template; // 2
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
 
-  return newElement.firstChild; // 3
+  return newElement.firstChild;
 };
 
 // Рендер элемента

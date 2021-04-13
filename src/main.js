@@ -3,9 +3,9 @@ import { generatePoint } from './mock/point.js';
 import { offers, destinations } from './mock/const.js';
 
 import { POINT_COUNTER, position } from './const.js';
-import { renderTemplate } from './utils.js';
+import { renderTemplate, renderElement } from './utils.js';
 
-import { createSiteHeaderMenuTemplate } from './view/menu.js';
+import SiteHeaderMenuView from './view/menu.js';
 import { createSiteHeaderInfoTemplate } from './view/info.js';
 import { createSiteHeaderNavigationTemplate } from './view/navigation.js';
 import { createSiteHeaderCostTemplate } from './view/cost.js';
@@ -20,15 +20,18 @@ const points = new Array(POINT_COUNTER).fill().map(generatePoint);
 
 // Хедер страницы
 const siteHeaderElement = document.querySelector('.page-header');
+
 // Добавляем шаблон для маршрута и стоимости
 const siteHeaderTripMainElement = siteHeaderElement.querySelector('.trip-main');
 renderTemplate(siteHeaderTripMainElement, createSiteHeaderInfoTemplate(), position.AFTER_BEGIN);
 const siteHeaderInfoElement = siteHeaderElement.querySelector('.trip-info');
 renderTemplate(siteHeaderInfoElement, createSiteHeaderNavigationTemplate(points), position.AFTER_BEGIN);
 renderTemplate(siteHeaderInfoElement, createSiteHeaderCostTemplate(points));
+
 // Добавляем меню
 const siteHeaderMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
-renderTemplate(siteHeaderMenuElement, createSiteHeaderMenuTemplate());
+renderElement(siteHeaderMenuElement, new SiteHeaderMenuView().getElement());
+
 // Добавляем фильтры
 const siteHeaderFilterElement = siteHeaderElement.querySelector('.trip-controls__filters');
 renderTemplate(siteHeaderFilterElement, createSiteHeaderFilterTemplate());
