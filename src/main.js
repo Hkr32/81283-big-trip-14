@@ -40,6 +40,7 @@ const renderPoint = (pointListElement, point) => {
   const pointEditComponent = new SitePointEditView(destinations, offers, point);
 
   const replacePointToForm = () => {
+    const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
     siteMainPointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
   };
 
