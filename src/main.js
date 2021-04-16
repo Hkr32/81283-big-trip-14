@@ -43,12 +43,47 @@ const siteMainEventsElement = siteMainElement.querySelector('.trip-events');
 // Добавляем сортировку
 render(siteMainEventsElement, new SiteMainSortingView().getElement());
 
+//
+const renderPoint = (pointListElement, point) => {
+  const pointComponent = new SitePointView(point);
+  const pointEditComponent = new SitePointEditView(destinations, offers, point);
+
+  const replacePointToForm = () => {
+    siteMainPointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+  };
+
+  const replaceFormToPoint = () => {
+    pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replacePointToForm();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+
+  pointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceFormToPoint();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  render(pointListElement, pointComponent.getElement());
+};
+
 // Добавляем шаблон для точек
 render(siteMainEventsElement, new SitePointListView().getElement());
 //Добавляем точки в список
 const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
 for (let i = 0; i < POINT_COUNTER; i++) {
-  render(siteMainPointListElement, new SitePointView(points[i]).getElement());
+  renderPoint(siteMainPointListElement, points[i]);
 }
 
 // Добавляем форму редактирования в начало списка

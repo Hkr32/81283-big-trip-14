@@ -55,36 +55,36 @@ const getDestinationByCity = (destinations, city) => {
   return destination[0];
 };
 
-const createSitePointEditTemplate = (destinationsExternal, offersExternal, point = {}) => {
-  // const {
-  //   type = '',
-  //   offers = [],
-  //   destination: {
-  //     description: description = '',
-  //     name: city = '',
-  //     pictures: photos = [],
-  //   } = {},
-  //   basePrice = '',
-  //   dateFrom = '',
-  //   dateTo = '',
-  //   isFavorite = false,
-  // } = point;
-
-  // Тестовые данные
-  const dest = getDestinationByCity(destinationsExternal, 'Utrecht');
+const createSitePointEditTemplate = (destinationsExternal, offersExternal, point) => {
   const {
-    type = defaultType,
-    offers = getOffersByType(offersExternal, defaultType),
+    type = '',
+    offers = [],
     destination: {
-      description: description = dest.description,
-      name: city = dest.name,
-      pictures: pictures = dest.pictures,
+      description: description = '',
+      name: city = '',
+      pictures: pictures = [],
     } = {},
-    basePrice = 100,
-    dateFrom = '2021-04-01T09:00',
-    dateTo = '2021-04-02T15:10',
+    basePrice = '',
+    dateFrom = '',
+    dateTo = '',
     isFavorite = false,
   } = point;
+
+  // Тестовые данные
+  // const dest = getDestinationByCity(destinationsExternal, 'Utrecht');
+  // const {
+  //   type = defaultType,
+  //   offers = getOffersByType(offersExternal, defaultType),
+  //   destination: {
+  //     description: description = dest.description,
+  //     name: city = dest.name,
+  //     pictures: pictures = dest.pictures,
+  //   } = {},
+  //   basePrice = 100,
+  //   dateFrom = '2021-04-01T09:00',
+  //   dateTo = '2021-04-02T15:10',
+  //   isFavorite = false,
+  // } = point;
 
   const previewTypeIcon = {
     src: type ? ('img/icons/' + type.toLowerCase() + '.png') : '',
@@ -162,14 +162,15 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
 };
 
 export default class SitePointEdit {
-  constructor(destinations, offers) {
+  constructor(destinations, offers, point) {
     this._element = null;
+    this._point = point;
     this._destinations = destinations;
     this._offers = offers;
   }
 
   getTemplate() {
-    return createSitePointEditTemplate(this._destinations, this._offers);
+    return createSitePointEditTemplate(this._destinations, this._offers, this._point);
   }
 
   getElement() {
