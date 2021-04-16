@@ -54,7 +54,7 @@ export const createElement = (template) => {
 };
 
 // Рендер элемента
-export const renderElement = (container, element, place = position.BEFORE_END) => {
+export const render = (container, element, place = position.BEFORE_END) => {
   switch (place) {
     case position.AFTER_BEGIN:
       container.prepend(element);
@@ -63,9 +63,4 @@ export const renderElement = (container, element, place = position.BEFORE_END) =
       container.append(element);
       break;
   }
-};
-
-// Функция для отображения данных на странице
-export const renderTemplate = (container, template, place = position.BEFORE_END) => {
-  container.insertAdjacentHTML(place, template);
 };

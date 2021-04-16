@@ -3,7 +3,7 @@ import { generatePoint } from './mock/point.js';
 import { offers, destinations } from './mock/const.js';
 
 import { POINT_COUNTER, position } from './const.js';
-import { renderTemplate, renderElement } from './utils.js';
+import { render } from './utils.js';
 
 import SiteHeaderInfoView from './view/info.js';
 import SiteHeaderNavigationView from './view/navigation.js';
@@ -23,33 +23,33 @@ const siteHeaderElement = document.querySelector('.page-header');
 
 // Добавляем шаблон для маршрута и стоимости
 const siteHeaderTripMainElement = siteHeaderElement.querySelector('.trip-main');
-renderElement(siteHeaderTripMainElement, new SiteHeaderInfoView().getElement(), position.AFTER_BEGIN);
+render(siteHeaderTripMainElement, new SiteHeaderInfoView().getElement(), position.AFTER_BEGIN);
 const siteHeaderInfoElement = siteHeaderElement.querySelector('.trip-info');
-renderElement(siteHeaderInfoElement, new SiteHeaderNavigationView(points).getElement(), position.AFTER_BEGIN);
-renderElement(siteHeaderInfoElement, new SiteHeaderCostView(points).getElement());
+render(siteHeaderInfoElement, new SiteHeaderNavigationView(points).getElement(), position.AFTER_BEGIN);
+render(siteHeaderInfoElement, new SiteHeaderCostView(points).getElement());
 
 // Добавляем меню
 const siteHeaderMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
-renderElement(siteHeaderMenuElement, new SiteHeaderMenuView().getElement());
+render(siteHeaderMenuElement, new SiteHeaderMenuView().getElement());
 
 // Добавляем фильтры
 const siteHeaderFilterElement = siteHeaderElement.querySelector('.trip-controls__filters');
-renderElement(siteHeaderFilterElement, new SiteHeaderFilterView().getElement());
+render(siteHeaderFilterElement, new SiteHeaderFilterView().getElement());
 
 // Контент страницы
 const siteMainElement = document.querySelector('.page-main');
 const siteMainEventsElement = siteMainElement.querySelector('.trip-events');
 
 // Добавляем сортировку
-renderElement(siteMainEventsElement, new SiteMainSortingView().getElement());
+render(siteMainEventsElement, new SiteMainSortingView().getElement());
 
 // Добавляем шаблон для точек
-renderElement(siteMainEventsElement, new SitePointListView().getElement());
+render(siteMainEventsElement, new SitePointListView().getElement());
 //Добавляем точки в список
 const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
 for (let i = 0; i < POINT_COUNTER; i++) {
-  renderElement(siteMainPointListElement, new SitePointView(points[i]).getElement());
+  render(siteMainPointListElement, new SitePointView(points[i]).getElement());
 }
 
 // Добавляем форму редактирования в начало списка
-renderElement(siteMainPointListElement, new SitePointEditView(destinations, offers).getElement(), position.AFTER_BEGIN);
+// render(siteMainPointListElement, new SitePointEditView(destinations, offers).getElement(), position.AFTER_BEGIN);
