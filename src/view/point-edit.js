@@ -90,14 +90,10 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
   //   isFavorite = false,
   // } = point;
 
-  const previewTypeIcon = {
-    src: type ? ('img/icons/' + type.toLowerCase() + '.png') : '',
-    alt: type ? 'Event type icon' : '',
-  };
+  const iconSrc = type ? ('img/icons/' + type.toLowerCase() + '.png') : '';
+  const iconAlt = type ? 'Event type icon' : '';
 
-  const cities = destinationsExternal.map((dest) => {
-    return dest.name;
-  });
+  const cities = destinationsExternal.map((dest) => dest.name);
 
   const typesTemplate = createSitePointTypesTemplate(types);
   const citiesTemplate = createSitePointCitiesTemplate(cities);
@@ -110,7 +106,7 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="${previewTypeIcon.src}" alt="${previewTypeIcon.alt}">
+            <img class="event__type-icon" width="17" height="17" src="${iconSrc}" alt="${iconAlt}">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
           ${typesTemplate}
