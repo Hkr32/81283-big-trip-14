@@ -40,8 +40,7 @@ const renderPoint = (pointListElement, point) => {
   const pointEditComponent = new SitePointEditView(destinations, offers, point);
 
   const replacePointToForm = () => {
-    const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
-    siteMainPointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
   };
 
   const replaceFormToPoint = () => {
@@ -85,9 +84,9 @@ if (points.length === 0) {
   render(siteMainEventsElement, new SiteMainSortingView().getElement());
 
   // Добавляем шаблон для точек
-  render(siteMainEventsElement, new SitePointListView().getElement());
+  const siteMainPointListElement = new SitePointListView().getElement();
+  render(siteMainEventsElement, siteMainPointListElement);
   //Добавляем точки в список
-  const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
   for (let i = 0; i < POINT_COUNTER; i++) {
     renderPoint(siteMainPointListElement, points[i]);
   }
