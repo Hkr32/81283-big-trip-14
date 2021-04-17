@@ -2,41 +2,39 @@ import { createElement } from '../utils.js';
 import { dateFormat } from '../utils.js';
 
 const generateTrip = (points) => {
-  const trip = {
-    title: '',
-    date: '',
-  };
+  let title = '';
+  let date = '';
 
   points.map((point, index, points) => {
     if (index === 0) {
-      trip.title += point.destination.name;
-      trip.date += dateFormat(point.dateFrom, 'D MMM');
+      title += point.destination.name;
+      date += dateFormat(point.dateFrom, 'D MMM');
     }
 
     if (index === 1 && points.length > 3) {
-      trip.title += ' &mdash; ... ';
+      title += ' &mdash; ... ';
     }
 
     if (index === 1 && points.length === 3) {
-      trip.title += ' &mdash; ' + point.destination.name;
+      title += ' &mdash; ' + point.destination.name;
     }
 
     if (index !== 0 && index === points.length - 1) {
-      trip.title += ' &mdash; ' + point.destination.name;
-      trip.date += '&nbsp;&mdash;&nbsp;' + dateFormat(point.dateTo, 'D MMM');
+      title += ' &mdash; ' + point.destination.name;
+      date += '&nbsp;&mdash;&nbsp;' + dateFormat(point.dateTo, 'D MMM');
     }
   });
 
-  return trip;
+  return { title, date };
 };
 
 const createSiteHeaderNavigationTemplate = (points) => {
-  const trip = generateTrip(points);
+  const { title, date } = generateTrip(points);
 
   return `<div class="trip-info__main">
-    <h1 class="trip-info__title">${trip.title}</h1>
+    <h1 class="trip-info__title">${title}</h1>
 
-    <p class="trip-info__dates">${trip.date}</p>
+    <p class="trip-info__dates">${date}</p>
   </div>`;
 };
 
