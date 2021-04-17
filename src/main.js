@@ -69,10 +69,13 @@ const renderPoint = (pointListElement, point) => {
   render(pointListElement, pointComponent.getElement());
 };
 
-//
-if (points.length === 0) {
-  render(siteMainEventsElement, new SitePointEmptyListView().getElement());
-} else {
+const renderPoints = (points) => {
+  if (points.length === 0) {
+    render(siteMainEventsElement, new SitePointEmptyListView().getElement());
+
+    return;
+  }
+
   // Добавляем шаблон для маршрута и стоимости
   const siteHeaderTripMainElement = siteHeaderElement.querySelector('.trip-main');
   render(siteHeaderTripMainElement, new SiteHeaderInfoView().getElement(), position.AFTER_BEGIN);
@@ -90,4 +93,6 @@ if (points.length === 0) {
   for (let i = 0; i < POINT_COUNTER; i++) {
     renderPoint(siteMainPointListElement, points[i]);
   }
-}
+};
+
+renderPoints(points);
