@@ -1,8 +1,6 @@
 import { createElement } from '../utils.js';
 
-const createSitePointListEmptyTemplate = () => {
-  return '<p class="trip-events__msg">Click New Event to create your first point</p>';
-};
+const createSitePointListEmptyTemplate = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
 
 export default class SitePointList {
   constructor() {
