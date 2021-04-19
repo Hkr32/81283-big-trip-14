@@ -2,7 +2,7 @@
 import { generatePoint } from './mock/point.js';
 import { offers, destinations } from './mock/const.js';
 
-import { POINT_COUNTER, position } from './const.js';
+import { POINT_COUNTER, position, KeyType } from './const.js';
 import { render } from './utils.js';
 
 import SiteHeaderInfoView from './view/info.js';
@@ -40,8 +40,7 @@ const renderPoint = (pointListElement, point) => {
   const pointEditComponent = new SitePointEditView(destinations, offers, point);
 
   const replacePointToForm = () => {
-    const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
-    siteMainPointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
   };
 
   const replaceFormToPoint = () => {
@@ -49,7 +48,7 @@ const renderPoint = (pointListElement, point) => {
   };
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (evt.key === KeyType.ESCAPE || evt.key === KeyType.ESC) {
       evt.preventDefault();
       replaceFormToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
@@ -74,10 +73,13 @@ const renderPoint = (pointListElement, point) => {
   render(pointListElement, pointComponent.getElement());
 };
 
-//
-if (points.length === 0) {
-  render(siteMainEventsElement, new SitePointEmptyListView().getElement());
-} else {
+const renderPoints = (points) => {
+  if (points.length === 0) {
+    render(siteMainEventsElement, new SitePointEmptyListView().getElement());
+
+    return;
+  }
+
   // Добавляем шаблон для маршрута и стоимости
   const siteHeaderTripMainElement = siteHeaderElement.querySelector('.trip-main');
   render(siteHeaderTripMainElement, new SiteHeaderInfoView().getElement(), position.AFTER_BEGIN);
@@ -89,10 +91,12 @@ if (points.length === 0) {
   render(siteMainEventsElement, new SiteMainSortingView().getElement());
 
   // Добавляем шаблон для точек
-  render(siteMainEventsElement, new SitePointListView().getElement());
+  const siteMainPointListElement = new SitePointListView().getElement();
+  render(siteMainEventsElement, siteMainPointListElement);
   //Добавляем точки в список
-  const siteMainPointListElement = siteMainEventsElement.querySelector('.trip-events__list');
   for (let i = 0; i < POINT_COUNTER; i++) {
     renderPoint(siteMainPointListElement, points[i]);
   }
-}
+};
+
+renderPoints(points);

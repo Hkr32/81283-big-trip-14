@@ -5,38 +5,42 @@ const createSitePointTypesTemplate = (types) => {
   return `<div class="event__type-list">
     <fieldset class="event__type-group">
       <legend class="visually-hidden">Event type</legend>
-      ${types.map((type) => `<div class="event__type-item">
+      ${types.reduce((str, type) => `${str}
+      <div class="event__type-item">
         <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
         <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
-      </div>`).join('')}
+      </div>`, '')}
     </fieldset>
   </div>`;
 };
 
 const createSitePointCitiesTemplate = (cities) => {
   return `<datalist id="destination-list-1">
-    ${cities.map((city) => `<div class="event__type-item">
+    ${cities.reduce((str, city) => `${str}
+    <div class="event__type-item">
       <option value="${city}"></option>
-    </div>`).join('')}
+    </div>`, '')}
   </datalist>`;
 };
 
 const createSitePointOffersTemplate = (offers) => {
   return `<div class="event__available-offers">
-    ${offers.map(({ name, title, price }) => `<div class="event__offer-selector">
+    ${offers.reduce((str, { name, title, price }) => `${str}
+    <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${name}-1" type="checkbox" name="event-offer-${name}" ${offers.includes(name) ? 'checked' : ''}>
       <label class="event__offer-label" for="event-offer-${name}-1">
         <span class="event__offer-title">${title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>
       </label>
-    </div>`).join('')}
+    </div>`, '')}
   </div>`;
 };
 
 const createSitePointPhotosTemplate = (photos) => {
   return `<div class="event__photos-tape">
-    ${photos.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`).join('')}
+    ${photos.reduce((str, photo) => `${str}
+    <img class="event__photo" src="${photo.src}" alt="${photo.description}">`, '')}
   </div>`;
 };
 
@@ -86,14 +90,10 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
   //   isFavorite = false,
   // } = point;
 
-  const previewTypeIcon = {
-    src: type ? ('img/icons/' + type.toLowerCase() + '.png') : '',
-    alt: type ? 'Event type icon' : '',
-  };
+  const iconSrc = type ? ('img/icons/' + type.toLowerCase() + '.png') : '';
+  const iconAlt = type ? 'Event type icon' : '';
 
-  const cities = destinationsExternal.map((dest) => {
-    return dest.name;
-  });
+  const cities = destinationsExternal.map((dest) => dest.name);
 
   const typesTemplate = createSitePointTypesTemplate(types);
   const citiesTemplate = createSitePointCitiesTemplate(cities);
@@ -106,7 +106,7 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="${previewTypeIcon.src}" alt="${previewTypeIcon.alt}">
+            <img class="event__type-icon" width="17" height="17" src="${iconSrc}" alt="${iconAlt}">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
           ${typesTemplate}
@@ -122,10 +122,10 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom ? dateFormat(dateFrom, 'YY/MM/DD HH:mm') : ''}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFormat(dateFrom, 'YY/MM/DD HH:mm')}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo ? dateFormat(dateTo, 'YY/MM/DD HH:mm') : ''}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFormat(dateTo, 'YY/MM/DD HH:mm')}">
         </div>
 
         <div class="event__field-group  event__field-group--price">

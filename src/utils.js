@@ -30,6 +30,8 @@ export const dateDiff = (dateFrom, dateTo) => {
 };
 
 export const dateFormat = (date, format = 'YYYY-MM-DD') => {
+  if (!date) return '';
+
   return dayjs(date).format(format);
 };
 

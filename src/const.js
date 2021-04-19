@@ -10,6 +10,12 @@ export const position = {
 };
 
 //
+export const KeyType = {
+  ESCAPE: 'Escape',
+  ESC: 'Esc',
+};
+
+//
 export const Type = {
   TAXI: 'taxi',
   BUS: 'bus',
