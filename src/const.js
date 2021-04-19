@@ -10,7 +10,7 @@ export const position = {
 };
 
 //
-export const keys = {
+export const KeyType = {
   ESCAPE: 'Escape',
   ESC: 'Esc',
 };

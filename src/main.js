@@ -2,7 +2,7 @@
 import { generatePoint } from './mock/point.js';
 import { offers, destinations } from './mock/const.js';
 
-import { POINT_COUNTER, position, keys } from './const.js';
+import { POINT_COUNTER, position, KeyType } from './const.js';
 import { render } from './utils.js';
 
 import SiteHeaderInfoView from './view/info.js';
@@ -48,7 +48,7 @@ const renderPoint = (pointListElement, point) => {
   };
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === keys.ESCAPE || evt.key === keys.ESC) {
+    if (evt.key === KeyType.ESCAPE || evt.key === KeyType.ESC) {
       evt.preventDefault();
       replaceFormToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
