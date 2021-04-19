@@ -10,6 +10,12 @@ export const position = {
 };
 
 //
+export const keys = {
+  ESCAPE: 'Escape',
+  ESC: 'Esc',
+};
+
+//
 export const Type = {
   TAXI: 'taxi',
   BUS: 'bus',
@@ -36,3 +42,5 @@ export const types = [
   Type.SIGHTSEEING,
   Type.RESTAURANT,
 ];
+
+export const defaultType = Type.TAXI;

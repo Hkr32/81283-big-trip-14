@@ -1,4 +1,4 @@
-import { dateFormat, dateToISO, dateDiff } from '../utils.js';
+import { createElement, dateFormat, dateToISO, dateDiff } from '../utils.js';
 
 const createSitePointOffersTemplate = (offers) => {
   return `<h4 class="visually-hidden">Offers:</h4>
@@ -12,7 +12,7 @@ const createSitePointOffersTemplate = (offers) => {
 };
 
 export const createSitePointTemplate = (point) => {
-  const { type, city, dateFrom, dateTo, basePrice, offers, isFavorite } = point;
+  const { type, destination, dateFrom, dateTo, basePrice, offers, isFavorite } = point;
   const createOffers = createSitePointOffersTemplate(offers);
   const favoriteActiveClassName = isFavorite
     ? 'event__favorite-btn--active'
@@ -24,7 +24,7 @@ export const createSitePointTemplate = (point) => {
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
       </div>
-      <h3 class="event__title">${type} ${city}</h3>
+      <h3 class="event__title">${type} ${destination.name}</h3>
       <div class="event__schedule">
         <p class="event__time">
           <time class="event__start-time" datetime="${dateToISO(dateFrom)}">${ dateFormat(dateFrom, 'HH:mm') }</time>
@@ -49,3 +49,26 @@ export const createSitePointTemplate = (point) => {
     </div>
   </li>`;
 };
+
+export default class SitePoint {
+  constructor(point) {
+    this._element = null;
+    this._point = point;
+  }
+
+  getTemplate() {
+    return createSitePointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

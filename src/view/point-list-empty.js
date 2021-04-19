@@ -1,17 +1,14 @@
 import { createElement } from '../utils.js';
 
-const createSiteHeaderInfoTemplate = () => {
-  return `<section class="trip-main__trip-info  trip-info">
-  </section>`;
-};
+const createSitePointListEmptyTemplate = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
 
-export default class SiteHeaderInfo {
+export default class SitePointList {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createSiteHeaderInfoTemplate();
+    return createSitePointListEmptyTemplate();
   }
 
   getElement() {
