@@ -1,4 +1,5 @@
-import { createElement, dateFormat } from '../utils.js';
+import AbstractView from './abstract.js';
+import { dateFormat } from '../utils.js';
 import { types, defaultType } from '../const.js';
 
 const createSitePointTypesTemplate = (types) => {
@@ -161,9 +162,9 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
   </li>`;
 };
 
-export default class SitePointEdit {
+export default class SitePointEdit extends AbstractView {
   constructor(destinations, offers, point) {
-    this._element = null;
+    super();
     this._point = point;
     this._destinations = destinations;
     this._offers = offers;
@@ -171,17 +172,5 @@ export default class SitePointEdit {
 
   getTemplate() {
     return createSitePointEditTemplate(this._destinations, this._offers, this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
