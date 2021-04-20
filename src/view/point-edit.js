@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { dateFormat } from '../utils.js';
+import { dateFormat } from '../utils/date.js';
 import { types } from '../const.js';
 
 const createSitePointTypesTemplate = (types) => {

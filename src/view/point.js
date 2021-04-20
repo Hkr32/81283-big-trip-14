@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { dateFormat, dateToISO, dateDiff } from '../utils.js';
+import { dateFormat, dateToISO, dateDiff } from '../utils/date.js';
 
 const createSitePointOffersTemplate = (offers) => {
   return `<h4 class="visually-hidden">Offers:</h4>
