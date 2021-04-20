@@ -29,6 +29,7 @@ export const render = (container, element, place = position.BEFORE_END) => {
   }
 };
 
+// Перезапись элемента
 export const replace = (newChild, oldChild) => {
   if (oldChild instanceof Abstract) {
     oldChild = oldChild.getElement();
@@ -47,6 +48,7 @@ export const replace = (newChild, oldChild) => {
   parent.replaceChild(newChild, oldChild);
 };
 
+// Удаление элемента
 export const remove = (component) => {
   if (!(component instanceof Abstract)) {
     throw new Error('Can remove only components');

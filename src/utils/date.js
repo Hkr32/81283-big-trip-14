@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 
+// Получение разницы дат
 export const dateDiff = (dateFrom, dateTo) => {
   const MINUTE_IN_DAY = 1440;
   const MINUTE_IN_HOUR = 60;
@@ -28,12 +29,14 @@ export const dateDiff = (dateFrom, dateTo) => {
   return diffStr;
 };
 
+// Форматирование даты
 export const dateFormat = (date, format = 'YYYY-MM-DD') => {
   if (!date) return '';
 
   return dayjs(date).format(format);
 };
 
+// Приведение даты к формату ISO
 export const dateToISO = (date) => {
   return dayjs(date).toISOString();
 };

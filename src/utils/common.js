@@ -8,6 +8,7 @@ export const getRandomInteger = (min = 0, max = 1, coefficient = 1) => {
   return (Math.floor(lower + Math.random() * (upper - lower + 1)) * coefficient);
 };
 
+// Проверка нажата ли клавиша esc
 export const isEscKey = (keyType) => {
   return (keyType === KeyType.ESCAPE || keyType === KeyType.ESC);
 };

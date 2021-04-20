@@ -35,7 +35,7 @@ render(siteHeaderFilterElement, new SiteHeaderFilterView());
 const siteMainElement = document.querySelector('.page-main');
 const siteMainEventsElement = siteMainElement.querySelector('.trip-events');
 
-//
+// Отрисовка точки
 const renderPoint = (pointListElement, point) => {
   const pointComponent = new SitePointView(point);
   const pointEditComponent = new SitePointEditView(destinations, offers, point);
@@ -72,6 +72,7 @@ const renderPoint = (pointListElement, point) => {
   render(pointListElement, pointComponent);
 };
 
+// Функция отрисовки точек
 const renderPoints = (points) => {
   if (points.length === 0) {
     render(siteMainEventsElement, new SitePointEmptyListView());
@@ -98,4 +99,5 @@ const renderPoints = (points) => {
   }
 };
 
+// Вызов отрисовки точек
 renderPoints(points);
