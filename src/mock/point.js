@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 import { getRandomInteger } from '../utils/common.js';
 import { destinations, offers } from './const.js';
-import { types } from '../const.js';
+import { types } from '../utils/const.js';
 
 let counter = -7;
 

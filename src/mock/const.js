@@ -1,4 +1,4 @@
-import { Type } from '../const.js';
+import { Type } from '../utils/const.js';
 
 // Destinations mock
 export const destinations = [

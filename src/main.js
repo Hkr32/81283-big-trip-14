@@ -2,7 +2,7 @@
 import { generatePoint } from './mock/point.js';
 import { offers, destinations } from './mock/const.js';
 
-import { POINT_COUNTER, position, KeyType } from './const.js';
+import { POINT_COUNTER, position, KeyType } from './utils/const.js';
 import { render } from './utils/render.js';
 
 import SiteHeaderInfoView from './view/info.js';

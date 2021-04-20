@@ -1,4 +1,4 @@
-import { position } from '../const.js';
+import { position } from './const.js';
 
 // Создание элемента
 export const createElement = (template) => {
