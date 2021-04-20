@@ -1,6 +1,6 @@
 import AbstractView from './abstract.js';
 import { dateFormat } from '../utils.js';
-import { types, defaultType } from '../const.js';
+import { types } from '../const.js';
 
 const createSitePointTypesTemplate = (types) => {
   return `<div class="event__type-list">
@@ -45,21 +45,6 @@ const createSitePointPhotosTemplate = (photos) => {
   </div>`;
 };
 
-const getOffersByType = (offers, type) => {
-  const offer = offers.filter((offer) => {
-    return offer.type === type;
-  });
-
-  return offer[0].offers;
-};
-const getDestinationByCity = (destinations, city) => {
-  const destination = destinations.filter((destination) => {
-    return destination.name === city;
-  });
-
-  return destination[0];
-};
-
 const createSitePointEditTemplate = (destinationsExternal, offersExternal, point) => {
   const {
     type = '',
@@ -72,24 +57,7 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
     basePrice = '',
     dateFrom = '',
     dateTo = '',
-    isFavorite = false,
   } = point;
-
-  // Тестовые данные
-  // const dest = getDestinationByCity(destinationsExternal, 'Utrecht');
-  // const {
-  //   type = defaultType,
-  //   offers = getOffersByType(offersExternal, defaultType),
-  //   destination: {
-  //     description: description = dest.description,
-  //     name: city = dest.name,
-  //     pictures: pictures = dest.pictures,
-  //   } = {},
-  //   basePrice = 100,
-  //   dateFrom = '2021-04-01T09:00',
-  //   dateTo = '2021-04-02T15:10',
-  //   isFavorite = false,
-  // } = point;
 
   const iconSrc = type ? ('img/icons/' + type.toLowerCase() + '.png') : '';
   const iconAlt = type ? 'Event type icon' : '';
