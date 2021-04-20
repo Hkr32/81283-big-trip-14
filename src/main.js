@@ -3,7 +3,7 @@ import { generatePoint } from './mock/point.js';
 import { offers, destinations } from './mock/const.js';
 
 import { POINT_COUNTER, position, KeyType } from './utils/const.js';
-import { render } from './utils/render.js';
+import { render, replace } from './utils/render.js';
 
 import SiteHeaderInfoView from './view/info.js';
 import SiteHeaderNavigationView from './view/navigation.js';
@@ -24,11 +24,11 @@ const siteHeaderElement = document.querySelector('.page-header');
 
 // Добавляем меню
 const siteHeaderMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
-render(siteHeaderMenuElement, new SiteHeaderMenuView().getElement());
+render(siteHeaderMenuElement, new SiteHeaderMenuView());
 
 // Добавляем фильтры
 const siteHeaderFilterElement = siteHeaderElement.querySelector('.trip-controls__filters');
-render(siteHeaderFilterElement, new SiteHeaderFilterView().getElement());
+render(siteHeaderFilterElement, new SiteHeaderFilterView());
 
 // Контент страницы
 const siteMainElement = document.querySelector('.page-main');
@@ -40,11 +40,11 @@ const renderPoint = (pointListElement, point) => {
   const pointEditComponent = new SitePointEditView(destinations, offers, point);
 
   const replacePointToForm = () => {
-    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    replace(pointEditComponent, pointComponent);
   };
 
   const replaceFormToPoint = () => {
-    pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+    replace(pointComponent, pointEditComponent);
   };
 
   // @todo вынести проверку в отдельную функцию
@@ -69,28 +69,28 @@ const renderPoint = (pointListElement, point) => {
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  render(pointListElement, pointComponent.getElement());
+  render(pointListElement, pointComponent);
 };
 
 const renderPoints = (points) => {
   if (points.length === 0) {
-    render(siteMainEventsElement, new SitePointEmptyListView().getElement());
+    render(siteMainEventsElement, new SitePointEmptyListView());
 
     return;
   }
 
   // Добавляем шаблон для маршрута и стоимости
   const siteHeaderTripMainElement = siteHeaderElement.querySelector('.trip-main');
-  render(siteHeaderTripMainElement, new SiteHeaderInfoView().getElement(), position.AFTER_BEGIN);
+  render(siteHeaderTripMainElement, new SiteHeaderInfoView(), position.AFTER_BEGIN);
   const siteHeaderInfoElement = siteHeaderElement.querySelector('.trip-info');
-  render(siteHeaderInfoElement, new SiteHeaderNavigationView(points).getElement(), position.AFTER_BEGIN);
-  render(siteHeaderInfoElement, new SiteHeaderCostView(points).getElement());
+  render(siteHeaderInfoElement, new SiteHeaderNavigationView(points), position.AFTER_BEGIN);
+  render(siteHeaderInfoElement, new SiteHeaderCostView(points));
 
   // Добавляем сортировку
-  render(siteMainEventsElement, new SiteMainSortingView().getElement());
+  render(siteMainEventsElement, new SiteMainSortingView());
 
   // Добавляем шаблон для точек
-  const siteMainPointListElement = new SitePointListView().getElement();
+  const siteMainPointListElement = new SitePointListView();
   render(siteMainEventsElement, siteMainPointListElement);
   //Добавляем точки в список
   for (let i = 0; i < POINT_COUNTER; i++) {
