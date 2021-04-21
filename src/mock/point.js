@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
 
 import { getRandomInteger } from '../utils/common.js';
 import { destinations, offers } from './const.js';
@@ -48,6 +49,7 @@ export const generatePoint = () => {
   const from = generateConsistentlyDate();
 
   return {
+    id: nanoid(),
     type: type,
     offers: getOffers(offers, type),
     destination: generateDestination(),

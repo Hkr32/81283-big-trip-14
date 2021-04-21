@@ -16,6 +16,7 @@ export default class Trip {
     this._tripHeaderContainer = container.querySelector('.page-header');
     this._tripMainContainer = container.querySelector('.trip-events');
     this._tripPoints = null;
+    this._pointPresenter = {};
 
     this._pointSortComponent = new SiteMainSortingView();
     this._pointListComponent = new SitePointListView();
@@ -35,6 +36,7 @@ export default class Trip {
   _renderPoint(point) {
     const pointPresenter = new PointPresenter(this._pointListComponent);
     pointPresenter.init(point);
+    this._pointPresenter[point.id] = pointPresenter;
   }
 
   _renderPoints() {
@@ -45,6 +47,13 @@ export default class Trip {
 
   _renderNoPoints() {
     render(this._tripMainContainer, this._pointEmptyListComponent);
+  }
+
+  _clearPointsList() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
   }
 
   _renderPointsList() {
