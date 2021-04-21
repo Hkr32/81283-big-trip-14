@@ -9,7 +9,7 @@ export const position = {
   AFTER_END: 'afterend', // после element (после закрывающего тега)
 };
 
-//
+// Типы кнопок
 export const KeyType = {
   ESCAPE: 'Escape',
   ESC: 'Esc',
@@ -42,5 +42,3 @@ export const types = [
   Type.SIGHTSEEING,
   Type.RESTAURANT,
 ];
-
-export const defaultType = Type.TAXI;

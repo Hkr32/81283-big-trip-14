@@ -1,5 +1,6 @@
-import { createElement, dateFormat } from '../utils.js';
-import { types, defaultType } from '../const.js';
+import AbstractView from './abstract.js';
+import { dateFormat } from '../utils/date.js';
+import { types } from '../utils/const.js';
 
 const createSitePointTypesTemplate = (types) => {
   return `<div class="event__type-list">
@@ -44,21 +45,6 @@ const createSitePointPhotosTemplate = (photos) => {
   </div>`;
 };
 
-const getOffersByType = (offers, type) => {
-  const offer = offers.filter((offer) => {
-    return offer.type === type;
-  });
-
-  return offer[0].offers;
-};
-const getDestinationByCity = (destinations, city) => {
-  const destination = destinations.filter((destination) => {
-    return destination.name === city;
-  });
-
-  return destination[0];
-};
-
 const createSitePointEditTemplate = (destinationsExternal, offersExternal, point) => {
   const {
     type = '',
@@ -71,24 +57,7 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
     basePrice = '',
     dateFrom = '',
     dateTo = '',
-    isFavorite = false,
   } = point;
-
-  // Тестовые данные
-  // const dest = getDestinationByCity(destinationsExternal, 'Utrecht');
-  // const {
-  //   type = defaultType,
-  //   offers = getOffersByType(offersExternal, defaultType),
-  //   destination: {
-  //     description: description = dest.description,
-  //     name: city = dest.name,
-  //     pictures: pictures = dest.pictures,
-  //   } = {},
-  //   basePrice = 100,
-  //   dateFrom = '2021-04-01T09:00',
-  //   dateTo = '2021-04-02T15:10',
-  //   isFavorite = false,
-  // } = point;
 
   const iconSrc = type ? ('img/icons/' + type.toLowerCase() + '.png') : '';
   const iconAlt = type ? 'Event type icon' : '';
@@ -161,27 +130,37 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
   </li>`;
 };
 
-export default class SitePointEdit {
+export default class SitePointEdit extends AbstractView {
   constructor(destinations, offers, point) {
-    this._element = null;
+    super();
     this._point = point;
     this._destinations = destinations;
     this._offers = offers;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 
   getTemplate() {
     return createSitePointEditTemplate(this._destinations, this._offers, this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

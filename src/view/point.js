@@ -1,4 +1,5 @@
-import { createElement, dateFormat, dateToISO, dateDiff } from '../utils.js';
+import AbstractView from './abstract.js';
+import { dateFormat, dateToISO, dateDiff } from '../utils/date.js';
 
 const createSitePointOffersTemplate = (offers) => {
   return `<h4 class="visually-hidden">Offers:</h4>
@@ -50,25 +51,24 @@ export const createSitePointTemplate = (point) => {
   </li>`;
 };
 
-export default class SitePoint {
+export default class SitePoint extends AbstractView {
   constructor(point) {
-    this._element = null;
+    super();
     this._point = point;
+    this._editClickHandler = this._editClickHandler.bind(this);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 
   getTemplate() {
     return createSitePointTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

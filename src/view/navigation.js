@@ -1,5 +1,5 @@
-import { createElement } from '../utils.js';
-import { dateFormat } from '../utils.js';
+import AbstractView from './abstract.js';
+import { dateFormat } from '../utils/date.js';
 
 const generateTrip = (points) => {
   let title = '';
@@ -38,25 +38,13 @@ const createSiteHeaderNavigationTemplate = (points) => {
   </div>`;
 };
 
-export default class SiteHeaderNavigation {
+export default class SiteHeaderNavigation extends AbstractView {
   constructor(points) {
-    this._element = null;
+    super();
     this._points = points;
   }
 
   getTemplate() {
     return createSiteHeaderNavigationTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
