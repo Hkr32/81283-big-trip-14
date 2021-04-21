@@ -1,18 +1,15 @@
+import PointPresenter from './point.js';
+
 import SiteMainSortingView from '../view/sorting.js';
 import SitePointListView from '../view/point-list.js';
 import SitePointEmptyListView from '../view/point-list-empty.js';
-import SitePointView from '../view/point.js';
-import SitePointEditView from '../view/point-edit.js';
 
 import SiteHeaderInfoView from '../view/info.js';
 import SiteHeaderNavigationView from '../view/navigation.js';
 import SiteHeaderCostView from '../view/cost.js';
 
-import { POINT_COUNTER, position } from '../utils/const.js';
-import { isEscKey } from '../utils/common.js';
-import { render, replace, remove } from '../utils/render.js';
-
-import { offers, destinations } from '../mock/const.js';
+import { position } from '../utils/const.js';
+import { render } from '../utils/render.js';
 
 export default class Trip {
   constructor(container) {
@@ -36,39 +33,8 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointComponent = new SitePointView(point);
-    const pointEditComponent = new SitePointEditView(destinations, offers, point);
-
-    const replacePointToForm = () => {
-      replace(pointEditComponent, pointComponent);
-    };
-
-    const replaceFormToPoint = () => {
-      replace(pointComponent, pointEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (isEscKey) {
-        evt.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    pointComponent.setEditClickHandler(() => {
-      replacePointToForm();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-    pointEditComponent.setFormSubmitHandler(() => {
-      replaceFormToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-    pointEditComponent.setEditClickHandler(() => {
-      replaceFormToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    render(this._pointListComponent, pointComponent);
+    const pointPresenter = new PointPresenter(this._pointListComponent);
+    pointPresenter.init(point);
   }
 
   _renderPoints() {
