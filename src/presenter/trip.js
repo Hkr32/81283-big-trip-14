@@ -4,16 +4,11 @@ import MainSortingView from '../view/sorting.js';
 import PointListView from '../view/point-list.js';
 import PointEmptyListView from '../view/point-list-empty.js';
 
-import HeaderInfoView from '../view/info.js';
-import HeaderNavigationView from '../view/navigation.js';
-import HeaderCostView from '../view/cost.js';
-
 import { position } from '../utils/const.js';
 import { render } from '../utils/render.js';
 
 export default class Trip {
   constructor(container) {
-    this._tripHeaderContainer = container.querySelector('.page-header');
     this._tripMainContainer = container.querySelector('.trip-events');
     this._tripPoints = null;
     this._pointPresenter = {};
@@ -26,7 +21,6 @@ export default class Trip {
   init(tripPoints) {
     this._tripPoints = tripPoints.slice();
     this._renderTrip();
-    this._renderHeader();
   }
 
   _renderSort() {
@@ -70,16 +64,5 @@ export default class Trip {
 
     this._renderSort();
     this._renderPointsList();
-  }
-
-  _renderHeader() {
-    const headerTripMainElement = this._tripHeaderContainer.querySelector('.trip-main');
-    const headerInfoComponent = new HeaderInfoView();
-    render(headerTripMainElement, headerInfoComponent, position.AFTER_BEGIN);
-    const headerInfoElement = this._tripHeaderContainer.querySelector('.trip-info');
-    const headerNavigationComponent = new HeaderNavigationView(this._tripPoints);
-    const headerCostComponent = new HeaderCostView(this._tripPoints);
-    render(headerInfoElement, headerNavigationComponent, position.AFTER_BEGIN);
-    render(headerInfoElement, headerCostComponent);
   }
 }
