@@ -7,14 +7,16 @@ import { render, replace, remove } from '../utils/render.js';
 import { offers, destinations } from '../mock/const.js';
 
 export default class Point {
-  constructor(container) {
+  constructor(container, changeData) {
     this._pointListContainer = container;
     this._tripPoint = null;
+    this._changeData = changeData;
 
     this._pointComponent = null;
     this._pointEditComponent = null;
 
     this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleEditCloseClick = this._handleEditCloseClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
@@ -30,6 +32,7 @@ export default class Point {
     this._pointEditComponent = new PointEditView(destinations, offers, this._tripPoint);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
+    this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setEditClickHandler(this._handleEditCloseClick);
 
@@ -40,11 +43,11 @@ export default class Point {
     }
 
     if (this._pointListContainer.getElement().contains(prevPointComponent.getElement())) {
-      replace(this._taskComponent, prevPointComponent);
+      replace(this._pointComponent, prevPointComponent);
     }
 
     if (this._pointListContainer.getElement().contains(prevPointEditComponent.getElement())) {
-      replace(this._taskEditComponent, prevPointEditComponent);
+      replace(this._pointEditComponent, prevPointEditComponent);
     }
 
     remove(prevPointComponent);
@@ -77,11 +80,24 @@ export default class Point {
     this._replacePointToForm();
   }
 
+  _handleFavoriteClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._tripPoint,
+        {
+          isFavorite: !this._tripPoint.isFavorite,
+        },
+      ),
+    );
+  }
+
   _handleEditCloseClick() {
     this._replaceFormToPoint();
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(point) {
+    this._changeData(point);
     this._replaceFormToPoint();
   }
 }

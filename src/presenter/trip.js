@@ -4,6 +4,7 @@ import MainSortingView from '../view/sorting.js';
 import PointListView from '../view/point-list.js';
 import PointEmptyListView from '../view/point-list-empty.js';
 
+import { updateItem } from '../utils/common.js';
 import { render } from '../utils/render.js';
 
 export default class Trip {
@@ -15,6 +16,8 @@ export default class Trip {
     this._pointSortComponent = new MainSortingView();
     this._pointListComponent = new PointListView();
     this._pointEmptyListComponent = new PointEmptyListView();
+
+    this._handlePointChange = this._handlePointChange.bind(this);
   }
 
   init(tripPoints) {
@@ -22,12 +25,17 @@ export default class Trip {
     this._renderTrip();
   }
 
+  _handlePointChange(updatedPoint) {
+    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    this._pointPresenter[updatedPoint.id].init(updatedPoint);
+  }
+
   _renderSort() {
     render(this._tripMainContainer, this._pointSortComponent);
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointListComponent);
+    const pointPresenter = new PointPresenter(this._pointListComponent, this._handlePointChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
