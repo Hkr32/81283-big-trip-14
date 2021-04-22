@@ -1,4 +1,8 @@
-import { KeyType } from './const.js';
+// Типы кнопок
+export const KeyType = {
+  ESCAPE: 'Escape',
+  ESC: 'Esc',
+};
 
 // Получение случайного целого числа
 export const getRandomInteger = (min = 0, max = 1, coefficient = 1) => {
@@ -11,4 +15,18 @@ export const getRandomInteger = (min = 0, max = 1, coefficient = 1) => {
 // Проверка нажата ли клавиша esc
 export const isEscKey = (keyType) => {
   return (keyType === KeyType.ESCAPE || keyType === KeyType.ESC);
+};
+
+export const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
 };

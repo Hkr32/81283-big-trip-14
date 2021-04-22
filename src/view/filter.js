@@ -1,6 +1,6 @@
 import AbstractView from './abstract.js';
 
-const createSiteHeaderFilterTemplate = () => {
+const createHeaderFilterTemplate = () => {
   return `<form class="trip-filters" action="#" method="get">
     <div class="trip-filters__filter">
       <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked>
@@ -21,8 +21,8 @@ const createSiteHeaderFilterTemplate = () => {
   </form>`;
 };
 
-export default class SiteHeaderFilter extends AbstractView {
+export default class HeaderFilter extends AbstractView {
   getTemplate() {
-    return createSiteHeaderFilterTemplate();
+    return createHeaderFilterTemplate();
   }
 }

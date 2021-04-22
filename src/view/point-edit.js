@@ -2,7 +2,7 @@ import AbstractView from './abstract.js';
 import { dateFormat } from '../utils/date.js';
 import { types } from '../utils/const.js';
 
-const createSitePointTypesTemplate = (types) => {
+const createPointTypesTemplate = (types) => {
   return `<div class="event__type-list">
     <fieldset class="event__type-group">
       <legend class="visually-hidden">Event type</legend>
@@ -15,7 +15,7 @@ const createSitePointTypesTemplate = (types) => {
   </div>`;
 };
 
-const createSitePointCitiesTemplate = (cities) => {
+const createPointCitiesTemplate = (cities) => {
   return `<datalist id="destination-list-1">
     ${cities.reduce((str, city) => `${str}
     <div class="event__type-item">
@@ -24,7 +24,7 @@ const createSitePointCitiesTemplate = (cities) => {
   </datalist>`;
 };
 
-const createSitePointOffersTemplate = (offers) => {
+const createPointOffersTemplate = (offers) => {
   return `<div class="event__available-offers">
     ${offers.reduce((str, { name, title, price }) => `${str}
     <div class="event__offer-selector">
@@ -38,14 +38,14 @@ const createSitePointOffersTemplate = (offers) => {
   </div>`;
 };
 
-const createSitePointPhotosTemplate = (photos) => {
+const createPointPhotosTemplate = (photos) => {
   return `<div class="event__photos-tape">
     ${photos.reduce((str, photo) => `${str}
     <img class="event__photo" src="${photo.src}" alt="${photo.description}">`, '')}
   </div>`;
 };
 
-const createSitePointEditTemplate = (destinationsExternal, offersExternal, point) => {
+const createPointEditTemplate = (destinationsExternal, offersExternal, point) => {
   const {
     type = '',
     offers = [],
@@ -57,6 +57,7 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
     basePrice = '',
     dateFrom = '',
     dateTo = '',
+    isFavorite = false,
   } = point;
 
   const iconSrc = type ? ('img/icons/' + type.toLowerCase() + '.png') : '';
@@ -64,10 +65,10 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
 
   const cities = destinationsExternal.map((dest) => dest.name);
 
-  const typesTemplate = createSitePointTypesTemplate(types);
-  const citiesTemplate = createSitePointCitiesTemplate(cities);
-  const offersTemplate = createSitePointOffersTemplate(offers);
-  const photosTemplate = createSitePointPhotosTemplate(pictures);
+  const typesTemplate = createPointTypesTemplate(types);
+  const citiesTemplate = createPointCitiesTemplate(cities);
+  const offersTemplate = createPointOffersTemplate(offers);
+  const photosTemplate = createPointPhotosTemplate(pictures);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -130,7 +131,7 @@ const createSitePointEditTemplate = (destinationsExternal, offersExternal, point
   </li>`;
 };
 
-export default class SitePointEdit extends AbstractView {
+export default class PointEdit extends AbstractView {
   constructor(destinations, offers, point) {
     super();
     this._point = point;
@@ -147,7 +148,7 @@ export default class SitePointEdit extends AbstractView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._point);
   }
 
   setFormSubmitHandler(callback) {
@@ -161,6 +162,6 @@ export default class SitePointEdit extends AbstractView {
   }
 
   getTemplate() {
-    return createSitePointEditTemplate(this._destinations, this._offers, this._point);
+    return createPointEditTemplate(this._destinations, this._offers, this._point);
   }
 }

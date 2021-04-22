@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 import { dateFormat, dateToISO, dateDiff } from '../utils/date.js';
 
-const createSitePointOffersTemplate = (offers) => {
+const createPointOffersTemplate = (offers) => {
   return `<h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
       ${offers.map(({title, price}) => `<li class="event__offer">
@@ -12,9 +12,9 @@ const createSitePointOffersTemplate = (offers) => {
     </ul>`;
 };
 
-export const createSitePointTemplate = (point) => {
+export const createPointTemplate = (point) => {
   const { type, destination, dateFrom, dateTo, basePrice, offers, isFavorite } = point;
-  const createOffers = createSitePointOffersTemplate(offers);
+  const createOffers = createPointOffersTemplate(offers);
   const favoriteActiveClassName = isFavorite
     ? 'event__favorite-btn--active'
     : '';
@@ -51,11 +51,12 @@ export const createSitePointTemplate = (point) => {
   </li>`;
 };
 
-export default class SitePoint extends AbstractView {
+export default class Point extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   _editClickHandler(evt) {
@@ -63,12 +64,22 @@ export default class SitePoint extends AbstractView {
     this._callback.editClick();
   }
 
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
+  }
+
   getTemplate() {
-    return createSitePointTemplate(this._point);
+    return createPointTemplate(this._point);
   }
 }
