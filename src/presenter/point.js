@@ -86,7 +86,7 @@ export default class Point {
   }
 
   _escKeyDownHandler(evt) {
-    if (isEscKey) {
+    if (isEscKey(evt.key)) {
       evt.preventDefault();
       this._replaceFormToPoint();
     }

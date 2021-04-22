@@ -1,4 +1,8 @@
-import { KeyType } from './const.js';
+// Типы кнопок
+export const KeyType = {
+  ESCAPE: 'Escape',
+  ESC: 'Esc',
+};
 
 // Получение случайного целого числа
 export const getRandomInteger = (min = 0, max = 1, coefficient = 1) => {
