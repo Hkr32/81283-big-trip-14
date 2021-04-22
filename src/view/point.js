@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 import { dateFormat, dateToISO, dateDiff } from '../utils/date.js';
 
-const createSitePointOffersTemplate = (offers) => {
+const createPointOffersTemplate = (offers) => {
   return `<h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
       ${offers.map(({title, price}) => `<li class="event__offer">
@@ -12,9 +12,9 @@ const createSitePointOffersTemplate = (offers) => {
     </ul>`;
 };
 
-export const createSitePointTemplate = (point) => {
+export const createPointTemplate = (point) => {
   const { type, destination, dateFrom, dateTo, basePrice, offers, isFavorite } = point;
-  const createOffers = createSitePointOffersTemplate(offers);
+  const createOffers = createPointOffersTemplate(offers);
   const favoriteActiveClassName = isFavorite
     ? 'event__favorite-btn--active'
     : '';
@@ -51,7 +51,7 @@ export const createSitePointTemplate = (point) => {
   </li>`;
 };
 
-export default class SitePoint extends AbstractView {
+export default class Point extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
@@ -69,6 +69,6 @@ export default class SitePoint extends AbstractView {
   }
 
   getTemplate() {
-    return createSitePointTemplate(this._point);
+    return createPointTemplate(this._point);
   }
 }

@@ -28,7 +28,7 @@ const generateTrip = (points) => {
   return { title, date };
 };
 
-const createSiteHeaderNavigationTemplate = (points) => {
+const createHeaderNavigationTemplate = (points) => {
   const { title, date } = generateTrip(points);
 
   return `<div class="trip-info__main">
@@ -38,13 +38,13 @@ const createSiteHeaderNavigationTemplate = (points) => {
   </div>`;
 };
 
-export default class SiteHeaderNavigation extends AbstractView {
+export default class HeaderNavigation extends AbstractView {
   constructor(points) {
     super();
     this._points = points;
   }
 
   getTemplate() {
-    return createSiteHeaderNavigationTemplate(this._points);
+    return createHeaderNavigationTemplate(this._points);
   }
 }

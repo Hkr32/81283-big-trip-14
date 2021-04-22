@@ -1,5 +1,5 @@
-import SitePointView from '../view/point.js';
-import SitePointEditView from '../view/point-edit.js';
+import PointView from '../view/point.js';
+import PointEditView from '../view/point-edit.js';
 
 import { isEscKey } from '../utils/common.js';
 import { render, replace, remove } from '../utils/render.js';
@@ -26,8 +26,8 @@ export default class Point {
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
 
-    this._pointComponent = new SitePointView(point);
-    this._pointEditComponent = new SitePointEditView(destinations, offers, point);
+    this._pointComponent = new PointView(point);
+    this._pointEditComponent = new PointEditView(destinations, offers, point);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);

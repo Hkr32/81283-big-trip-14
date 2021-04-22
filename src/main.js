@@ -4,8 +4,8 @@ import { generatePoint } from './mock/point.js';
 import { POINT_COUNTER } from './utils/const.js';
 import { render } from './utils/render.js';
 
-import SiteHeaderMenuView from './view/menu.js';
-import SiteHeaderFilterView from './view/filter.js';
+import HeaderMenuView from './view/menu.js';
+import HeaderFilterView from './view/filter.js';
 
 import TripPresenter from './presenter/trip.js';
 
@@ -13,15 +13,15 @@ import TripPresenter from './presenter/trip.js';
 const points = new Array(POINT_COUNTER).fill().map(generatePoint);
 
 // Хедер страницы
-const siteHeaderElement = document.querySelector('.page-header');
+const headerElement = document.querySelector('.page-header');
 
 // Добавляем меню
-const siteHeaderMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
-render(siteHeaderMenuElement, new SiteHeaderMenuView());
+const headerMenuElement = headerElement.querySelector('.trip-controls__navigation');
+render(headerMenuElement, new HeaderMenuView());
 
 // Добавляем фильтры
-const siteHeaderFilterElement = siteHeaderElement.querySelector('.trip-controls__filters');
-render(siteHeaderFilterElement, new SiteHeaderFilterView());
+const headerFilterElement = headerElement.querySelector('.trip-controls__filters');
+render(headerFilterElement, new HeaderFilterView());
 
 // Вызов отрисовки точек
 const tripPresenter = new TripPresenter(document.querySelector('.page-body'));

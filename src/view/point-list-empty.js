@@ -1,9 +1,9 @@
 import AbstractView from './abstract.js';
 
-const createSitePointListEmptyTemplate = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
+const createPointListEmptyTemplate = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
 
-export default class SitePointList extends AbstractView {
+export default class PointList extends AbstractView {
   getTemplate() {
-    return createSitePointListEmptyTemplate();
+    return createPointListEmptyTemplate();
   }
 }

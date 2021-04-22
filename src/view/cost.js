@@ -1,6 +1,6 @@
 import AbstractView from './abstract.js';
 
-const createSiteHeaderCostTemplate = (points) => {
+const createHeaderCostTemplate = (points) => {
   const cost = points.reduce((sum, point) => sum + point.basePrice, 0);
 
   return `<p class="trip-info__cost">
@@ -8,13 +8,13 @@ const createSiteHeaderCostTemplate = (points) => {
   </p>`;
 };
 
-export default class SiteHeaderCost extends AbstractView {
+export default class HeaderCost extends AbstractView {
   constructor(points) {
     super();
     this._points = points;
   }
 
   getTemplate() {
-    return createSiteHeaderCostTemplate(this._points);
+    return createHeaderCostTemplate(this._points);
   }
 }

@@ -1,12 +1,12 @@
 import PointPresenter from './point.js';
 
-import SiteMainSortingView from '../view/sorting.js';
-import SitePointListView from '../view/point-list.js';
-import SitePointEmptyListView from '../view/point-list-empty.js';
+import MainSortingView from '../view/sorting.js';
+import PointListView from '../view/point-list.js';
+import PointEmptyListView from '../view/point-list-empty.js';
 
-import SiteHeaderInfoView from '../view/info.js';
-import SiteHeaderNavigationView from '../view/navigation.js';
-import SiteHeaderCostView from '../view/cost.js';
+import HeaderInfoView from '../view/info.js';
+import HeaderNavigationView from '../view/navigation.js';
+import HeaderCostView from '../view/cost.js';
 
 import { position } from '../utils/const.js';
 import { render } from '../utils/render.js';
@@ -18,9 +18,9 @@ export default class Trip {
     this._tripPoints = null;
     this._pointPresenter = {};
 
-    this._pointSortComponent = new SiteMainSortingView();
-    this._pointListComponent = new SitePointListView();
-    this._pointEmptyListComponent = new SitePointEmptyListView();
+    this._pointSortComponent = new MainSortingView();
+    this._pointListComponent = new PointListView();
+    this._pointEmptyListComponent = new PointEmptyListView();
   }
 
   init(tripPoints) {
@@ -73,13 +73,13 @@ export default class Trip {
   }
 
   _renderHeader() {
-    const siteHeaderTripMainElement = this._tripHeaderContainer.querySelector('.trip-main');
-    const headerInfoComponent = new SiteHeaderInfoView();
-    render(siteHeaderTripMainElement, headerInfoComponent, position.AFTER_BEGIN);
-    const siteHeaderInfoElement = this._tripHeaderContainer.querySelector('.trip-info');
-    const headerNavigationComponent = new SiteHeaderNavigationView(this._tripPoints);
-    const headerCostComponent = new SiteHeaderCostView(this._tripPoints);
-    render(siteHeaderInfoElement, headerNavigationComponent, position.AFTER_BEGIN);
-    render(siteHeaderInfoElement, headerCostComponent);
+    const headerTripMainElement = this._tripHeaderContainer.querySelector('.trip-main');
+    const headerInfoComponent = new HeaderInfoView();
+    render(headerTripMainElement, headerInfoComponent, position.AFTER_BEGIN);
+    const headerInfoElement = this._tripHeaderContainer.querySelector('.trip-info');
+    const headerNavigationComponent = new HeaderNavigationView(this._tripPoints);
+    const headerCostComponent = new HeaderCostView(this._tripPoints);
+    render(headerInfoElement, headerNavigationComponent, position.AFTER_BEGIN);
+    render(headerInfoElement, headerCostComponent);
   }
 }
