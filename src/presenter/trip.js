@@ -4,7 +4,6 @@ import MainSortingView from '../view/sorting.js';
 import PointListView from '../view/point-list.js';
 import PointEmptyListView from '../view/point-list-empty.js';
 
-import { position } from '../utils/const.js';
 import { render } from '../utils/render.js';
 
 export default class Trip {

@@ -33,11 +33,13 @@ export default class Trip {
   }
 
   _renderFilter() {
-    render(this._tripHeaderTripMainContainer.querySelector('.trip-controls__filters'), this._headerFilterComponent);
+    const filterContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__filters');
+    render(filterContainer, this._headerFilterComponent);
   }
 
   _renderMenu() {
-    render(this._tripHeaderTripMainContainer.querySelector('.trip-controls__navigation'), this._headerMenuComponent);
+    const menuContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__navigation');
+    render(menuContainer, this._headerMenuComponent);
   }
 
   _renderMain() {
