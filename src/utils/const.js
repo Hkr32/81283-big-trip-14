@@ -9,6 +9,12 @@ export const position = {
   AFTER_END: 'afterend', // после element (после закрывающего тега)
 };
 
+export const SortType = {
+  DAY: 'sort-day',
+  TIME: 'sort-time',
+  PRICE: 'sort-price',
+};
+
 //
 export const Type = {
   TAXI: 'taxi',
