@@ -57,7 +57,6 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, point) =>
     basePrice = '',
     dateFrom = '',
     dateTo = '',
-    isFavorite = false,
   } = point;
 
   const iconSrc = type ? ('img/icons/' + type.toLowerCase() + '.png') : '';
