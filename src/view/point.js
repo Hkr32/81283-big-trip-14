@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { dateFormat, dateToISO, dateDiff } from '../utils/date.js';
+import { dateFormat, dateToISO, dateDiffStr } from '../utils/date.js';
 
 const createPointOffersTemplate = (offers) => {
   return `<h4 class="visually-hidden">Offers:</h4>
@@ -32,7 +32,7 @@ export const createPointTemplate = (point) => {
           &mdash;
           <time class="event__end-time" datetime="${dateToISO(dateTo)}">${dateFormat(dateTo, 'HH:mm')}</time>
         </p>
-        <p class="event__duration">${dateDiff(dateFrom, dateTo)}</p>
+        <p class="event__duration">${dateDiffStr(dateFrom, dateTo)}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${ basePrice }</span>

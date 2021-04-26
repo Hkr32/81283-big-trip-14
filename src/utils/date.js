@@ -1,7 +1,11 @@
 import dayjs from 'dayjs';
 
+export const dateDiffInMinutes = (dateFrom, dateTo) => {
+  return dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
+};
+
 // Получение разницы дат
-export const dateDiff = (dateFrom, dateTo) => {
+export const dateDiffStr = (dateFrom, dateTo) => {
   const MINUTE_IN_DAY = 1440;
   const MINUTE_IN_HOUR = 60;
   const DAY_ZERO_MIN = 1;
@@ -10,7 +14,7 @@ export const dateDiff = (dateFrom, dateTo) => {
   const HOUR_ZERO_MAX = 10;
   const MINUTE_ZERO_MAX = 10;
 
-  const diff = dayjs(dateFrom).diff(dayjs(dateTo), 'minute');
+  const diff = dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
   const d = Math.floor(diff / MINUTE_IN_DAY);
   const remainder = diff % MINUTE_IN_DAY;
   const h = Math.floor(remainder / MINUTE_IN_HOUR);
