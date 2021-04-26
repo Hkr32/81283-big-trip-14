@@ -41,12 +41,32 @@ export default class MainSorting extends AbstractView {
     return createMainSortingTemplate();
   }
 
+  _resetSelected() {
+    const items = this._element.querySelectorAll('.trip-sort__input:not([disabled])');
+    Array.from(items).forEach((item) => {
+      item.checked = false;
+    });
+  }
+
+  _setSelected(value) {
+    const item = this._element.querySelector(`.trip-sort__input[value="${value}"]`);
+
+    if (item) {
+      item.checked = true;
+    }
+  }
+
   _sortTypeChangeHandler(evt) {
     if (evt.target.tagName !== 'LABEL') {
       return;
     }
 
     evt.preventDefault();
+
+    const sortType = evt.target.dataset.sortType;
+    this._resetSelected();
+    this._setSelected(sortType);
+
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 
