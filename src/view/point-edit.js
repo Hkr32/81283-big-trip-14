@@ -26,10 +26,10 @@ const createPointCitiesTemplate = (cities) => {
 
 const createPointOffersTemplate = (offers) => {
   return `<div class="event__available-offers">
-    ${offers.reduce((str, { name, title, price }) => `${str}
+    ${offers.reduce((str, { title, price }) => `${str}
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${name}-1" type="checkbox" name="event-offer-${name}" ${offers.includes(name) ? 'checked' : ''}>
-      <label class="event__offer-label" for="event-offer-${name}-1">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title.replace(/\s+/g, '-').trim().toLowerCase()}" type="checkbox" name="event-offer-${title.replace(/\s+/g, '-').trim().toLowerCase()}" ${offers.includes(title.replace(/\s+/g, '-').trim().toLowerCase()) ? 'checked' : ''}>
+      <label class="event__offer-label" for="event-offer-${title.replace(/\s+/g, '-').trim().toLowerCase()}">
         <span class="event__offer-title">${title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>
