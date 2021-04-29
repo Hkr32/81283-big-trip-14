@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 import { dateFormat } from '../utils/date.js';
 import { types } from '../utils/const.js';
 
@@ -45,7 +45,7 @@ const createPointPhotosTemplate = (photos) => {
   </div>`;
 };
 
-const createPointEditTemplate = (destinationsExternal, offersExternal, point) => {
+const createPointEditTemplate = (destinationsExternal, offersExternal, data) => {
   const {
     type = '',
     offers = [],
@@ -57,7 +57,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, point) =>
     basePrice = '',
     dateFrom = '',
     dateTo = '',
-  } = point;
+  } = data;
 
   const iconSrc = type ? ('img/icons/' + type.toLowerCase() + '.png') : '';
   const iconAlt = type ? 'Event type icon' : '';
@@ -130,14 +130,17 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, point) =>
   </li>`;
 };
 
-export default class PointEdit extends AbstractView {
+export default class PointEdit extends SmartView {
   constructor(destinations, offers, point) {
     super();
-    this._point = point;
+    this._data = PointEdit.parsePointToData(point);
     this._destinations = destinations;
     this._offers = offers;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._priceInputHandler = this._priceInputHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   _editClickHandler(evt) {
@@ -150,6 +153,26 @@ export default class PointEdit extends AbstractView {
     this._callback.formSubmit(this._point);
   }
 
+  _priceInputHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value,
+    }, true);
+  }
+
+  _setInnerHandlers() {
+    // ???
+    this.getElement()
+      .querySelector('.event__input--price')
+      .addEventListener('input', this._priceInputHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setEditClickHandler(this._callback.editClick);
+  }
+
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
@@ -160,7 +183,27 @@ export default class PointEdit extends AbstractView {
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 
+  reset(point) {
+    this.updateData(
+      PointEdit.parsePointToData(point),
+    );
+  }
+
   getTemplate() {
-    return createPointEditTemplate(this._destinations, this._offers, this._point);
+    return createPointEditTemplate(this._destinations, this._offers, this._data);
+  }
+
+  static parsePointToData(point) {
+    return Object.assign(
+      {},
+      point,
+      {},
+    );
+  }
+
+  static parseDataToPoint(data) {
+    data = Object.assign({}, data);
+
+    return data;
   }
 }
