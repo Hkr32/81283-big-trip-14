@@ -25,20 +25,27 @@ const createPointCitiesTemplate = (cities) => {
   </datalist>`;
 };
 
-const createPointOffersTemplate = (offers) => {
-  return `<div class="event__available-offers">
-    ${offers.reduce((str, { title, price }) => {
+const createOffersTemplate = (offers) => {
+  return offers.reduce((str, { title, price }) => {
     const offerId = getOfferId(title);
+    console.log(offers)
     str += `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" name="event-offer-${offerId}" ${offers.includes(offerId) ? 'checked' : ''}>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" name="event-offer-${offerId}" ${offers.includes(title) ? 'checked' : ''}>
         <label class="event__offer-label" for="event-offer-${offerId}">
           <span class="event__offer-title">${title}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${price}</span>
         </label>
       </div>`;
-    return str;}, '')}
-  </div>`;
+
+    return str;
+  }, '');
+};
+
+const createPointOffersTemplate = (offers) => {
+  const offersTemplate = createOffersTemplate(offers);
+
+  return `<div class="event__available-offers">${offersTemplate}</div>`;
 };
 
 const createPointPhotosTemplate = (photos) => {
