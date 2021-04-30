@@ -11,3 +11,5 @@ export const sortPointTime = (pointOne, pointSecond) => {
 export const sortPointPrice = (pointOne, pointSecond) => {
   return compareNumeric(pointOne.basePrice, pointSecond.basePrice);
 };
+
+export const getOfferId = (value) => value.replace(/\s+/g, '-').trim().toLowerCase();

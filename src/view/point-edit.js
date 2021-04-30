@@ -1,6 +1,7 @@
 import SmartView from './smart.js';
 import { dateFormat } from '../utils/date.js';
 import { types } from '../utils/const.js';
+import { getOfferId } from '../utils/point.js';
 
 const createPointTypesTemplate = (types) => {
   return `<div class="event__type-list">
@@ -26,15 +27,17 @@ const createPointCitiesTemplate = (cities) => {
 
 const createPointOffersTemplate = (offers) => {
   return `<div class="event__available-offers">
-    ${offers.reduce((str, { title, price }) => `${str}
-    <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title.replace(/\s+/g, '-').trim().toLowerCase()}" type="checkbox" name="event-offer-${title.replace(/\s+/g, '-').trim().toLowerCase()}" ${offers.includes(title.replace(/\s+/g, '-').trim().toLowerCase()) ? 'checked' : ''}>
-      <label class="event__offer-label" for="event-offer-${title.replace(/\s+/g, '-').trim().toLowerCase()}">
-        <span class="event__offer-title">${title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${price}</span>
-      </label>
-    </div>`, '')}
+    ${offers.reduce((str, { title, price }) => {
+    const offerId = getOfferId(title);
+    str += `<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" name="event-offer-${offerId}" ${offers.includes(offerId) ? 'checked' : ''}>
+        <label class="event__offer-label" for="event-offer-${offerId}">
+          <span class="event__offer-title">${title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${price}</span>
+        </label>
+      </div>`;
+    return str;}, '')}
   </div>`;
 };
 
