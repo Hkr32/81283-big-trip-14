@@ -28,7 +28,6 @@ const createPointCitiesTemplate = (cities) => {
 const createOffersTemplate = (offers) => {
   return offers.reduce((str, { title, price }) => {
     const offerId = getOfferId(title);
-    console.log(offers)
     str += `<div class="event__offer-selector">
         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" name="event-offer-${offerId}" ${offers.includes(title) ? 'checked' : ''}>
         <label class="event__offer-label" for="event-offer-${offerId}">
@@ -148,9 +147,15 @@ export default class PointEdit extends SmartView {
     this._offers = offers;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._changeTypeHandler = this._changeTypeHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
 
     this._setInnerHandlers();
+  }
+
+  _changeTypeHandler(evt) {
+    this.getElement().querySelector('.event__type-icon').src = `img/icons/${evt.target.value}.png`;
+    this.getElement().querySelector('.event__label.event__type-output').innerText = evt.target.value;
   }
 
   _editClickHandler(evt) {
@@ -180,7 +185,12 @@ export default class PointEdit extends SmartView {
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setChangeTypeHandler();
     this.setEditClickHandler(this._callback.editClick);
+  }
+
+  setChangeTypeHandler() {
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._changeTypeHandler);
   }
 
   setFormSubmitHandler(callback) {

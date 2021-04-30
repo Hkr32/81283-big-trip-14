@@ -41,6 +41,7 @@ export default class Point {
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._pointEditComponent.setChangeTypeHandler();
     this._pointEditComponent.setEditClickHandler(this._handleEditCloseClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
