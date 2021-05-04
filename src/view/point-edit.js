@@ -25,15 +25,19 @@ const createPointCitiesTemplate = (cities) => {
   </datalist>`;
 };
 
-const createOffersTemplate = (offers) => {
-  return offers.reduce((str, { title, price }) => {
-    const offerId = getOfferId(title);
+const createOffersTemplate = (offers, offersExternal) => {
+  return offersExternal.reduce((str, offer) => {
+    const offerId = getOfferId(offer.title);
+    const isChecked = offers.some(({ title }) => {
+      return getOfferId(title) === offerId;
+    });
+
     str += `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" name="event-offer-${offerId}" ${offers.includes(title) ? 'checked' : ''}>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" name="event-offer-${offerId}" ${isChecked ? 'checked' : ''}>
         <label class="event__offer-label" for="event-offer-${offerId}">
-          <span class="event__offer-title">${title}</span>
+          <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
-          <span class="event__offer-price">${price}</span>
+          <span class="event__offer-price">${offer.price}</span>
         </label>
       </div>`;
 
@@ -41,8 +45,8 @@ const createOffersTemplate = (offers) => {
   }, '');
 };
 
-const createPointOffersTemplate = (offers) => {
-  const offersTemplate = createOffersTemplate(offers);
+const createPointOffersTemplate = (offers, offersExternal) => {
+  const offersTemplate = createOffersTemplate(offers, offersExternal);
 
   return `<div class="event__available-offers">${offersTemplate}</div>`;
 };
@@ -73,9 +77,13 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data) => 
 
   const cities = destinationsExternal.map((dest) => dest.name);
 
+  const offersExternalByType = offersExternal.find((offer) => {
+    return offer.type === data.type;
+  });
+
   const typesTemplate = createPointTypesTemplate(types);
   const citiesTemplate = createPointCitiesTemplate(cities);
-  const offersTemplate = createPointOffersTemplate(offers);
+  const offersTemplate = createPointOffersTemplate(offers, offersExternalByType.offers);
   const photosTemplate = createPointPhotosTemplate(pictures);
 
   return `<li class="trip-events__item">
@@ -154,8 +162,12 @@ export default class PointEdit extends SmartView {
   }
 
   _changeTypeHandler(evt) {
-    this.getElement().querySelector('.event__type-icon').src = `img/icons/${evt.target.value}.png`;
-    this.getElement().querySelector('.event__label.event__type-output').innerText = evt.target.value;
+    // this.getElement().querySelector('.event__type-icon').src = `img/icons/${evt.target.value}.png`;
+    // this.getElement().querySelector('.event__label.event__type-output').innerText = evt.target.value;
+    evt.preventDefault();
+    this.updateData({
+      type: evt.target.value,
+    });
   }
 
   _editClickHandler(evt) {
@@ -180,13 +192,13 @@ export default class PointEdit extends SmartView {
     this.getElement()
       .querySelector('.event__input--price')
       .addEventListener('input', this._priceInputHandler);
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setChangeTypeHandler();
+    this.setEditClickHandler(this._callback.editClick);
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
-    this.setFormSubmitHandler(this._callback.formSubmit);
-    this.setChangeTypeHandler();
-    this.setEditClickHandler(this._callback.editClick);
   }
 
   setChangeTypeHandler() {
