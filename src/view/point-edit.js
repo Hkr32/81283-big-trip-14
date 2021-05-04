@@ -16,10 +16,10 @@ const createPointTypesTemplate = (types) => {
   </div>`;
 };
 
-const createCitiesTemplate = (cities, dest) => {
+const createCitiesTemplate = (cities, currentCity) => {
   return cities.reduce((str, city) => {
     const isChecked = cities.some((city) => {
-      return city === dest.name;
+      return city === currentCity;
     });
 
     str += `<div class="event__type-item">
@@ -30,8 +30,8 @@ const createCitiesTemplate = (cities, dest) => {
   }, '');
 };
 
-const createPointCitiesTemplate = (cities, dest) => {
-  const citiesTemplate = createCitiesTemplate(cities, dest);
+const createPointCitiesTemplate = (cities, currentCity) => {
+  const citiesTemplate = createCitiesTemplate(cities, currentCity);
 
   return `<datalist id="destination-list-1">${citiesTemplate}</datalist>`;
 };
@@ -87,16 +87,13 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data) => 
   const iconAlt = type ? 'Event type icon' : '';
 
   const cities = destinationsExternal.map((dest) => dest.name);
-  const dest = destinationsExternal.find(({ name }) => {
-    return name === data.destination.name;
-  });
 
   const offersExternalByType = offersExternal.find((offer) => {
     return offer.type === data.type;
   });
 
   const typesTemplate = createPointTypesTemplate(types);
-  const citiesTemplate = createPointCitiesTemplate(cities, dest);
+  const citiesTemplate = createPointCitiesTemplate(cities, data.destination.name);
   const offersTemplate = createPointOffersTemplate(offers, offersExternalByType.offers);
   const photosTemplate = createPointPhotosTemplate(pictures);
 
@@ -187,7 +184,9 @@ export default class PointEdit extends SmartView {
   _changeDestinationHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      destination: evt.target.value,
+      destination: this._destinations.find(({ name }) => {
+        return name === evt.target.value;
+      }),
     });
   }
 
