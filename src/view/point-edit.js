@@ -16,13 +16,24 @@ const createPointTypesTemplate = (types) => {
   </div>`;
 };
 
-const createPointCitiesTemplate = (cities) => {
-  return `<datalist id="destination-list-1">
-    ${cities.reduce((str, city) => `${str}
-    <div class="event__type-item">
-      <option value="${city}"></option>
-    </div>`, '')}
-  </datalist>`;
+const createCitiesTemplate = (cities, dest) => {
+  return cities.reduce((str, city) => {
+    const isChecked = cities.some((city) => {
+      return city === dest.name;
+    });
+
+    str += `<div class="event__type-item">
+        <option value="${city}" ${isChecked ? 'checked' : ''}>${city}</option>
+      </div>`;
+
+    return str;
+  }, '');
+};
+
+const createPointCitiesTemplate = (cities, dest) => {
+  const citiesTemplate = createCitiesTemplate(cities, dest);
+
+  return `<datalist id="destination-list-1">${citiesTemplate}</datalist>`;
 };
 
 const createOffersTemplate = (offers, offersExternal) => {
@@ -76,13 +87,16 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data) => 
   const iconAlt = type ? 'Event type icon' : '';
 
   const cities = destinationsExternal.map((dest) => dest.name);
+  const dest = destinationsExternal.find(({ name }) => {
+    return name === data.destination.name;
+  });
 
   const offersExternalByType = offersExternal.find((offer) => {
     return offer.type === data.type;
   });
 
   const typesTemplate = createPointTypesTemplate(types);
-  const citiesTemplate = createPointCitiesTemplate(cities);
+  const citiesTemplate = createPointCitiesTemplate(cities, dest);
   const offersTemplate = createPointOffersTemplate(offers, offersExternalByType.offers);
   const photosTemplate = createPointPhotosTemplate(pictures);
 
@@ -156,17 +170,24 @@ export default class PointEdit extends SmartView {
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._changeTypeHandler = this._changeTypeHandler.bind(this);
+    this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
 
     this._setInnerHandlers();
   }
 
   _changeTypeHandler(evt) {
-    // this.getElement().querySelector('.event__type-icon').src = `img/icons/${evt.target.value}.png`;
-    // this.getElement().querySelector('.event__label.event__type-output').innerText = evt.target.value;
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
+      offers: [],
+    });
+  }
+
+  _changeDestinationHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      destination: evt.target.value,
     });
   }
 
@@ -188,12 +209,10 @@ export default class PointEdit extends SmartView {
   }
 
   _setInnerHandlers() {
-    // ???
-    this.getElement()
-      .querySelector('.event__input--price')
-      .addEventListener('input', this._priceInputHandler);
+    this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setChangeTypeHandler();
+    this.setChangeDestinationHandler();
     this.setEditClickHandler(this._callback.editClick);
   }
 
@@ -203,6 +222,10 @@ export default class PointEdit extends SmartView {
 
   setChangeTypeHandler() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._changeTypeHandler);
+  }
+
+  setChangeDestinationHandler() {
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._changeDestinationHandler);
   }
 
   setFormSubmitHandler(callback) {
