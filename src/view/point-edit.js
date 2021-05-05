@@ -2,6 +2,8 @@ import SmartView from './smart.js';
 import { dateFormat } from '../utils/date.js';
 import { types } from '../utils/const.js';
 import { getOfferId } from '../utils/point.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createPointTypesTemplate = (types) => {
   return `<div class="event__type-list">
