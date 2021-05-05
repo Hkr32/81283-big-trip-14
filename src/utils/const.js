@@ -9,13 +9,14 @@ export const position = {
   AFTER_END: 'afterend', // после element (после закрывающего тега)
 };
 
+// Типы сортировки
 export const SortType = {
   DAY: 'sort-day',
   TIME: 'sort-time',
   PRICE: 'sort-price',
 };
 
-//
+// Соответствие типов
 export const Type = {
   TAXI: 'taxi',
   BUS: 'bus',
@@ -29,7 +30,7 @@ export const Type = {
   RESTAURANT: 'restaurant',
 };
 
-//
+// Типы путешествий
 export const types = [
   Type.TAXI,
   Type.BUS,
@@ -42,3 +43,17 @@ export const types = [
   Type.SIGHTSEEING,
   Type.RESTAURANT,
 ];
+
+// Действия пользователя
+export const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+// Типы обновлений
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};

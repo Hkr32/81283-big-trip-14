@@ -4,37 +4,81 @@ import MainSortingView from '../view/sorting.js';
 import PointListView from '../view/point-list.js';
 import PointEmptyListView from '../view/point-list-empty.js';
 
-import { updateItem } from '../utils/common.js';
-import { SortType } from '../utils/const.js';
+import { SortType, UpdateType, UserAction } from '../utils/const.js';
 import { sortPointTime, sortPointPrice } from '../utils/point.js';
-import { render } from '../utils/render.js';
+import { render, remove } from '../utils/render.js';
 
 export default class Trip {
-  constructor(container) {
+  constructor(container, pointsModel) {
+    this._pointsModel = pointsModel;
     this._tripMainContainer = container.querySelector('.trip-events');
     this._tripPoints = null;
     this._pointPresenter = {};
     this._currentSortType = SortType.DAY;
+    this._sortComponent = null;
 
     this._pointSortComponent = new MainSortingView();
     this._pointListComponent = new PointListView();
     this._pointEmptyListComponent = new PointEmptyListView();
 
-    this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+
+    this._pointsModel.addObserver(this._handleModelEvent);
   }
 
-  init(tripPoints) {
-    this._tripPoints = tripPoints.slice();
-    this._sourcedTripPoints = tripPoints.slice();
-
+  init() {
     this._renderTrip();
   }
 
+  _getPoints() {
+    switch (this._currentSortType) {
+      case SortType.TIME:
+        return this._pointsModel.getPoints().slice().sort(sortPointTime);
+      case SortType.PRICE:
+        return this._pointsModel.getPoints().slice().sort(sortPointPrice);
+    }
+    return this._pointsModel.getPoints();
+  }
+
+  _handleViewAction(actionType, updateType, update) {
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this._pointsModel.updatePoint(updateType, update);
+        break;
+      case UserAction.ADD_POINT:
+        this._pointsModel.addPoint(updateType, update);
+        break;
+      case UserAction.DELETE_POINT:
+        this._pointsModel.deletePoint(updateType, update);
+        break;
+    }
+  }
+
+  _handleModelEvent(updateType, data) {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        // - обновить часть списка (например, когда поменялось описание)
+        this._pointPresenter[data.id].init(data);
+        break;
+      case UpdateType.MINOR:
+        // - обновить список (например, когда задача ушла в архив)
+        this._clearTrip();
+        this._renderTrip();
+        break;
+      case UpdateType.MAJOR:
+        // - обновить всю доску (например, при переключении фильтра)
+        this._clearTrip({ resetSortType: true });
+        this._renderTrip();
+        break;
+    }
+  }
+
   _handlePointChange(updatedPoint) {
-    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
-    this._sourcedTripPoints = updateItem(this._sourcedTripPoints, updatedPoint);
+    // Models update
+
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
@@ -44,46 +88,38 @@ export default class Trip {
       .forEach((presenter) => presenter.resetView());
   }
 
-  _sortPoints(sortType) {
-    switch (sortType) {
-      case SortType.TIME:
-        this._tripPoints.sort(sortPointTime);
-        break;
-      case SortType.PRICE:
-        this._tripPoints.sort(sortPointPrice);
-        break;
-      default:
-        this._tripPoints = this._sourcedTripPoints.slice();
-    }
-
-    this._currentSortType = sortType;
-  }
-
   _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
       return;
     }
 
-    this._sortPoints(sortType);
-    this._clearPointsList();
-    this._renderPointsList();
+    this._currentSortType = sortType;
+    // ???
+    this._clearTrip({ resetSortType: true });
+    this._renderTrip();
+    // this._clearPointsList();
+    // this._renderPointsList();
   }
 
   _renderSort() {
-    render(this._tripMainContainer, this._pointSortComponent);
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+
+    // @todo wtf?
+    this._sortComponent = new MainSortingView(this._currentSortType);
     this._pointSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    render(this._tripMainContainer, this._pointSortComponent);
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointListComponent, this._handlePointChange, this._handleModeChange);
+    const pointPresenter = new PointPresenter(this._pointListComponent, this._handleViewAction, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
 
-  _renderPoints() {
-    this._tripPoints
-      .slice()
-      .forEach((tripPoint) => this._renderPoint(tripPoint));
+  _renderPoints(points) {
+    points.forEach((point) => this._renderPoint(point));
   }
 
   _renderNoPoints() {
@@ -99,17 +135,36 @@ export default class Trip {
 
   _renderPointsList() {
     render(this._tripMainContainer, this._pointListComponent);
-    this._renderPoints(this._tripPoints);
+    const points = this._getPoints().slice();
+    this._renderPoints(points);
+  }
+
+  // @todo resetRenderedTaskCount = false need?
+  _clearTrip({ resetSortType = false } = {}) {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
+
+    remove(this._pointSortComponent);
+    remove(this._pointListComponent);
+    remove(this._pointEmptyListComponent);
+
+    if (resetSortType) {
+      this._currentSortType = SortType.DAY;
+    }
   }
 
   _renderTrip() {
-    if (this._tripPoints.length === 0) {
+    const points = this._getPoints();
+    if (points.length === 0) {
       this._renderNoPoints();
 
       return;
     }
 
     this._renderSort();
-    this._renderPointsList();
+    // this._renderPointsList();
+    this._renderPoints(points.slice());
   }
 }
