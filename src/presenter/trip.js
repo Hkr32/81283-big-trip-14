@@ -16,7 +16,7 @@ export default class Trip {
     this._pointPresenter = {};
     this._currentSortType = SortType.DAY;
 
-    this._pointSortComponent = new MainSortingView(this._currentSortType);
+    this._pointSortComponent = null;
     this._pointListComponent = new PointListView();
     this._pointEmptyListComponent = new PointEmptyListView();
 
@@ -118,14 +118,7 @@ export default class Trip {
     render(this._tripMainContainer, this._pointEmptyListComponent);
   }
 
-  _clearPointsList() {
-    Object
-      .values(this._pointPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._pointPresenter = {};
-  }
-
-  _renderPointsList() {
+  _renderPoints() {
     render(this._tripMainContainer, this._pointListComponent);
     this._getPoints().slice().forEach((point) => this._renderPoint(point));
   }
@@ -154,6 +147,6 @@ export default class Trip {
     }
 
     this._renderSort();
-    this._renderPointsList();
+    this._renderPoints();
   }
 }
