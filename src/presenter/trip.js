@@ -15,9 +15,8 @@ export default class Trip {
     this._tripPoints = null;
     this._pointPresenter = {};
     this._currentSortType = SortType.DAY;
-    this._sortComponent = null;
 
-    this._pointSortComponent = new MainSortingView();
+    this._pointSortComponent = new MainSortingView(this._currentSortType);
     this._pointListComponent = new PointListView();
     this._pointEmptyListComponent = new PointEmptyListView();
 
@@ -95,20 +94,16 @@ export default class Trip {
     }
 
     this._currentSortType = sortType;
-    // ???
-    this._clearTrip({ resetSortType: true });
+    this._clearTrip();
     this._renderTrip();
-    // this._clearPointsList();
-    // this._renderPointsList();
   }
 
   _renderSort() {
-    if (this._sortComponent !== null) {
-      this._sortComponent = null;
+    if (this._pointSortComponent !== null) {
+      this._pointSortComponent = null;
     }
 
-    // @todo wtf?
-    this._sortComponent = new MainSortingView(this._currentSortType);
+    this._pointSortComponent = new MainSortingView(this._currentSortType);
     this._pointSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
     render(this._tripMainContainer, this._pointSortComponent);
   }
@@ -132,8 +127,7 @@ export default class Trip {
 
   _renderPointsList() {
     render(this._tripMainContainer, this._pointListComponent);
-    const points = this._getPoints().slice();
-    points.forEach((point) => this._renderPoint(point));
+    this._getPoints().slice().forEach((point) => this._renderPoint(point));
   }
 
   // @todo resetRenderedTaskCount = false need?
@@ -153,8 +147,7 @@ export default class Trip {
   }
 
   _renderTrip() {
-    const points = this._getPoints();
-    if (points.length === 0) {
+    if (this._getPoints().length === 0) {
       this._renderNoPoints();
 
       return;
