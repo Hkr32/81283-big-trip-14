@@ -40,6 +40,7 @@ export default class Trip {
       case SortType.PRICE:
         return this._pointsModel.getPoints().slice().sort(sortPointPrice);
     }
+
     return this._pointsModel.getPoints();
   }
 
@@ -118,10 +119,6 @@ export default class Trip {
     this._pointPresenter[point.id] = pointPresenter;
   }
 
-  _renderPoints(points) {
-    points.forEach((point) => this._renderPoint(point));
-  }
-
   _renderNoPoints() {
     render(this._tripMainContainer, this._pointEmptyListComponent);
   }
@@ -136,7 +133,7 @@ export default class Trip {
   _renderPointsList() {
     render(this._tripMainContainer, this._pointListComponent);
     const points = this._getPoints().slice();
-    this._renderPoints(points);
+    points.forEach((point) => this._renderPoint(point));
   }
 
   // @todo resetRenderedTaskCount = false need?
@@ -164,7 +161,6 @@ export default class Trip {
     }
 
     this._renderSort();
-    // this._renderPointsList();
-    this._renderPoints(points.slice());
+    this._renderPointsList();
   }
 }

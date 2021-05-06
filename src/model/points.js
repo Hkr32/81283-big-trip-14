@@ -1,4 +1,5 @@
 import Observer from '../utils/observer.js';
+import { dateFormat } from '../utils/date.js';
 
 export default class Points extends Observer {
   constructor() {
@@ -12,6 +13,37 @@ export default class Points extends Observer {
 
   getPoints() {
     return this._points;
+  }
+
+  getSumTrip() {
+    return this._points.reduce((sum, point) => sum + point.basePrice, 0);
+  }
+
+  generateTrip () {
+    let title = '';
+    let date = '';
+
+    this._points.map((point, index, points) => {
+      if (index === 0) {
+        title += point.destination.name;
+        date += dateFormat(point.dateFrom, 'D MMM');
+      }
+
+      if (index === 1 && points.length > 3) {
+        title += ' &mdash; ... ';
+      }
+
+      if (index === 1 && points.length === 3) {
+        title += ' &mdash; ' + point.destination.name;
+      }
+
+      if (index !== 0 && index === points.length - 1) {
+        title += ' &mdash; ' + point.destination.name;
+        date += '&nbsp;&mdash;&nbsp;' + dateFormat(point.dateTo, 'D MMM');
+      }
+    });
+
+    return { title, date };
   }
 
   updatePoint(updateType, update) {

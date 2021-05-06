@@ -1,30 +1,33 @@
-import HeaderMenuView from '../view/menu.js';
-import HeaderFilterView from '../view/filter.js';
-import HeaderInfoView from '../view/info.js';
-import HeaderNavigationView from '../view/navigation.js';
-import HeaderCostView from '../view/cost.js';
+import HeaderMenuView from '../view/header/menu.js';
+import HeaderFilterView from '../view/header/filter.js';
+import HeaderInfoView from '../view/header/info.js';
+import HeaderNavigationView from '../view/header/navigation.js';
+import HeaderCostView from '../view/header/cost.js';
 
 import { position } from '../utils/const.js';
 import { render } from '../utils/render.js';
 
 export default class Trip {
-  constructor(container) {
+  constructor(container, headerModel, pointsModel) {
+    this._headerModel = headerModel;
+    this._pointsModel = pointsModel;
+
     this._tripHeaderTripMainContainer = container.querySelector('.trip-main');
     this._tripHeaderInfoContainer = null;
+
     this._tripPoints = null;
 
-    this._headerMenuComponent = new HeaderMenuView();
     this._headerFilterComponent = new HeaderFilterView();
+    this._headerMenuComponent = new HeaderMenuView();
     this._headerInfoComponent = new HeaderInfoView();
+
     this._headerNavigationComponent = null;
     this._headerCostComponent = null;
   }
 
-  init(tripPoints) {
-    this._tripPoints = tripPoints.slice();
-
-    this._headerNavigationComponent = new HeaderNavigationView(this._tripPoints);
-    this._headerCostComponent = new HeaderCostView(this._tripPoints);
+  init() {
+    this._headerNavigationComponent = new HeaderNavigationView(this._pointsModel.generateTrip());
+    this._headerCostComponent = new HeaderCostView(this._pointsModel.getSumTrip());
 
     this._renderMenu();
     this._renderFilter();
