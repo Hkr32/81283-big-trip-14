@@ -170,6 +170,7 @@ export default class PointEdit extends SmartView {
     this._offers = offers;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._changeTypeHandler = this._changeTypeHandler.bind(this);
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
@@ -258,7 +259,12 @@ export default class PointEdit extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(this._point);
+    this._callback.formSubmit(PointEdit.parseDataToPoint(this._data));
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(PointEdit.parseDataToPoint(this._data));
   }
 
   _priceInputHandler(evt) {
@@ -270,6 +276,7 @@ export default class PointEdit extends SmartView {
 
   _setInnerHandlers() {
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
     this.setChangePriceHandler();
     this.setChangeTypeHandler();
     this.setChangeDestinationHandler();
@@ -299,9 +306,27 @@ export default class PointEdit extends SmartView {
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
+  }
+
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datePickerStart) {
+      this._datePickerStart.destroy();
+      this._datePickerStart = null;
+    }
+    if (this._datePickerEnd) {
+      this._datePickerEnd.destroy();
+      this._datePickerEnd = null;
+    }
   }
 
   reset(point) {
