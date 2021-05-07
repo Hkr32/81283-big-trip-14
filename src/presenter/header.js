@@ -5,7 +5,7 @@ import HeaderNavigationView from '../view/header/navigation.js';
 import HeaderCostView from '../view/header/cost.js';
 
 import { position, UpdateType } from '../utils/const.js';
-import { render } from '../utils/render.js';
+import { render, remove } from '../utils/render.js';
 
 export default class Trip {
   constructor(container, headerModel, filterModel, pointsModel) {
@@ -31,6 +31,10 @@ export default class Trip {
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
+  _clearFilter() {
+    remove(this._headerFilterComponent);
+  }
+
   _renderFilter() {
     if (this._headerFilterComponent !== null) {
       this._headerFilterComponent = null;
@@ -53,6 +57,8 @@ export default class Trip {
     }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._clearFilter();
+    this._renderFilter();
   }
 
   _renderMenu() {
