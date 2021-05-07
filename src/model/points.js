@@ -51,7 +51,7 @@ export default class Points extends Observer {
         break;
     }
 
-    date = Length.ONE === lengthPoints
+    date = lengthPoints === Length.ONE
       ? dateFormat(first.dateFrom, 'D MMM')
       : `${dateFormat(first.dateFrom, 'D MMM')}&nbsp;&mdash;&nbsp; ${dateFormat(this._points[lastPoint].dateTo, 'D MMM')}`;
 

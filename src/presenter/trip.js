@@ -4,17 +4,21 @@ import MainSortingView from '../view/sorting.js';
 import PointListView from '../view/point-list.js';
 import PointEmptyListView from '../view/point-list-empty.js';
 
-import { SortType, UpdateType, UserAction } from '../utils/const.js';
-import { sortPointTime, sortPointPrice } from '../utils/point.js';
+import { SortType, FilterType, UpdateType, UserAction } from '../utils/const.js';
+import { sortPointTime, sortPointPrice, filterPointsFuture, filterPointsPast } from '../utils/point.js';
 import { render, remove } from '../utils/render.js';
 
 export default class Trip {
-  constructor(container, pointsModel) {
+  constructor(container, headerModel, pointsModel) {
+    this._headerModel = headerModel;
     this._pointsModel = pointsModel;
-    this._tripMainContainer = container.querySelector('.trip-events');
+
     this._tripPoints = null;
     this._pointPresenter = {};
+    this._currentFilterType = FilterType.EVERYTHING;
     this._currentSortType = SortType.DAY;
+
+    this._tripMainContainer = container.querySelector('.trip-events');
 
     this._pointSortComponent = null;
     this._pointListComponent = new PointListView();
@@ -25,6 +29,7 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
+    this._headerModel.addObserver(this._handleModelEvent);
     this._pointsModel.addObserver(this._handleModelEvent);
   }
 
@@ -33,6 +38,14 @@ export default class Trip {
   }
 
   _getPoints() {
+    console.log(this._currentFilterType)
+    switch (this._currentFilterType) {
+      case FilterType.FUTURE:
+        return filterPointsFuture(this._pointsModel.getPoints().slice());
+      case FilterType.PAST:
+        return filterPointsPast(this._pointsModel.getPoints().slice());
+    }
+
     switch (this._currentSortType) {
       case SortType.TIME:
         return this._pointsModel.getPoints().slice().sort(sortPointTime);
@@ -70,7 +83,7 @@ export default class Trip {
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
-        this._clearTrip({ resetSortType: true });
+        this._clearTrip({ resetSortType: true, resetFilterType: true });
         this._renderTrip();
         break;
     }
@@ -94,6 +107,17 @@ export default class Trip {
     }
 
     this._currentSortType = sortType;
+    this._clearTrip();
+    this._renderTrip();
+  }
+
+  _handleFilterTypeChange(filterType) {
+    if (this._currentFilterType === filterType) {
+      return;
+    }
+
+    console.log(filterType, this._currentFilterType)
+    this._currentFilterType = filterType;
     this._clearTrip();
     this._renderTrip();
   }
@@ -124,7 +148,7 @@ export default class Trip {
   }
 
   // @todo resetRenderedTaskCount = false need?
-  _clearTrip({ resetSortType = false } = {}) {
+  _clearTrip({ resetSortType = false, resetFilterType = false } = {}) {
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());
@@ -136,6 +160,9 @@ export default class Trip {
 
     if (resetSortType) {
       this._currentSortType = SortType.DAY;
+    }
+    if (resetFilterType) {
+      this._currentFilterType = FilterType.EVERYTHING;
     }
   }
 

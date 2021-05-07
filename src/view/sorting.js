@@ -43,21 +43,6 @@ export default class MainSorting extends AbstractView {
     return createMainSortingTemplate(this._currentSortType);
   }
 
-  _resetSelected() {
-    const items = this._element.querySelectorAll('.trip-sort__input:not([disabled])');
-    Array.from(items).forEach((item) => {
-      item.checked = false;
-    });
-  }
-
-  _setSelected(value) {
-    const item = this._element.querySelector(`.trip-sort__input[value="${value}"]`);
-
-    if (item) {
-      item.checked = true;
-    }
-  }
-
   _sortTypeChangeHandler(evt) {
     if (evt.target.tagName !== 'LABEL') {
       return;

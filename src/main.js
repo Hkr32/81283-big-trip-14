@@ -21,5 +21,5 @@ const headerPresenter = new HeaderPresenter(document.querySelector('.page-header
 headerPresenter.init();
 
 // Trip
-const tripPresenter = new TripPresenter(document.querySelector('.page-body'), pointsModel);
+const tripPresenter = new TripPresenter(document.querySelector('.page-body'), headerModel, pointsModel);
 tripPresenter.init();

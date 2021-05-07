@@ -16,6 +16,13 @@ export const SortType = {
   PRICE: 'sort-price',
 };
 
+// Типы фильтров
+export const FilterType = {
+  EVERYTHING: 'filter-everything',
+  FUTURE: 'filter-future',
+  PAST: 'filter-past',
+};
+
 // Соответствие типов
 export const Type = {
   TAXI: 'taxi',
