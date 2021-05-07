@@ -1,6 +1,12 @@
 import Observer from '../utils/observer.js';
 import { dateFormat } from '../utils/date.js';
 
+const Length = {
+  ONE: 1,
+  TWO: 2,
+  TREE: 3,
+};
+
 export default class Points extends Observer {
   constructor() {
     super();
@@ -19,29 +25,35 @@ export default class Points extends Observer {
     return this._points.reduce((sum, point) => sum + point.basePrice, 0);
   }
 
-  generateTrip () {
+  generateTrip() {
     let title = '';
     let date = '';
+    const lengthPoints = this._points.length;
+    if (lengthPoints === 0) {
+      return { title, date };
+    }
 
-    this._points.map((point, index, points) => {
-      if (index === 0) {
-        title += point.destination.name;
-        date += dateFormat(point.dateFrom, 'D MMM');
-      }
+    const [first, second, third] = this._points;
+    const lastPoint = lengthPoints - 1;
 
-      if (index === 1 && points.length > 3) {
-        title += ' &mdash; ... ';
-      }
+    switch (lengthPoints) {
+      case Length.ONE:
+        title = first.destination.name;
+        break;
+      case Length.TWO:
+        title = [first.destination.name, second.destination.name].join(' &mdash; ');
+        break;
+      case Length.TREE:
+        title = [first.destination.name, second.destination.name, third.destination.name].join(' &mdash; ');
+        break;
+      default:
+        title = `${first.destination.name} &mdash; ... &mdash; ${this._points[lastPoint].destination.name}`;
+        break;
+    }
 
-      if (index === 1 && points.length === 3) {
-        title += ' &mdash; ' + point.destination.name;
-      }
-
-      if (index !== 0 && index === points.length - 1) {
-        title += ' &mdash; ' + point.destination.name;
-        date += '&nbsp;&mdash;&nbsp;' + dateFormat(point.dateTo, 'D MMM');
-      }
-    });
+    date = Length.ONE === lengthPoints
+      ? dateFormat(first.dateFrom, 'D MMM')
+      : `${dateFormat(first.dateFrom, 'D MMM')}&nbsp;&mdash;&nbsp; ${dateFormat(this._points[lastPoint].dateTo, 'D MMM')}`;
 
     return { title, date };
   }
