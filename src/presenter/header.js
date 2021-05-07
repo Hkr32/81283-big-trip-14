@@ -4,26 +4,31 @@ import HeaderInfoView from '../view/header/info.js';
 import HeaderNavigationView from '../view/header/navigation.js';
 import HeaderCostView from '../view/header/cost.js';
 
-import { position, FilterType } from '../utils/const.js';
+import { position, UpdateType } from '../utils/const.js';
 import { render } from '../utils/render.js';
 
 export default class Trip {
-  constructor(container, headerModel, pointsModel) {
+  constructor(container, headerModel, filterModel, pointsModel) {
     this._headerModel = headerModel;
+    this._filterModel = filterModel;
     this._pointsModel = pointsModel;
 
-    this._currentFilterType = FilterType.EVERYTHING;
     this._tripPoints = null;
 
     this._tripHeaderInfoContainer = null;
     this._tripHeaderTripMainContainer = container.querySelector('.trip-main');
 
-    // this._headerFilterComponent = new HeaderFilterView();
+    this._headerFilterComponent = null;
+    this._headerNavigationComponent = null;
+    this._headerCostComponent = null;
     this._headerMenuComponent = new HeaderMenuView();
     this._headerInfoComponent = new HeaderInfoView();
 
-    this._headerNavigationComponent = null;
-    this._headerCostComponent = null;
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   _renderFilter() {
@@ -31,21 +36,23 @@ export default class Trip {
       this._headerFilterComponent = null;
     }
 
-    this._headerFilterComponent = new HeaderFilterView(this._currentFilterType);
+    this._headerFilterComponent = new HeaderFilterView(this._filterModel.getFilter());
     this._headerFilterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     const filterContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__filters');
     render(filterContainer, this._headerFilterComponent);
   }
 
+  _handleModelEvent() {
+    this.init();
+  }
+
   _handleFilterTypeChange(filterType) {
-    if (this._currentFilterType === filterType) {
+    if (this._filterModel.getFilter() === filterType) {
       return;
     }
 
-    console.log(filterType, this._currentFilterType)
-
-    this._currentFilterType = filterType;
+    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
   _renderMenu() {

@@ -32,8 +32,7 @@ export default class HeaderFilter extends AbstractView {
   }
 
   getTemplate() {
-    console.log('get')
-    return createHeaderFilterTemplate(this._filterTypeChangeHandler);
+    return createHeaderFilterTemplate(this._currentFilterType);
   }
 
   _filterTypeChangeHandler(evt) {
@@ -42,8 +41,6 @@ export default class HeaderFilter extends AbstractView {
     }
 
     evt.preventDefault();
-
-    console.log(evt.target)
 
     this._callback.filterTypeChange(evt.target.dataset.filterType);
   }

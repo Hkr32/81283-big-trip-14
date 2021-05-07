@@ -9,13 +9,13 @@ import { sortPointTime, sortPointPrice, filterPointsFuture, filterPointsPast } f
 import { render, remove } from '../utils/render.js';
 
 export default class Trip {
-  constructor(container, headerModel, pointsModel) {
+  constructor(container, headerModel, filterModel, pointsModel) {
     this._headerModel = headerModel;
+    this._filterModel = filterModel;
     this._pointsModel = pointsModel;
 
     this._tripPoints = null;
     this._pointPresenter = {};
-    this._currentFilterType = FilterType.EVERYTHING;
     this._currentSortType = SortType.DAY;
 
     this._tripMainContainer = container.querySelector('.trip-events');
@@ -30,6 +30,7 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._headerModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
     this._pointsModel.addObserver(this._handleModelEvent);
   }
 
@@ -38,19 +39,20 @@ export default class Trip {
   }
 
   _getPoints() {
-    console.log(this._currentFilterType)
-    switch (this._currentFilterType) {
+    const filterType = this._filterModel.getFilter();
+    const points = this._pointsModel.getPoints();
+    switch (filterType) {
       case FilterType.FUTURE:
-        return filterPointsFuture(this._pointsModel.getPoints().slice());
+        return filterPointsFuture(points);
       case FilterType.PAST:
-        return filterPointsPast(this._pointsModel.getPoints().slice());
+        return filterPointsPast(points);
     }
 
     switch (this._currentSortType) {
       case SortType.TIME:
-        return this._pointsModel.getPoints().slice().sort(sortPointTime);
+        return points.sort(sortPointTime);
       case SortType.PRICE:
-        return this._pointsModel.getPoints().slice().sort(sortPointPrice);
+        return points.sort(sortPointPrice);
     }
 
     return this._pointsModel.getPoints();
@@ -107,17 +109,6 @@ export default class Trip {
     }
 
     this._currentSortType = sortType;
-    this._clearTrip();
-    this._renderTrip();
-  }
-
-  _handleFilterTypeChange(filterType) {
-    if (this._currentFilterType === filterType) {
-      return;
-    }
-
-    console.log(filterType, this._currentFilterType)
-    this._currentFilterType = filterType;
     this._clearTrip();
     this._renderTrip();
   }

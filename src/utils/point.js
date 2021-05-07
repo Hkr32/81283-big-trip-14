@@ -1,4 +1,4 @@
-import { dateDiffInMinutes } from '../utils/date.js';
+import { dateDiffInMinutes, isSameOrAfterDate, isSameOrBeforeDate } from '../utils/date.js';
 
 const compareNumeric = (onePrice, secondPrice) => {
   return onePrice - secondPrice;
@@ -6,13 +6,13 @@ const compareNumeric = (onePrice, secondPrice) => {
 
 export const filterPointsFuture = (points) => {
   return points.filter((point) => {
-    return point;
+    return isSameOrAfterDate(point.dateFrom);
   });
 };
 
 export const filterPointsPast = (points) => {
   return points.filter((point) => {
-    return point;
+    return isSameOrBeforeDate(point.dateFrom);
   });
 };
 
