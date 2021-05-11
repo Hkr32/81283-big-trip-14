@@ -44,7 +44,7 @@ export default class MainSorting extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== 'LABEL') {
+    if (evt.target.tagName !== 'LABEL' && evt.target.dataset.sortType === undefined) {
       return;
     }
 
