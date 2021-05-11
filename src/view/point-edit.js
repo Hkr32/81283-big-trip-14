@@ -196,7 +196,7 @@ export default class PointEdit extends SmartView {
         time_24hr: true,
         dateFormat: 'y/m/d H:i',
         defaultDate: this._data.dateFrom,
-        onChange: this._startDateChangeHandler(),
+        onChange: this._startDateChangeHandler,
       },
     );
   }
@@ -214,7 +214,7 @@ export default class PointEdit extends SmartView {
         time_24hr: true,
         dateFormat: 'y/m/d H:i',
         defaultDate: this._data.dateTo,
-        onChange: this._endDateChangeHandler(),
+        onChange: this._endDateChangeHandler,
       },
     );
   }
