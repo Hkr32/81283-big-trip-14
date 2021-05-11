@@ -7,7 +7,7 @@ import HeaderCostView from '../view/header/cost.js';
 import { position, UpdateType } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
-export default class Trip {
+export default class Header {
   constructor(container, headerModel, filterModel, pointsModel) {
     this._headerModel = headerModel;
     this._filterModel = filterModel;
