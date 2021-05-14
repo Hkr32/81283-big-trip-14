@@ -9,8 +9,7 @@ import { sortPointTime, sortPointPrice, filterPointsFuture, filterPointsPast } f
 import { render, remove } from '../utils/render.js';
 
 export default class Trip {
-  constructor(container, headerModel, filterModel, pointsModel) {
-    this._headerModel = headerModel;
+  constructor(container, filterModel, pointsModel) {
     this._filterModel = filterModel;
     this._pointsModel = pointsModel;
 
@@ -29,7 +28,6 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._headerModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
     this._pointsModel.addObserver(this._handleModelEvent);
   }

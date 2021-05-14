@@ -8,8 +8,7 @@ import { position, UpdateType } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
 export default class Header {
-  constructor(container, headerModel, filterModel, pointsModel) {
-    this._headerModel = headerModel;
+  constructor(container, filterModel, pointsModel) {
     this._filterModel = filterModel;
     this._pointsModel = pointsModel;
 
@@ -28,7 +27,6 @@ export default class Header {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   _clearFilter() {
@@ -80,6 +78,7 @@ export default class Header {
     this._headerNavigationComponent = new HeaderNavigationView(this._pointsModel.generateTrip());
     this._headerCostComponent = new HeaderCostView(this._pointsModel.getSumTrip());
 
+    // @todo нужно удалять перед инициализацией?
     this._renderMenu();
     this._renderFilter();
     this._renderMain();
