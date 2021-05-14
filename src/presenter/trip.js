@@ -40,14 +40,20 @@ export default class Trip {
 
   _getPoints() {
     const filterType = this._filterModel.getFilter();
-    const points = this._pointsModel.getPoints();
+    let points = this._pointsModel.getPoints().slice();
+
     switch (filterType) {
       case FilterType.FUTURE:
-        return filterPointsFuture(points);
+        points = filterPointsFuture(points);
+
+        break;
       case FilterType.PAST:
-        return filterPointsPast(points);
+        points = filterPointsPast(points);
+
+        break;
     }
 
+    // @todo переделать сортировку, походу должно идти все от больше к меньшему???
     switch (this._currentSortType) {
       case SortType.TIME:
         return points.sort(sortPointTime);
@@ -55,7 +61,7 @@ export default class Trip {
         return points.sort(sortPointPrice);
     }
 
-    return this._pointsModel.getPoints();
+    return points;
   }
 
   _handleViewAction(actionType, updateType, update) {
@@ -133,9 +139,9 @@ export default class Trip {
     render(this._tripMainContainer, this._pointEmptyListComponent);
   }
 
-  _renderPoints() {
+  _renderPoints(points) {
     render(this._tripMainContainer, this._pointListComponent);
-    this._getPoints().slice().forEach((point) => this._renderPoint(point));
+    points.forEach((point) => this._renderPoint(point));
   }
 
   // @todo resetRenderedTaskCount = false need?
@@ -158,13 +164,15 @@ export default class Trip {
   }
 
   _renderTrip() {
-    if (this._getPoints().length === 0) {
+    const points = this._getPoints();
+
+    if (points.length === 0) {
       this._renderNoPoints();
 
       return;
     }
 
     this._renderSort();
-    this._renderPoints();
+    this._renderPoints(points);
   }
 }
