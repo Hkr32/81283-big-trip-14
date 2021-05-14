@@ -27,7 +27,6 @@ export default class Header {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
-    // this._headerModel.addObserver(this._handleModelEvent);
   }
 
   _handleModelEvent() {
@@ -41,8 +40,6 @@ export default class Header {
     }
 
     this._headerModel.setFilter(UpdateType.MAJOR, filterType);
-    // this._clearFilter();
-    // this._renderFilter();
     this._clearHeader();
     this._renderHeader();
   }
@@ -91,7 +88,6 @@ export default class Header {
   }
 
   _renderHeader() {
-    // @todo нужно удалять перед инициализацией?
     this._renderMenu();
     this._renderFilter();
     this._renderMain();
