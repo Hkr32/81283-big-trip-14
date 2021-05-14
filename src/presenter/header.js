@@ -27,10 +27,24 @@ export default class Header {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
+    // this._headerModel.addObserver(this._handleModelEvent);
   }
 
-  _clearFilter() {
-    remove(this._headerFilterComponent);
+  _handleModelEvent() {
+    this._clearHeader();
+    this._renderHeader();
+  }
+
+  _handleFilterTypeChange(filterType) {
+    if (this._headerModel.getFilter() === filterType) {
+      return;
+    }
+
+    this._headerModel.setFilter(UpdateType.MAJOR, filterType);
+    // this._clearFilter();
+    // this._renderFilter();
+    this._clearHeader();
+    this._renderHeader();
   }
 
   _renderFilter() {
@@ -45,20 +59,6 @@ export default class Header {
     render(filterContainer, this._headerFilterComponent);
   }
 
-  _handleModelEvent() {
-    this.init();
-  }
-
-  _handleFilterTypeChange(filterType) {
-    if (this._headerModel.getFilter() === filterType) {
-      return;
-    }
-
-    this._headerModel.setFilter(UpdateType.MAJOR, filterType);
-    this._clearFilter();
-    this._renderFilter();
-  }
-
   _renderMenu() {
     const menuContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__navigation');
     render(menuContainer, this._headerMenuComponent);
@@ -70,18 +70,36 @@ export default class Header {
   }
 
   _renderInfo() {
+    if (this._headerNavigationComponent !== null) {
+      this._headerNavigationComponent = null;
+    }
+    if (this._headerCostComponent !== null) {
+      this._headerCostComponent = null;
+    }
+
+    const points = this._pointsModel.getDisplayedPoints();
+    this._headerNavigationComponent = new HeaderNavigationView(this._headerModel.generateTrip(points));
+    this._headerCostComponent = new HeaderCostView(this._headerModel.getSumTrip(points));
     render(this._tripHeaderInfoContainer, this._headerNavigationComponent, position.AFTER_BEGIN);
     render(this._tripHeaderInfoContainer, this._headerCostComponent);
   }
 
-  init() {
-    this._headerNavigationComponent = new HeaderNavigationView(this._pointsModel.generateTrip());
-    this._headerCostComponent = new HeaderCostView(this._pointsModel.getSumTrip());
+  _clearHeader() {
+    remove(this._headerFilterComponent);
+    remove(this._headerNavigationComponent);
+    remove(this._headerCostComponent);
+  }
 
+  _renderHeader() {
     // @todo нужно удалять перед инициализацией?
     this._renderMenu();
     this._renderFilter();
     this._renderMain();
     this._renderInfo();
+  }
+
+  init() {
+    this._pointsModel.setDisplayedPoints(this._pointsModel.getPoints());
+    this._renderHeader();
   }
 }

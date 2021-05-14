@@ -38,7 +38,7 @@ export default class Trip {
 
   _getPoints() {
     const filterType = this._headerModel.getFilter();
-    let points = this._pointsModel.getPoints().slice();
+    let points = this._pointsModel.getPoints();
 
     switch (filterType) {
       case FilterType.FUTURE:
@@ -54,9 +54,13 @@ export default class Trip {
     // @todo переделать сортировку, походу должно идти все от больше к меньшему???
     switch (this._currentSortType) {
       case SortType.TIME:
-        return points.sort(sortPointTime);
+        points.sort(sortPointTime);
+
+        break;
       case SortType.PRICE:
-        return points.sort(sortPointPrice);
+        points.sort(sortPointPrice);
+
+        break;
     }
 
     return points;
@@ -163,6 +167,7 @@ export default class Trip {
 
   _renderTrip() {
     const points = this._getPoints();
+    this._pointsModel.setDisplayedPoints(points);
 
     if (points.length === 0) {
       this._renderNoPoints();
