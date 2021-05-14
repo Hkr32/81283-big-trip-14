@@ -7,19 +7,19 @@ import HeaderPresenter from './presenter/header.js';
 import TripPresenter from './presenter/trip.js';
 
 import PointModel from './model/points.js';
-import FilterModel from './model/filter.js';
+import HeaderModel from './model/header.js';
 
 // Генерируем случайный набор точек
 const points = new Array(POINT_COUNTER).fill().map(generatePoint);
 
 const pointsModel = new PointModel();
 pointsModel.setPoints(points);
-const filterModel = new FilterModel();
+const headerModel = new HeaderModel();
 
 // Header
-const headerPresenter = new HeaderPresenter(document.querySelector('.page-header'), filterModel, pointsModel);
+const headerPresenter = new HeaderPresenter(document.querySelector('.page-header'), headerModel, pointsModel);
 headerPresenter.init();
 
 // Trip
-const tripPresenter = new TripPresenter(document.querySelector('.page-body'), filterModel, pointsModel);
+const tripPresenter = new TripPresenter(document.querySelector('.page-body'), headerModel, pointsModel);
 tripPresenter.init();

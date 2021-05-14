@@ -8,8 +8,8 @@ import { position, UpdateType } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
 export default class Header {
-  constructor(container, filterModel, pointsModel) {
-    this._filterModel = filterModel;
+  constructor(container, headerModel, pointsModel) {
+    this._headerModel = headerModel;
     this._pointsModel = pointsModel;
 
     this._tripPoints = null;
@@ -38,7 +38,7 @@ export default class Header {
       this._headerFilterComponent = null;
     }
 
-    this._headerFilterComponent = new HeaderFilterView(this._filterModel.getFilter());
+    this._headerFilterComponent = new HeaderFilterView(this._headerModel.getFilter());
     this._headerFilterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     const filterContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__filters');
@@ -50,11 +50,11 @@ export default class Header {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
+    if (this._headerModel.getFilter() === filterType) {
       return;
     }
 
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._headerModel.setFilter(UpdateType.MAJOR, filterType);
     this._clearFilter();
     this._renderFilter();
   }
