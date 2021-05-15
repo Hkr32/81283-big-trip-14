@@ -25,7 +25,7 @@ export default class Header extends Observer {
   }
 
   getSumTrip(points) {
-    return points.reduce((sum, point) => sum + point.basePrice, 0);
+    return points.reduce((sum, point) => sum + Number(point.basePrice), 0);
   }
 
   generateTrip(points) {

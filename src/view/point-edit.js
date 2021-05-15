@@ -80,9 +80,9 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data) => 
       name: city = '',
       pictures: pictures = [],
     } = {},
-    basePrice = '',
-    dateFrom = '',
-    dateTo = '',
+    basePrice = null,
+    dateFrom = null,
+    dateTo = null,
   } = data;
 
   const iconSrc = type ? ('img/icons/' + type.toLowerCase() + '.png') : '';
@@ -270,7 +270,7 @@ export default class PointEdit extends SmartView {
   _priceInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      price: evt.target.value,
+      basePrice: Number(evt.target.value),
     }, true);
   }
 
