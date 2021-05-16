@@ -23,3 +23,10 @@ headerPresenter.init();
 // Trip
 const tripPresenter = new TripPresenter(document.querySelector('.page-body'), headerModel, pointsModel);
 tripPresenter.init();
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  tripPresenter.createPoint();
+});
+
+

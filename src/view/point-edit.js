@@ -1,7 +1,9 @@
 import SmartView from './smart.js';
+
 import { dateFormat } from '../utils/date.js';
-import { types } from '../utils/const.js';
+import { Type, types } from '../utils/const.js';
 import { getOfferId } from '../utils/point.js';
+
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
@@ -32,7 +34,7 @@ const createCitiesTemplate = (cities, currentCity) => {
   }, '');
 };
 
-const createPointCitiesTemplate = (cities, currentCity) => {
+const createPointCitiesTemplate = (cities, currentCity = '') => {
   const citiesTemplate = createCitiesTemplate(cities, currentCity);
 
   return `<datalist id="destination-list-1">${citiesTemplate}</datalist>`;
@@ -58,7 +60,7 @@ const createOffersTemplate = (offers, offersExternal) => {
   }, '');
 };
 
-const createPointOffersTemplate = (offers, offersExternal) => {
+const createPointOffersTemplate = (offers = [], offersExternal) => {
   const offersTemplate = createOffersTemplate(offers, offersExternal);
 
   return `<div class="event__available-offers">${offersTemplate}</div>`;
@@ -71,16 +73,16 @@ const createPointPhotosTemplate = (photos) => {
   </div>`;
 };
 
-const createPointEditTemplate = (destinationsExternal, offersExternal, data) => {
+const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}) => {
   const {
-    type = '',
+    type = Type.TAXI,
     offers = [],
     destination: {
       description: description = '',
-      name: city = '',
+      name: city = 'Amsterdam',
       pictures: pictures = [],
     } = {},
-    basePrice = null,
+    basePrice = 0,
     dateFrom = null,
     dateTo = null,
   } = data;
@@ -91,11 +93,11 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data) => 
   const cities = destinationsExternal.map((dest) => dest.name);
 
   const offersExternalByType = offersExternal.find((offer) => {
-    return offer.type === data.type;
+    return offer.type === type;
   });
 
   const typesTemplate = createPointTypesTemplate(types);
-  const citiesTemplate = createPointCitiesTemplate(cities, data.destination.name);
+  const citiesTemplate = createPointCitiesTemplate(cities, city);
   const offersTemplate = createPointOffersTemplate(offers, offersExternalByType.offers);
   const photosTemplate = createPointPhotosTemplate(pictures);
 
@@ -163,6 +165,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data) => 
 export default class PointEdit extends SmartView {
   constructor(destinations, offers, point) {
     super();
+
     this._data = PointEdit.parsePointToData(point);
     this._datePickerStart = null;
     this._datePickerEnd = null;
