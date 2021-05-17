@@ -59,7 +59,7 @@ const createOffersTemplate = (offers, offersExternal) => {
     });
 
     str += `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" name="event-offer-${offerId}" ${isChecked ? 'checked' : ''}>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" value="${offerId}" name="event-offers[]" ${isChecked ? 'checked' : ''}>
         <label class="event__offer-label" for="event-offer-${offerId}">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
@@ -188,6 +188,7 @@ export default class PointEdit extends SmartView {
     this._editClickHandler = this._editClickHandler.bind(this);
     this._changeTypeHandler = this._changeTypeHandler.bind(this);
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
+    this._changeOfferHandler = this._changeOfferHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._startDateInputHandler = this._startDateInputHandler.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
@@ -268,6 +269,19 @@ export default class PointEdit extends SmartView {
     });
   }
 
+  _changeOfferHandler(evt) {
+    const offer = evt.target.value;
+    if (evt.target.checked) {
+      if (!this._data.offers || this._data.offers.length === 0) {
+        this._data.offers = [];
+      }
+      this._data.offers.push(offer);
+    } else {
+      const index = this._data.offers.indexOf(offer);
+      this._data.offers.splice(index, 1);
+    }
+  }
+
   _editClickHandler(evt) {
     evt.preventDefault();
     this._callback.editClick();
@@ -296,6 +310,7 @@ export default class PointEdit extends SmartView {
     this.setChangePriceHandler();
     this.setChangeTypeHandler();
     this.setChangeDestinationHandler();
+    this.setChangeOffersHandler();
     this.setEditClickHandler(this._callback.editClick);
   }
 
@@ -315,6 +330,13 @@ export default class PointEdit extends SmartView {
 
   setChangeDestinationHandler() {
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._changeDestinationHandler);
+  }
+
+  setChangeOffersHandler() {
+    const offers = this.getElement().querySelectorAll('.event__available-offers input.event__offer-checkbox');
+    offers.forEach((offer) => {
+      offer.addEventListener('change', this._changeOfferHandler);
+    });
   }
 
   setFormSubmitHandler(callback) {
