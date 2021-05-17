@@ -7,15 +7,26 @@ import { getOfferId } from '../utils/point.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const createPointTypesTemplate = (types) => {
+const createTypesTemplate = (types, currentType) => {
+  return types.reduce((str, type) => {
+    const isChecked = type === currentType;
+
+    str += `<div class="event__type-item">
+      <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${isChecked ? 'checked' : ''}>
+      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
+    </div>`;
+
+    return str;
+  }, '');
+};
+
+const createPointTypesTemplate = (types, currentType) => {
+  const typesTemplate = createTypesTemplate(types, currentType);
+
   return `<div class="event__type-list">
     <fieldset class="event__type-group">
       <legend class="visually-hidden">Event type</legend>
-      ${types.reduce((str, type) => `${str}
-      <div class="event__type-item">
-        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-        <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
-      </div>`, '')}
+      ${typesTemplate}
     </fieldset>
   </div>`;
 };
@@ -79,7 +90,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
     offers = [],
     destination: {
       description: description = '',
-      name: city = 'Amsterdam',
+      name: city = '',
       pictures: pictures = [],
     } = {},
     basePrice = 0,
@@ -96,7 +107,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
     return offer.type === type;
   });
 
-  const typesTemplate = createPointTypesTemplate(types);
+  const typesTemplate = createPointTypesTemplate(types, type);
   const citiesTemplate = createPointCitiesTemplate(cities, city);
   const offersTemplate = createPointOffersTemplate(offers, offersExternalByType.offers);
   const photosTemplate = createPointPhotosTemplate(pictures);
@@ -179,7 +190,9 @@ export default class PointEdit extends SmartView {
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._startDateInputHandler = this._startDateInputHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateInputHandler = this._endDateInputHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._startDateInputHandler();

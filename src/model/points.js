@@ -4,23 +4,14 @@ export default class Points extends Observer {
   constructor() {
     super();
     this._points = [];
-    this._displayedPoints = [];
   }
 
   setPoints(points) {
     this._points = points.slice();
   }
 
-  setDisplayedPoints(points) {
-    this._displayedPoints = points.slice();
-  }
-
   getPoints() {
     return this._points.slice();
-  }
-
-  getDisplayedPoints() {
-    return this._displayedPoints;
   }
 
   updatePoint(updateType, update) {

@@ -178,7 +178,6 @@ export default class Trip {
 
   _renderTrip() {
     const points = this._getPoints();
-    this._pointsModel.setDisplayedPoints(points);
 
     if (points.length === 0) {
       this._renderNoPoints();

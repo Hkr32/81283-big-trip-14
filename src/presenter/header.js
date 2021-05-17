@@ -12,8 +12,6 @@ export default class Header {
     this._headerModel = headerModel;
     this._pointsModel = pointsModel;
 
-    this._tripPoints = null;
-
     this._tripHeaderInfoContainer = null;
     this._tripHeaderTripMainContainer = container.querySelector('.trip-main');
 
@@ -74,7 +72,8 @@ export default class Header {
       this._headerCostComponent = null;
     }
 
-    const points = this._pointsModel.getDisplayedPoints();
+    const points = this._pointsModel.getPoints();
+
     this._headerNavigationComponent = new HeaderNavigationView(this._headerModel.generateTrip(points));
     this._headerCostComponent = new HeaderCostView(this._headerModel.getSumTrip(points));
     render(this._tripHeaderInfoContainer, this._headerNavigationComponent, position.AFTER_BEGIN);
@@ -95,7 +94,6 @@ export default class Header {
   }
 
   init() {
-    this._pointsModel.setDisplayedPoints(this._pointsModel.getPoints());
     this._renderHeader();
   }
 }
