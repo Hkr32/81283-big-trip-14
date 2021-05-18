@@ -3,7 +3,7 @@ import PointEditView from '../view/point-edit.js';
 import { nanoid } from 'nanoid';
 
 import { remove, render } from '../utils/render.js';
-import { UserAction, UpdateType, position } from '../utils/const.js';
+import { UserAction, UpdateType, position, Type } from '../utils/const.js';
 
 import { offers, destinations } from '../mock/const.js';
 
@@ -24,7 +24,20 @@ export default class PointNew {
       return;
     }
 
-    this._pointEditComponent = new PointEditView(destinations, offers, {});
+    const defaultValue = {
+      type: Type.TAXI,
+      offers: [],
+      destination: {
+        description: '',
+        name: '',
+        pictures: [],
+      },
+      basePrice: 0,
+      dateFrom: null,
+      dateTo: null,
+    };
+
+    this._pointEditComponent = new PointEditView(destinations, offers, defaultValue);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
@@ -47,7 +60,7 @@ export default class PointNew {
   _handleFormSubmit(point) {
     this._changeData(
       UserAction.ADD_POINT,
-      UpdateType.MINOR,
+      UpdateType.MAJOR,
       Object.assign({ id: nanoid() }, point),
     );
     this.destroy();

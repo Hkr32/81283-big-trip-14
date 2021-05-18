@@ -71,7 +71,7 @@ const createOffersTemplate = (offers, offersExternal) => {
   }, '');
 };
 
-const createPointOffersTemplate = (offers = [], offersExternal) => {
+const createPointOffersTemplate = (offers = [], offersExternal = []) => {
   const offersTemplate = createOffersTemplate(offers, offersExternal);
 
   return `<div class="event__available-offers">${offersTemplate}</div>`;
@@ -86,7 +86,7 @@ const createPointPhotosTemplate = (photos) => {
 
 const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}) => {
   const {
-    type = Type.TAXI,
+    type = '',
     offers = [],
     destination: {
       description: description = '',
@@ -109,7 +109,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
 
   const typesTemplate = createPointTypesTemplate(types, type);
   const citiesTemplate = createPointCitiesTemplate(cities, city);
-  const offersTemplate = createPointOffersTemplate(offers, offersExternalByType.offers);
+  const offersTemplate = createPointOffersTemplate(offers, offersExternalByType !== undefined ? offersExternalByType.offers : []);
   const photosTemplate = createPointPhotosTemplate(pictures);
 
   return `<li class="trip-events__item">
@@ -270,14 +270,17 @@ export default class PointEdit extends SmartView {
   }
 
   _changeOfferHandler(evt) {
-    const offer = evt.target.value;
+    const offerValue = evt.target.value;
     if (evt.target.checked) {
-      if (!this._data.offers || this._data.offers.length === 0) {
-        this._data.offers = [];
-      }
-      this._data.offers.push(offer);
+      const currentOffer = this._offers.find((offerExternal) => {
+        return offerExternal.type === this._data.type;
+      });
+      const selectedOffer = currentOffer.offers.find(({ title }) => {
+        return getOfferId(title) === offerValue;
+      });
+      this._data.offers.push(selectedOffer);
     } else {
-      const index = this._data.offers.indexOf(offer);
+      const index = this._data.offers.indexOf(offerValue);
       this._data.offers.splice(index, 1);
     }
   }
