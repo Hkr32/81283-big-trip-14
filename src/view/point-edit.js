@@ -1,11 +1,12 @@
+
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+
 import SmartView from './smart.js';
 
 import { dateFormat } from '../utils/date.js';
 import { Type, types } from '../utils/const.js';
 import { getOfferId } from '../utils/point.js';
-
-import flatpickr from 'flatpickr';
-import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createTypesTemplate = (types, currentType) => {
   return types.reduce((str, type) => {
@@ -86,7 +87,7 @@ const createPointPhotosTemplate = (photos) => {
 
 const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}) => {
   const {
-    type = '',
+    type = Type.taxi,
     offers = [],
     destination: {
       description: description = '',
@@ -145,7 +146,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" name="event-price" value="${basePrice}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
