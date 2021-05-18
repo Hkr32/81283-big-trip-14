@@ -1,4 +1,5 @@
 import AbstractView from './abstract.js';
+
 import { dateFormat, dateToISO, dateDiffStr } from '../utils/date.js';
 
 const createPointOffersTemplate = (offers) => {

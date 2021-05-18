@@ -1,19 +1,33 @@
-import SmartView from './smart.js';
-import { dateFormat } from '../utils/date.js';
-import { types } from '../utils/const.js';
-import { getOfferId } from '../utils/point.js';
+
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const createPointTypesTemplate = (types) => {
+import SmartView from './smart.js';
+
+import { dateFormat } from '../utils/date.js';
+import { Type, types } from '../utils/const.js';
+import { getOfferId } from '../utils/point.js';
+
+const createTypesTemplate = (types, currentType) => {
+  return types.reduce((str, type) => {
+    const isChecked = type === currentType;
+
+    str += `<div class="event__type-item">
+      <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${isChecked ? 'checked' : ''}>
+      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
+    </div>`;
+
+    return str;
+  }, '');
+};
+
+const createPointTypesTemplate = (types, currentType) => {
+  const typesTemplate = createTypesTemplate(types, currentType);
+
   return `<div class="event__type-list">
     <fieldset class="event__type-group">
       <legend class="visually-hidden">Event type</legend>
-      ${types.reduce((str, type) => `${str}
-      <div class="event__type-item">
-        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-        <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
-      </div>`, '')}
+      ${typesTemplate}
     </fieldset>
   </div>`;
 };
@@ -32,7 +46,7 @@ const createCitiesTemplate = (cities, currentCity) => {
   }, '');
 };
 
-const createPointCitiesTemplate = (cities, currentCity) => {
+const createPointCitiesTemplate = (cities, currentCity = '') => {
   const citiesTemplate = createCitiesTemplate(cities, currentCity);
 
   return `<datalist id="destination-list-1">${citiesTemplate}</datalist>`;
@@ -46,7 +60,7 @@ const createOffersTemplate = (offers, offersExternal) => {
     });
 
     str += `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" name="event-offer-${offerId}" ${isChecked ? 'checked' : ''}>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerId}" type="checkbox" value="${offerId}" name="event-offers[]" ${isChecked ? 'checked' : ''}>
         <label class="event__offer-label" for="event-offer-${offerId}">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
@@ -58,7 +72,7 @@ const createOffersTemplate = (offers, offersExternal) => {
   }, '');
 };
 
-const createPointOffersTemplate = (offers, offersExternal) => {
+const createPointOffersTemplate = (offers = [], offersExternal = []) => {
   const offersTemplate = createOffersTemplate(offers, offersExternal);
 
   return `<div class="event__available-offers">${offersTemplate}</div>`;
@@ -71,18 +85,18 @@ const createPointPhotosTemplate = (photos) => {
   </div>`;
 };
 
-const createPointEditTemplate = (destinationsExternal, offersExternal, data) => {
+const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}) => {
   const {
-    type = '',
+    type = Type.taxi,
     offers = [],
     destination: {
       description: description = '',
       name: city = '',
       pictures: pictures = [],
     } = {},
-    basePrice = '',
-    dateFrom = '',
-    dateTo = '',
+    basePrice = 0,
+    dateFrom = null,
+    dateTo = null,
   } = data;
 
   const iconSrc = type ? ('img/icons/' + type.toLowerCase() + '.png') : '';
@@ -91,12 +105,12 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data) => 
   const cities = destinationsExternal.map((dest) => dest.name);
 
   const offersExternalByType = offersExternal.find((offer) => {
-    return offer.type === data.type;
+    return offer.type === type;
   });
 
-  const typesTemplate = createPointTypesTemplate(types);
-  const citiesTemplate = createPointCitiesTemplate(cities, data.destination.name);
-  const offersTemplate = createPointOffersTemplate(offers, offersExternalByType.offers);
+  const typesTemplate = createPointTypesTemplate(types, type);
+  const citiesTemplate = createPointCitiesTemplate(cities, city);
+  const offersTemplate = createPointOffersTemplate(offers, offersExternalByType !== undefined ? offersExternalByType.offers : []);
   const photosTemplate = createPointPhotosTemplate(pictures);
 
   return `<li class="trip-events__item">
@@ -132,7 +146,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data) => 
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" name="event-price" value="${basePrice}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -163,6 +177,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data) => 
 export default class PointEdit extends SmartView {
   constructor(destinations, offers, point) {
     super();
+
     this._data = PointEdit.parsePointToData(point);
     this._datePickerStart = null;
     this._datePickerEnd = null;
@@ -170,12 +185,16 @@ export default class PointEdit extends SmartView {
     this._offers = offers;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._changeTypeHandler = this._changeTypeHandler.bind(this);
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
+    this._changeOfferHandler = this._changeOfferHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._startDateInputHandler = this._startDateInputHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateInputHandler = this._endDateInputHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._startDateInputHandler();
@@ -195,7 +214,7 @@ export default class PointEdit extends SmartView {
         time_24hr: true,
         dateFormat: 'y/m/d H:i',
         defaultDate: this._data.dateFrom,
-        onChange: this._startDateChangeHandler(),
+        onChange: this._startDateChangeHandler,
       },
     );
   }
@@ -213,7 +232,7 @@ export default class PointEdit extends SmartView {
         time_24hr: true,
         dateFormat: 'y/m/d H:i',
         defaultDate: this._data.dateTo,
-        onChange: this._endDateChangeHandler(),
+        onChange: this._endDateChangeHandler,
       },
     );
   }
@@ -251,6 +270,22 @@ export default class PointEdit extends SmartView {
     });
   }
 
+  _changeOfferHandler(evt) {
+    const offerValue = evt.target.value;
+    if (evt.target.checked) {
+      const currentOffer = this._offers.find((offerExternal) => {
+        return offerExternal.type === this._data.type;
+      });
+      const selectedOffer = currentOffer.offers.find(({ title }) => {
+        return getOfferId(title) === offerValue;
+      });
+      this._data.offers.push(selectedOffer);
+    } else {
+      const index = this._data.offers.indexOf(offerValue);
+      this._data.offers.splice(index, 1);
+    }
+  }
+
   _editClickHandler(evt) {
     evt.preventDefault();
     this._callback.editClick();
@@ -258,21 +293,28 @@ export default class PointEdit extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(this._point);
+    this._callback.formSubmit(PointEdit.parseDataToPoint(this._data));
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(PointEdit.parseDataToPoint(this._data));
   }
 
   _priceInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      price: evt.target.value,
+      basePrice: Number(evt.target.value),
     }, true);
   }
 
   _setInnerHandlers() {
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
     this.setChangePriceHandler();
     this.setChangeTypeHandler();
     this.setChangeDestinationHandler();
+    this.setChangeOffersHandler();
     this.setEditClickHandler(this._callback.editClick);
   }
 
@@ -294,14 +336,39 @@ export default class PointEdit extends SmartView {
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._changeDestinationHandler);
   }
 
+  setChangeOffersHandler() {
+    const offers = this.getElement().querySelectorAll('.event__available-offers input.event__offer-checkbox');
+    offers.forEach((offer) => {
+      offer.addEventListener('change', this._changeOfferHandler);
+    });
+  }
+
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
+  }
+
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datePickerStart) {
+      this._datePickerStart.destroy();
+      this._datePickerStart = null;
+    }
+    if (this._datePickerEnd) {
+      this._datePickerEnd.destroy();
+      this._datePickerEnd = null;
+    }
   }
 
   reset(point) {

@@ -4,6 +4,18 @@ export const dateDiffInMinutes = (dateFrom, dateTo) => {
   return dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
 };
 
+export const isSameOrAfterDate = (date) => {
+  const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
+  dayjs.extend(isSameOrAfter);
+  return dayjs(date).isSameOrAfter(dayjs());
+};
+
+export const isSameOrBeforeDate = (date) => {
+  const isSameOrBefore = require('dayjs/plugin/isSameOrBefore');
+  dayjs.extend(isSameOrBefore);
+  return dayjs(date).isSameOrBefore(dayjs());
+};
+
 // Получение разницы дат
 export const dateDiffStr = (dateFrom, dateTo) => {
   const MINUTE_IN_DAY = 1440;
