@@ -7,6 +7,28 @@ import HeaderCostView from '../view/header/cost.js';
 import { position, UpdateType, MenuItem } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.ADD_NEW_POINT:
+      console.log(MenuItem.ADD_NEW_POINT)
+      // Скрыть статистику
+      // Показать точки
+      // Показать форму добавления новой точки
+      // Убрать выделение с ADD NEW POINT после сохранения
+      break;
+    case MenuItem.TABLE:
+      console.log(MenuItem.TABLE)
+      // Показать точки
+      // Скрыть статистику
+      break;
+    case MenuItem.STATISTICS:
+      console.log(MenuItem.STATISTICS)
+      // Скрыть точки
+      // Показать статистику
+      break;
+  }
+};
+
 export default class Header {
   constructor(container, headerModel, pointsModel) {
     this._headerModel = headerModel;
@@ -42,25 +64,6 @@ export default class Header {
     this._renderHeader();
   }
 
-  _handleSiteMenuClick (menuItem) {
-    switch (menuItem) {
-      case MenuItem.ADD_NEW_POINT:
-        // Скрыть статистику
-        // Показать точки
-        // Показать форму добавления новой точки
-        // Убрать выделение с ADD NEW POINT после сохранения
-        break;
-      case MenuItem.POINTS:
-        // Показать точки
-        // Скрыть статистику
-        break;
-      case MenuItem.STATISTICS:
-        // Скрыть точки
-        // Показать статистику
-        break;
-    }
-  }
-
   _renderFilter() {
     if (this._headerFilterComponent !== null) {
       this._headerFilterComponent = null;
@@ -77,6 +80,8 @@ export default class Header {
     //
     const menuContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__navigation');
     render(menuContainer, this._headerMenuComponent);
+
+    this._headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   }
 
   _renderMain() {

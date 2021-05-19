@@ -1,9 +1,6 @@
 import AbstractView from './abstract.js';
 
-const createStatisticsTemplate = () => `<section class="statistics">
-<h2 class="visually-hidden">Trip statistics</h2>
-
-<div class="statistics__item statistics__item--money">
+const createStatisticsTemplate = () => `<div class="statistics__item statistics__item--money">
   <canvas class="statistics__chart  statistics__chart--money" width="900"></canvas>
 </div>
 
@@ -13,8 +10,7 @@ const createStatisticsTemplate = () => `<section class="statistics">
 
 <div class="statistics__item statistics__item--time-spend">
   <canvas class="statistics__chart  statistics__chart--time" width="900"></canvas>
-</div>
-</section>`;
+</div>`;
 
 export default class Statistics extends AbstractView {
   getTemplate() {

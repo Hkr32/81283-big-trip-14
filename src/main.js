@@ -5,6 +5,7 @@ import { POINT_COUNTER } from './utils/const.js';
 
 import HeaderPresenter from './presenter/header.js';
 import TripPresenter from './presenter/trip.js';
+import StatisticsPresenter from './presenter/statistics.js';
 
 import PointModel from './model/points.js';
 import HeaderModel from './model/header.js';
@@ -23,6 +24,10 @@ headerPresenter.init();
 // Trip
 const tripPresenter = new TripPresenter(document.querySelector('.page-body'), headerModel, pointsModel);
 tripPresenter.init();
+
+// Statistics
+const statisticsPresenter = new StatisticsPresenter(document.querySelector('.page-body section.statistics'), pointsModel);
+statisticsPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
