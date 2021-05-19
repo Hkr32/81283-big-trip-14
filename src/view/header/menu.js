@@ -17,8 +17,6 @@ export default class HeaderMenu extends AbstractView {
     this._currentItem = MenuItem.TABLE;
 
     this._menuClickHandler = this._menuClickHandler.bind(this);
-
-    // this.setClickMenuHandler();
   }
 
   _menuClickHandler(evt) {
@@ -27,9 +25,9 @@ export default class HeaderMenu extends AbstractView {
     }
 
     evt.preventDefault();
-    console.log(evt.target.dataset.menu)
 
-    this._callback.menuClick(evt.target.value);
+    this._callback.menuClick(evt.target.dataset.menu);
+    this.setMenuItem(evt.target.dataset.menu);
   }
 
   setMenuClickHandler(callback) {
@@ -43,10 +41,8 @@ export default class HeaderMenu extends AbstractView {
   setMenuItem(menuItem) {
     const menu = this.getElement().querySelectorAll('.trip-tabs__btn');
     menu.forEach((item) => {
-      console.log(item)
       item.classList.remove('trip-tabs__btn--active');
     });
-
 
     const item = this.getElement().querySelector(`.trip-tabs__btn[data-menu=${menuItem}]`);
 

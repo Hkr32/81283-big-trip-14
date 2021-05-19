@@ -7,6 +7,11 @@ import HeaderCostView from '../view/header/cost.js';
 import { position, UpdateType, MenuItem } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
+const handlePointNewFormClose = () => {
+  this._headerMenuComponent.getElement().querySelector(`[value=${MenuItem.TABLE}]`).disabled = false;
+  this._headerMenuComponent.setMenuItem(MenuItem.TABLE);
+};
+
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
@@ -15,6 +20,8 @@ const handleSiteMenuClick = (menuItem) => {
       // Показать точки
       // Показать форму добавления новой точки
       // Убрать выделение с ADD NEW POINT после сохранения
+      tripPresenter.createPoint(handlePointNewFormClose);
+      this._headerMenuComponent.getElement().querySelector(`[value=${MenuItem.TABLE}]`).disabled = true;
       break;
     case MenuItem.TABLE:
       console.log(MenuItem.TABLE)
