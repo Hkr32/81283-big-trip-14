@@ -4,7 +4,7 @@ import HeaderInfoView from '../view/header/info.js';
 import HeaderNavigationView from '../view/header/navigation.js';
 import HeaderCostView from '../view/header/cost.js';
 
-import { position, UpdateType } from '../utils/const.js';
+import { position, UpdateType, MenuItem } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
 export default class Header {
@@ -42,6 +42,25 @@ export default class Header {
     this._renderHeader();
   }
 
+  _handleSiteMenuClick (menuItem) {
+    switch (menuItem) {
+      case MenuItem.ADD_NEW_POINT:
+        // Скрыть статистику
+        // Показать точки
+        // Показать форму добавления новой точки
+        // Убрать выделение с ADD NEW POINT после сохранения
+        break;
+      case MenuItem.POINTS:
+        // Показать точки
+        // Скрыть статистику
+        break;
+      case MenuItem.STATISTICS:
+        // Скрыть точки
+        // Показать статистику
+        break;
+    }
+  }
+
   _renderFilter() {
     if (this._headerFilterComponent !== null) {
       this._headerFilterComponent = null;
@@ -55,6 +74,7 @@ export default class Header {
   }
 
   _renderMenu() {
+    //
     const menuContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__navigation');
     render(menuContainer, this._headerMenuComponent);
   }

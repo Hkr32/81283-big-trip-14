@@ -120,7 +120,6 @@ export default class Point {
   }
 
   _handleFormSubmit(update) {
-    // @todo что-то проверять по изменению и менять тип обновления?
     this._changeData(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,

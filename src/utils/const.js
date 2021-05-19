@@ -9,6 +9,13 @@ export const position = {
   AFTER_END: 'afterend', // после element (после закрывающего тега)
 };
 
+// Элементы меню
+export const MenuItem = {
+  ADD_NEW_POINT: 'ADD_NEW_POINT',
+  TABLE: 'TABLE',
+  STATISTICS: 'STATISTICS',
+};
+
 // Типы сортировки
 export const SortType = {
   DAY: 'sort-day',
