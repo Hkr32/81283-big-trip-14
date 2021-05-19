@@ -13,7 +13,7 @@ export default class Header {
     this._pointsModel = pointsModel;
 
     this._tripHeaderInfoContainer = null;
-    this._tripHeaderTripMainContainer = container.querySelector('.trip-main');
+    this._tripHeaderTripMainContainer = container;
 
     this._headerFilterComponent = null;
     this._headerNavigationComponent = null;
@@ -25,11 +25,11 @@ export default class Header {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
+    this._headerModel.addObserver(this._handleModelEvent);
   }
 
   _handleModelEvent() {
-    this._clearHeader();
-    this._renderHeader();
+    this.init();
   }
 
   _handleFilterTypeChange(filterType) {
@@ -94,6 +94,7 @@ export default class Header {
   }
 
   init() {
+    this._clearHeader();
     this._renderHeader();
   }
 }

@@ -17,7 +17,7 @@ pointsModel.setPoints(points);
 const headerModel = new HeaderModel();
 
 // Header
-const headerPresenter = new HeaderPresenter(document.querySelector('.page-header'), headerModel, pointsModel);
+const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerModel, pointsModel);
 headerPresenter.init();
 
 // Trip
