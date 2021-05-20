@@ -27,7 +27,7 @@ tripPresenter.init();
 
 // Statistics
 const statisticsPresenter = new StatisticsPresenter(document.querySelector('.page-body section.statistics'), pointsModel);
-statisticsPresenter.init();
+// statisticsPresenter.init();
 
 const handlePointNewFormClose = () => {
   document.querySelector('.trip-main__event-add-btn').disabled = false;
@@ -44,27 +44,38 @@ const handleSiteMenuClick = (menuItem) => {
       document.querySelector('.trip-main__event-add-btn').disabled = true;
       break;
     case MenuItem.TABLE:
-      console.log(MenuItem.TABLE)
-      // Показать точки
+      document.querySelector('.trip-main__event-add-btn').disabled = false;
+      tripPresenter.destroy();
+      headerModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripPresenter.init();
-      // Скрыть статистику
+      statisticsPresenter.destroy();
       break;
     case MenuItem.STATISTICS:
-      console.log(MenuItem.STATISTICS)
-      // Скрыть точки
+      document.querySelector('.trip-main__event-add-btn').disabled = true;
+
+      // @todo Нет эффекта, все равно можно нажать на фильтры
+      const filters = document.querySelectorAll('.trip-filters input.trip-filters__filter-input');
+      const labels = document.querySelectorAll('.trip-filters label.trip-filters__filter-label');
+      filters.forEach((filter) => {
+        filter.disabled = true;
+      });
+      labels.forEach((label) => {
+        label.disabled = true;
+      });
+
       tripPresenter.destroy();
-      // Показать статистику
+      statisticsPresenter.init();
       break;
   }
 };
-headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 // Header
 const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
 headerPresenter.init();
 
-
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
   handleSiteMenuClick(MenuItem.ADD_NEW_POINT);
 });
+
+headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
