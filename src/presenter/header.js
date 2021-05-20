@@ -1,43 +1,13 @@
-import HeaderMenuView from '../view/header/menu.js';
 import HeaderFilterView from '../view/header/filter.js';
 import HeaderInfoView from '../view/header/info.js';
 import HeaderNavigationView from '../view/header/navigation.js';
 import HeaderCostView from '../view/header/cost.js';
 
-import { position, UpdateType, MenuItem } from '../utils/const.js';
+import { position, UpdateType } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
-const handlePointNewFormClose = () => {
-  this._headerMenuComponent.getElement().querySelector(`[value=${MenuItem.TABLE}]`).disabled = false;
-  this._headerMenuComponent.setMenuItem(MenuItem.TABLE);
-};
-
-const handleSiteMenuClick = (menuItem) => {
-  switch (menuItem) {
-    case MenuItem.ADD_NEW_POINT:
-      console.log(MenuItem.ADD_NEW_POINT)
-      // Скрыть статистику
-      // Показать точки
-      // Показать форму добавления новой точки
-      // Убрать выделение с ADD NEW POINT после сохранения
-      tripPresenter.createPoint(handlePointNewFormClose);
-      this._headerMenuComponent.getElement().querySelector(`[value=${MenuItem.TABLE}]`).disabled = true;
-      break;
-    case MenuItem.TABLE:
-      console.log(MenuItem.TABLE)
-      // Показать точки
-      // Скрыть статистику
-      break;
-    case MenuItem.STATISTICS:
-      console.log(MenuItem.STATISTICS)
-      // Скрыть точки
-      // Показать статистику
-      break;
-  }
-};
-
 export default class Header {
-  constructor(container, headerModel, pointsModel) {
+  constructor(container, headerMenuComponent, headerModel, pointsModel) {
     this._headerModel = headerModel;
     this._pointsModel = pointsModel;
 
@@ -47,7 +17,7 @@ export default class Header {
     this._headerFilterComponent = null;
     this._headerNavigationComponent = null;
     this._headerCostComponent = null;
-    this._headerMenuComponent = new HeaderMenuView();
+    this._headerMenuComponent = headerMenuComponent;
     this._headerInfoComponent = new HeaderInfoView();
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -87,8 +57,6 @@ export default class Header {
     //
     const menuContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__navigation');
     render(menuContainer, this._headerMenuComponent);
-
-    this._headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   }
 
   _renderMain() {

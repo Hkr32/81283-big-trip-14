@@ -39,9 +39,9 @@ export default class Trip {
     this._renderTrip();
   }
 
-  createPoint() {
+  createPoint(callback) {
     this._currentSortType = SortType.DAY;
-    this._pointNewPresenter.init();
+    this._pointNewPresenter.init(callback);
   }
 
   _getPoints() {
