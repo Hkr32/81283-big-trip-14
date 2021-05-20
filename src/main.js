@@ -1,7 +1,7 @@
 // @todo Удалить после того как будут реальные данные
 import { generatePoint } from './mock/point.js';
 
-import { POINT_COUNTER, MenuItem } from './utils/const.js';
+import { POINT_COUNTER, MenuItem, UpdateType, FilterType } from './utils/const.js';
 
 import HeaderMenuView from './view/header/menu.js';
 
@@ -37,27 +37,27 @@ const handlePointNewFormClose = () => {
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
-      console.log(MenuItem.ADD_NEW_POINT)
-      // Скрыть статистику
-      // Показать точки
-      // Убрать выделение с ADD NEW POINT после сохранения
+      tripPresenter.destroy();
+      headerModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      tripPresenter.init();
       tripPresenter.createPoint(handlePointNewFormClose);
       document.querySelector('.trip-main__event-add-btn').disabled = true;
       break;
     case MenuItem.TABLE:
       console.log(MenuItem.TABLE)
       // Показать точки
+      tripPresenter.init();
       // Скрыть статистику
       break;
     case MenuItem.STATISTICS:
       console.log(MenuItem.STATISTICS)
       // Скрыть точки
+      tripPresenter.destroy();
       // Показать статистику
       break;
   }
 };
-
-// headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 // Header
 const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
