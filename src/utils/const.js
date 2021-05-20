@@ -58,6 +58,20 @@ export const types = [
   Type.RESTAURANT,
 ];
 
+// Дефолтный объект
+export const defaultPoint = {
+  type: Type.TAXI,
+  offers: [],
+  destination: {
+    description: '',
+    name: '',
+    pictures: [],
+  },
+  basePrice: 0,
+  dateFrom: null,
+  dateTo: null,
+};
+
 // Действия пользователя
 export const UserAction = {
   UPDATE_POINT: 'UPDATE_POINT',
