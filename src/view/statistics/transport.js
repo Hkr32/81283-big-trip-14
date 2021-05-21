@@ -7,12 +7,6 @@ const createStatisticsTransportTemplate = () => {
 };
 
 export default class StatisticsTransport extends AbstractView {
-  constructor(data) {
-    super();
-
-    this._data = data;
-  }
-
   getTemplate() {
     return createStatisticsTransportTemplate();
   }

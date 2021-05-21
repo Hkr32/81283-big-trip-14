@@ -7,12 +7,6 @@ const createStatisticsTimeTemplate = () => {
 };
 
 export default class StatisticsTime extends AbstractView {
-  constructor(data) {
-    super();
-
-    this._data = data;
-  }
-
   getTemplate() {
     return createStatisticsTimeTemplate();
   }

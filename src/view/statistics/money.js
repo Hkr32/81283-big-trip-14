@@ -7,12 +7,6 @@ const createStatisticsMoneyTemplate = () => {
 };
 
 export default class StatisticsMoney extends AbstractView {
-  constructor(data) {
-    super();
-
-    this._data = data;
-  }
-
   getTemplate() {
     return createStatisticsMoneyTemplate();
   }
