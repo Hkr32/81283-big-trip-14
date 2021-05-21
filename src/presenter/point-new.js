@@ -12,6 +12,8 @@ export default class PointNew {
     this._pointListContainer = pointListContainer;
     this._changeData = changeData;
 
+    this._destroyCallback = null;
+
     this._pointEditComponent = null;
 
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
@@ -19,25 +21,14 @@ export default class PointNew {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init() {
+  init(callback) {
+    this._destroyCallback = callback;
+
     if (this._pointEditComponent !== null) {
       return;
     }
 
-    const defaultValue = {
-      type: Type.TAXI,
-      offers: [],
-      destination: {
-        description: '',
-        name: '',
-        pictures: [],
-      },
-      basePrice: 0,
-      dateFrom: null,
-      dateTo: null,
-    };
-
-    this._pointEditComponent = new PointEditView(destinations, offers, defaultValue);
+    this._pointEditComponent = new PointEditView(destinations, offers);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
@@ -49,6 +40,10 @@ export default class PointNew {
   destroy() {
     if (this._pointEditComponent === null) {
       return;
+    }
+
+    if (this._destroyCallback !== null) {
+      this._destroyCallback();
     }
 
     remove(this._pointEditComponent);

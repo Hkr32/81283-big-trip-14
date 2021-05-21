@@ -1,4 +1,3 @@
-import HeaderMenuView from '../view/header/menu.js';
 import HeaderFilterView from '../view/header/filter.js';
 import HeaderInfoView from '../view/header/info.js';
 import HeaderNavigationView from '../view/header/navigation.js';
@@ -8,28 +7,28 @@ import { position, UpdateType } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
 export default class Header {
-  constructor(container, headerModel, pointsModel) {
+  constructor(container, headerMenuComponent, headerModel, pointsModel) {
     this._headerModel = headerModel;
     this._pointsModel = pointsModel;
 
     this._tripHeaderInfoContainer = null;
-    this._tripHeaderTripMainContainer = container.querySelector('.trip-main');
+    this._tripHeaderTripMainContainer = container;
 
     this._headerFilterComponent = null;
     this._headerNavigationComponent = null;
     this._headerCostComponent = null;
-    this._headerMenuComponent = new HeaderMenuView();
+    this._headerMenuComponent = headerMenuComponent;
     this._headerInfoComponent = new HeaderInfoView();
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
+    this._headerModel.addObserver(this._handleModelEvent);
   }
 
   _handleModelEvent() {
-    this._clearHeader();
-    this._renderHeader();
+    this.init();
   }
 
   _handleFilterTypeChange(filterType) {
@@ -55,6 +54,7 @@ export default class Header {
   }
 
   _renderMenu() {
+    //
     const menuContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__navigation');
     render(menuContainer, this._headerMenuComponent);
   }
@@ -94,6 +94,7 @@ export default class Header {
   }
 
   init() {
+    this._clearHeader();
     this._renderHeader();
   }
 }

@@ -1,34 +1,23 @@
 import dayjs from 'dayjs';
+const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
+const isSameOrBefore = require('dayjs/plugin/isSameOrBefore');
+const duration = require('dayjs/plugin/duration');
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(duration);
 
-export const dateDiffInMinutes = (dateFrom, dateTo) => {
-  return dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
-};
-
-export const isSameOrAfterDate = (date) => {
-  const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
-  dayjs.extend(isSameOrAfter);
-  return dayjs(date).isSameOrAfter(dayjs());
-};
-
-export const isSameOrBeforeDate = (date) => {
-  const isSameOrBefore = require('dayjs/plugin/isSameOrBefore');
-  dayjs.extend(isSameOrBefore);
-  return dayjs(date).isSameOrBefore(dayjs());
-};
-
-// Получение разницы дат
-export const dateDiffStr = (dateFrom, dateTo) => {
+// Приведение минут к строке
+export const dateToDurationString = (minutes) => {
   const MINUTE_IN_DAY = 1440;
   const MINUTE_IN_HOUR = 60;
   const DAY_ZERO_MIN = 1;
   const DAY_ZERO_MAX = 10;
-  const HOUR_ZERO_MIN = 10;
+  const HOUR_ZERO_MIN = 1;
   const HOUR_ZERO_MAX = 10;
   const MINUTE_ZERO_MAX = 10;
 
-  const diff = dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
-  const d = Math.floor(diff / MINUTE_IN_DAY);
-  const remainder = diff % MINUTE_IN_DAY;
+  const d = Math.floor(minutes / MINUTE_IN_DAY);
+  const remainder = minutes % MINUTE_IN_DAY;
   const h = Math.floor(remainder / MINUTE_IN_HOUR);
   const m = Math.floor(remainder % MINUTE_IN_HOUR);
 
@@ -43,6 +32,28 @@ export const dateDiffStr = (dateFrom, dateTo) => {
   diffStr += (m >= MINUTE_ZERO_MAX ? m : ('0' + m)) + 'M ';
 
   return diffStr;
+};
+
+// Получен6ие разницы дат в минутах
+export const dateDiffInMinutes = (dateFrom, dateTo) => {
+  return dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
+};
+
+// Проверяет совпадает ли дата или она после
+export const isSameOrAfterDate = (date) => {
+  return dayjs(date).isSameOrAfter(dayjs());
+};
+
+// Проверяет совпадает ли дата или она раньше
+export const isSameOrBeforeDate = (date) => {
+  return dayjs(date).isSameOrBefore(dayjs());
+};
+
+// Получение разницы дат
+export const dateDiffStr = (dateFrom, dateTo) => {
+  const diffInMinutes = dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
+
+  return dateToDurationString(diffInMinutes);
 };
 
 // Форматирование даты

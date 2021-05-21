@@ -9,6 +9,13 @@ export const position = {
   AFTER_END: 'afterend', // после element (после закрывающего тега)
 };
 
+// Элементы меню
+export const MenuItem = {
+  ADD_NEW_POINT: 'ADD_NEW_POINT',
+  TABLE: 'TABLE',
+  STATISTICS: 'STATISTICS',
+};
+
 // Типы сортировки
 export const SortType = {
   DAY: 'sort-day',
@@ -50,6 +57,20 @@ export const types = [
   Type.SIGHTSEEING,
   Type.RESTAURANT,
 ];
+
+// Дефолтный объект
+export const defaultPoint = {
+  type: Type.TAXI,
+  offers: [],
+  destination: {
+    description: '',
+    name: '',
+    pictures: [],
+  },
+  basePrice: 0,
+  dateFrom: null,
+  dateTo: null,
+};
 
 // Действия пользователя
 export const UserAction = {

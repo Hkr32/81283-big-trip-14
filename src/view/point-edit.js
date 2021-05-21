@@ -5,7 +5,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import SmartView from './smart.js';
 
 import { dateFormat } from '../utils/date.js';
-import { Type, types } from '../utils/const.js';
+import { Type, types, defaultPoint } from '../utils/const.js';
 import { getOfferId } from '../utils/point.js';
 
 const createTypesTemplate = (types, currentType) => {
@@ -85,9 +85,9 @@ const createPointPhotosTemplate = (photos) => {
   </div>`;
 };
 
-const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}) => {
+const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}, isCreate = false) => {
   const {
-    type = Type.taxi,
+    type = Type.TAXI,
     offers = [],
     destination: {
       description: description = '',
@@ -150,7 +150,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Delete</button>
+        <button class="event__reset-btn" type="reset">${isCreate ? 'Cancel' : 'Delete'}</button>
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
         </button>
@@ -178,7 +178,8 @@ export default class PointEdit extends SmartView {
   constructor(destinations, offers, point) {
     super();
 
-    this._data = PointEdit.parsePointToData(point);
+    this._data = PointEdit.parsePointToData(point || defaultPoint);
+    this._isCreate = point ? false : true;
     this._datePickerStart = null;
     this._datePickerEnd = null;
     this._destinations = destinations;
@@ -237,16 +238,12 @@ export default class PointEdit extends SmartView {
     );
   }
 
-  _startDateChangeHandler(inputDate) {
-    this.updateData({
-      dateFrom: inputDate,
-    }, true);
+  _startDateChangeHandler(dateFrom) {
+    this.updateData({ dateFrom }, true);
   }
 
-  _endDateChangeHandler(inputDate) {
-    this.updateData({
-      dateTo: inputDate,
-    }, true);
+  _endDateChangeHandler(dateTo) {
+    this.updateData({ dateTo }, true);
   }
 
   _changeTypeHandler(evt) {
@@ -259,30 +256,35 @@ export default class PointEdit extends SmartView {
 
   _changeDestinationHandler(evt) {
     evt.preventDefault();
-    const dest = this._destinations.find(({ name }) => {
+    const destination = this._destinations.find(({ name }) => {
       return name === evt.target.value;
     });
-    if (!dest) {
+    if (!destination) {
       return;
     }
-    this.updateData({
-      destination: dest,
-    });
+    this.updateData({ destination });
   }
 
   _changeOfferHandler(evt) {
     const offerValue = evt.target.value;
-    if (evt.target.checked) {
+    const isExist = this._data.offers.some(({ title }) => {
+      return getOfferId(title) === offerValue;
+    });
+
+    if (!isExist) {
       const currentOffer = this._offers.find((offerExternal) => {
         return offerExternal.type === this._data.type;
       });
       const selectedOffer = currentOffer.offers.find(({ title }) => {
         return getOfferId(title) === offerValue;
       });
-      this._data.offers.push(selectedOffer);
+      if (selectedOffer) {
+        this._data.offers.push(selectedOffer);
+      }
     } else {
-      const index = this._data.offers.indexOf(offerValue);
-      this._data.offers.splice(index, 1);
+      this._data.offers = this._data.offers.filter(({ title }) => {
+        return getOfferId(title) !== offerValue;
+      });
     }
   }
 
@@ -378,7 +380,7 @@ export default class PointEdit extends SmartView {
   }
 
   getTemplate() {
-    return createPointEditTemplate(this._destinations, this._offers, this._data);
+    return createPointEditTemplate(this._destinations, this._offers, this._data, this._isCreate);
   }
 
   static parsePointToData(point) {
