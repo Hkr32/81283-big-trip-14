@@ -6,13 +6,14 @@ import StatisticsTransportView from '../view/statistics/transport.js';
 import StatisticsTimeView from '../view/statistics/time.js';
 
 import { render, remove } from '../utils/render.js';
-import { BAR_HEIGHT, sortDown } from '../utils/statistics.js';
+import { BAR_HEIGHT, sortMoneyDown, sortCountDown, sortDurationDown } from '../utils/statistics.js';
 import { dateDiffInMinutes } from '../utils/date.js';
 
 export default class Statistics {
   constructor(container, pointsModel) {
     this._pointsModel = pointsModel;
     this._data = this._calcStatistics(this._pointsModel.getPoints());
+    this._dataLength = this._data.length;
 
     this._statisticsContainer = container;
 
@@ -35,10 +36,14 @@ export default class Statistics {
 
   _renderStatisticsMoney() {
     const moneyCtx = this._statisticsMoneyComponent.getElement().querySelector('.statistics__chart--money');
-    moneyCtx.height = BAR_HEIGHT * 5;
+    moneyCtx.height = BAR_HEIGHT * this._dataLength;
     render(this._statisticsContainer, this._statisticsMoneyComponent);
-    console.log(this._data)
-    this._renderChart(moneyCtx, this._data, 'MONEY');
+    const sortArray = this._data.sort(sortMoneyDown);
+    const data = {
+      labels: sortArray.map((item) => item[0]),
+      data: sortArray.map((item) => item[1].money),
+    };
+    this._renderChart(moneyCtx, data, 'MONEY');
   }
   _renderStatisticsTransport() {
     const transportCtx = this._statisticsTransportComponent.getElement().querySelector('.statistics__chart--transport');
@@ -58,9 +63,9 @@ export default class Statistics {
       plugins: [ChartDataLabels],
       type: 'horizontalBar',
       data: {
-        labels: Object.keys(data),
+        labels: data.labels,
         datasets: [{
-          data: data,
+          data: data.data,
           backgroundColor: '#ffffff',
           hoverBackgroundColor: '#ffffff',
           anchor: 'start',
@@ -75,7 +80,7 @@ export default class Statistics {
             color: '#000000',
             anchor: 'end',
             align: 'start',
-            formatter: (val) => '€ ${val}',
+            formatter: (val) => `€ ${val}`,
           },
         },
         title: {
@@ -121,48 +126,29 @@ export default class Statistics {
   }
 
   _calcStatistics(points) {
-    // const calc = {
-    //   labels: [],
-    //   money: [],
-    //   count: [],
-    //   duration: [],
-    // };
-    // points.map(({ type, basePrice, dateFrom, dateTo }) => {
-    //   if (calc.money[type] === undefined) {
-    //     calc.labels.push(type);
-    //     calc.money[type] = +basePrice;
-    //     calc.count[type] = +1;
-    //     calc.duration[type] = +(dateDiffInMinutes(dateFrom, dateTo));
-    //   } else {
-    //     calc.labels.push(type);
-    //     calc.money[type] += +basePrice;
-    //     calc.count[type] += +1;
-    //     calc.duration[type] += +(dateDiffInMinutes(dateFrom, dateTo));
-    //   }
-    // });
-    const calc = [];
+    const calc = new Map();
     points.map(({ type, basePrice, dateFrom, dateTo }) => {
-      if (calc[type] === undefined) {
-        calc[type] = {
+      const typeValue = calc.get(type);
+      if (!typeValue) {
+        calc.set(type, {
           money: basePrice,
           count: 1,
           duration: (dateDiffInMinutes(dateFrom, dateTo)),
-        };
+        });
       } else {
-        calc[type].money += +basePrice;
-        calc[type].count += +1;
-        calc[type].duration += +(dateDiffInMinutes(dateFrom, dateTo));
+        typeValue.money += +basePrice;
+        typeValue.count += +1;
+        typeValue.duration += +(dateDiffInMinutes(dateFrom, dateTo));
       }
     });
 
-    // calc.labels = [...new Set(calc.labels)];
+    // const calcArray = Array.from(calc.entries());
 
-    // calc.money.sort((a, b) => a - b);
-    calc.sort(((a, b) => b.money - a.money));
+    // calcArray.sort(sortMoneyDown);
 
-    console.log(calc)
+    // console.log(calcArray)
 
-    return calc;
+    return Array.from(calc.entries());
   }
 
   init() {
