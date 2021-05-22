@@ -54,7 +54,6 @@ export default class Header {
   }
 
   _renderMenu() {
-    //
     const menuContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__navigation');
     render(menuContainer, this._headerMenuComponent);
   }

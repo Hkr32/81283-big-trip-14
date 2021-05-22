@@ -12,18 +12,18 @@ export const DiagramType = {
 };
 
 // Сортировка по деньгам
-export const sortMoneyDown = (one, second) => {
-  return second[1].money - one[1].money;
+export const sortMoneyDown = ([, { money: moneyOne }], [, { money: moneySecond }]) => {
+  return moneySecond - moneyOne;
 };
 
 // Сортировка по количеству использования
-export const sortCountDown = (one, second) => {
-  return second[1].count - one[1].count;
+export const sortCountDown = ([, { count: countOne }], [, { count: countSecond }]) => {
+  return countSecond - countOne;
 };
 
 // Сортировка по продолжительности
-export const sortDurationDown = (one, second) => {
-  return second[1].duration - one[1].duration;
+export const sortDurationDown = ([, { duration: durationOne }], [, { duration: durationSecond }]) => {
+  return durationSecond - durationOne;
 };
 
 // Расчет массива для построения диаграммы
