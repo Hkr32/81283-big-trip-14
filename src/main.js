@@ -34,6 +34,15 @@ const handlePointNewFormClose = () => {
   headerMenuComponent.setMenuItem(MenuItem.TABLE);
 };
 
+// Header
+const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
+headerPresenter.init();
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  handleSiteMenuClick(MenuItem.ADD_NEW_POINT);
+});
+
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
@@ -48,34 +57,16 @@ const handleSiteMenuClick = (menuItem) => {
       tripPresenter.destroy();
       headerModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripPresenter.init();
+      headerPresenter.setIsDisabled(false);
       statisticsPresenter.destroy();
       break;
     case MenuItem.STATISTICS:
       document.querySelector('.trip-main__event-add-btn').disabled = true;
-
-      // @todo Нет эффекта, все равно можно нажать на фильтры
-      const filters = document.querySelectorAll('.trip-filters input.trip-filters__filter-input');
-      const labels = document.querySelectorAll('.trip-filters label.trip-filters__filter-label');
-      filters.forEach((filter) => {
-        filter.disabled = true;
-      });
-      labels.forEach((label) => {
-        label.disabled = true;
-      });
-
+      headerPresenter.setIsDisabled(true);
       tripPresenter.destroy();
       statisticsPresenter.init();
       break;
   }
 };
-
-// Header
-const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
-headerPresenter.init();
-
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
-  evt.preventDefault();
-  handleSiteMenuClick(MenuItem.ADD_NEW_POINT);
-});
 
 headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);

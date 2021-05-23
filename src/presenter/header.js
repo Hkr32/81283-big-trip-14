@@ -96,4 +96,12 @@ export default class Header {
     this._clearHeader();
     this._renderHeader();
   }
+
+  setDisabled(status = true) {
+    if (!this._headerFilterComponent) {
+      return;
+    }
+
+    this._headerFilterComponent.setDisabledStatus(status);
+  }
 }

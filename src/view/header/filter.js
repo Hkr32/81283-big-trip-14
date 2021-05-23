@@ -49,4 +49,17 @@ export default class HeaderFilter extends AbstractView {
     this._callback.filterTypeChange = callback;
     this.getElement().addEventListener('click', this._filterTypeChangeHandler);
   }
+
+  setDisabledStatus(isDisabled) {
+    const filters = this.getElement().querySelectorAll('.trip-filters input.trip-filters__filter-input');
+    filters.forEach((filter) => {
+      filter.disabled = isDisabled;
+    });
+
+    if (isDisabled) {
+      this.getElement().removeEventListener('click', this._filterTypeChangeHandler);
+    } else {
+      this.getElement().addEventListener('click', this._filterTypeChangeHandler);
+    }
+  }
 }
