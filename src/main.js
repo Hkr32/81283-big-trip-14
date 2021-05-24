@@ -1,7 +1,12 @@
-// @todo Удалить после того как будут реальные данные
-import { generatePoint } from './mock/point.js';
+import {
+  AUTHORIZATION,
+  END_POINT,
+  MenuItem,
+  UpdateType,
+  FilterType
+} from './utils/const.js';
 
-import { POINT_COUNTER, MenuItem, UpdateType, FilterType } from './utils/const.js';
+import Api from './api/api.js';
 
 import HeaderMenuView from './view/header/menu.js';
 
@@ -14,20 +19,13 @@ import HeaderModel from './model/header.js';
 
 const headerMenuComponent = new HeaderMenuView();
 
-// Генерируем случайный набор точек
-const points = new Array(POINT_COUNTER).fill().map(generatePoint);
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointModel();
-pointsModel.setPoints(points);
 const headerModel = new HeaderModel();
 
-// Trip
-const tripPresenter = new TripPresenter(document.querySelector('.page-body'), headerModel, pointsModel);
-tripPresenter.init();
-
-// Statistics
+const tripPresenter = new TripPresenter(document.querySelector('.page-body .trip-events'), headerModel, pointsModel, api);
 const statisticsPresenter = new StatisticsPresenter(document.querySelector('.page-body section.statistics'), pointsModel);
-// statisticsPresenter.init();
 
 const handlePointNewFormClose = () => {
   document.querySelector('.trip-main__event-add-btn').disabled = false;
@@ -36,7 +34,6 @@ const handlePointNewFormClose = () => {
 
 // Header
 const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
-headerPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
@@ -57,16 +54,28 @@ const handleSiteMenuClick = (menuItem) => {
       tripPresenter.destroy();
       headerModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripPresenter.init();
-      headerPresenter.setIsDisabled(false);
+      headerPresenter.setDisabled(false);
       statisticsPresenter.destroy();
       break;
     case MenuItem.STATISTICS:
       document.querySelector('.trip-main__event-add-btn').disabled = true;
-      headerPresenter.setIsDisabled(true);
+      headerPresenter.setDisabled(true);
       tripPresenter.destroy();
       statisticsPresenter.init();
       break;
   }
 };
 
-headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+tripPresenter.init();
+
+api.getPoints()
+  .then((points) => {
+    pointsModel.setPoints(UpdateType.INIT, points);
+    headerPresenter.init();
+    headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  })
+  .catch (() => {
+    pointsModel.setPoints(UpdateType.INIT, []);
+    headerPresenter.init();
+    headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  });

@@ -16,7 +16,7 @@ import { renderChart } from '../utils/chart.js';
 export default class Statistics {
   constructor(container, pointsModel) {
     this._pointsModel = pointsModel;
-    this._data = calcStatistics(this._pointsModel.getPoints());
+    this._data = [];
     this._dataLength = this._data.length;
 
     this._statisticsContainer = container;
@@ -85,6 +85,8 @@ export default class Statistics {
   }
 
   init() {
+    // @todo нужно оно тут?
+    this._data = calcStatistics(this._pointsModel.getPoints());
     this._clearStatistics();
     this._renderStatistics();
   }
