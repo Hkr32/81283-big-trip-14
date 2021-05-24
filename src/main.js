@@ -74,7 +74,7 @@ api.getPoints()
     headerPresenter.init();
     headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   })
-  .catch (() => {
+  .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
     headerPresenter.init();
     headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);

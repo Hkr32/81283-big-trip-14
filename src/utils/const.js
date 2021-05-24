@@ -72,6 +72,7 @@ export const defaultPoint = {
   basePrice: 0,
   dateFrom: null,
   dateTo: null,
+  isFavorite: false,
 };
 
 // Действия пользователя

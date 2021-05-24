@@ -22,7 +22,7 @@ export default class Api {
   getPoints() {
     return this._load({url: 'points'})
       .then(Api.toJSON)
-      .then((tasks) => tasks.map(PointsModel.adaptToClient));
+      .then((points) => points.map(PointsModel.adaptToClient));
   }
 
   updatePoint(point) {
@@ -34,6 +34,24 @@ export default class Api {
     })
       .then(Api.toJSON)
       .then(PointsModel.adaptToClient);
+  }
+
+  addPoint(point) {
+    return this._load({
+      url: 'points',
+      method: Method.POST,
+      body: JSON.stringify(PointsModel.adaptToServer(point)),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    })
+      .then(Api.toJSON)
+      .then(PointsModel.adaptToClient);
+  }
+
+  deletePoint(point) {
+    return this._load({
+      url: `points/${point.id}`,
+      method: Method.DELETE,
+    });
   }
 
   _load({

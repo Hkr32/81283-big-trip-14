@@ -65,5 +65,7 @@ export const dateFormat = (date, format = 'YYYY-MM-DD') => {
 
 // Приведение даты к формату ISO
 export const dateToISO = (date) => {
+  if (!date) return null;
+
   return dayjs(date).toISOString();
 };
