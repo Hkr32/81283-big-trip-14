@@ -25,12 +25,39 @@ export const renderChart = (ctx, data, title) => {
     type: 'horizontalBar',
     data: {
       labels: data.labels,
-      datasets: [{
-        data: data.data,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
-      }],
+      datasets: [
+        {
+          data: data.data,
+          backgroundColor: '#ffffff',
+          hoverBackgroundColor: '#ffffff',
+          anchor: 'start',
+          scales: {
+            yAxes: [{
+              ticks: {
+                fontColor: '#000000',
+                padding: 5,
+                fontSize: 13,
+              },
+              gridLines: {
+                display: false,
+                drawBorder: false,
+              },
+              barThickness: 44,
+            }],
+            xAxes: [{
+              ticks: {
+                display: false,
+                beginAtZero: true,
+              },
+              gridLines: {
+                display: false,
+                drawBorder: false,
+              },
+              minBarLength: 50,
+            }],
+          },
+        },
+      ],
     },
     options: {
       plugins: {
@@ -50,31 +77,6 @@ export const renderChart = (ctx, data, title) => {
         fontColor: '#000000',
         fontSize: 23,
         position: 'left',
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-          barThickness: 44,
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-          minBarLength: 50,
-        }],
       },
       legend: {
         display: false,

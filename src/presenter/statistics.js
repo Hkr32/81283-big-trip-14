@@ -17,7 +17,7 @@ export default class Statistics {
   constructor(container, pointsModel) {
     this._pointsModel = pointsModel;
     this._data = [];
-    this._dataLength = this._data.length;
+    this._dataLength = 0;
 
     this._statisticsContainer = container;
 
@@ -87,6 +87,7 @@ export default class Statistics {
   init() {
     // @todo нужно оно тут?
     this._data = calcStatistics(this._pointsModel.getPoints());
+    this._dataLength = this._data.length;
     this._clearStatistics();
     this._renderStatistics();
   }
