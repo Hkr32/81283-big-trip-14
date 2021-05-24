@@ -3,12 +3,12 @@ import PointEditView from '../view/point-edit.js';
 import { remove, render } from '../utils/render.js';
 import { UserAction, UpdateType, position } from '../utils/const.js';
 
-import { offers, destinations } from '../mock/const.js';
-
 export default class PointNew {
-  constructor(pointListContainer, changeData) {
+  constructor(pointListContainer, changeData, pointsModel) {
     this._pointListContainer = pointListContainer;
     this._changeData = changeData;
+
+    this._pointsModel = pointsModel;
 
     this._destroyCallback = null;
 
@@ -26,7 +26,7 @@ export default class PointNew {
       return;
     }
 
-    this._pointEditComponent = new PointEditView(destinations, offers);
+    this._pointEditComponent = new PointEditView(this._pointsModel.getDestinations(), this._pointsModel.getOffers());
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 

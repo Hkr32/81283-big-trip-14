@@ -5,8 +5,6 @@ import { isEscKey } from '../utils/common.js';
 import { render, replace, remove } from '../utils/render.js';
 import { UserAction, UpdateType } from '../utils/const.js';
 
-import { offers, destinations } from '../mock/const.js';
-
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
@@ -19,7 +17,9 @@ export const State = {
 };
 
 export default class Point {
-  constructor(container, changeData, changeMode) {
+  constructor(container, changeData, changeMode, pointsModel) {
+    this._pointsModel = pointsModel;
+
     this._pointListContainer = container;
     this._tripPoint = null;
     this._mode = Mode.DEFAULT;
@@ -44,7 +44,7 @@ export default class Point {
     const prevPointEditComponent = this._pointEditComponent;
 
     this._pointComponent = new PointView(this._tripPoint);
-    this._pointEditComponent = new PointEditView(destinations, offers, this._tripPoint);
+    this._pointEditComponent = new PointEditView(this._pointsModel.getDestinations(), this._pointsModel.getOffers(), this._tripPoint);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
