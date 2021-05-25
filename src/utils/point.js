@@ -16,6 +16,10 @@ export const filterPointsPast = (points) => {
   });
 };
 
+export const sortPointDate = (pointOne, pointSecond) => {
+  return pointOne.dateFrom - pointSecond.dateFrom;
+};
+
 export const sortPointTime = (pointOne, pointSecond) => {
   return dateDiffInMinutes(pointSecond.dateFrom, pointSecond.dateTo) - dateDiffInMinutes(pointOne.dateFrom, pointOne.dateTo);
 };

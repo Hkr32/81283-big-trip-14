@@ -31,7 +31,7 @@ export const dateToDurationString = (minutes) => {
   return diffStr;
 };
 
-// Получен6ие разницы дат в минутах
+// Получение разницы дат в минутах
 export const dateDiffInMinutes = (dateFrom, dateTo) => {
   return dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
 };

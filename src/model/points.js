@@ -1,4 +1,5 @@
 import Observer from '../utils/observer.js';
+import { sortPointDate } from '../utils/point.js';
 
 export default class Points extends Observer {
   constructor() {
@@ -31,7 +32,7 @@ export default class Points extends Observer {
   }
 
   getPoints() {
-    return this._points.slice();
+    return this._points.sort(sortPointDate);
   }
 
   updatePoint(updateType, update) {
