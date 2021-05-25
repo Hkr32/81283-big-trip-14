@@ -31,31 +31,8 @@ export const renderChart = (ctx, data, title) => {
           backgroundColor: '#ffffff',
           hoverBackgroundColor: '#ffffff',
           anchor: 'start',
-          scales: {
-            yAxes: [{
-              ticks: {
-                fontColor: '#000000',
-                padding: 5,
-                fontSize: 13,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false,
-              },
-              barThickness: 44,
-            }],
-            xAxes: [{
-              ticks: {
-                display: false,
-                beginAtZero: true,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false,
-              },
-              minBarLength: 50,
-            }],
-          },
+          barThickness: 44,
+          minBarLength: 50,
         },
       ],
     },
@@ -77,6 +54,29 @@ export const renderChart = (ctx, data, title) => {
         fontColor: '#000000',
         fontSize: 23,
         position: 'left',
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: '#000000',
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+        }],
       },
       legend: {
         display: false,
