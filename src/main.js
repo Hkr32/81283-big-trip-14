@@ -68,33 +68,22 @@ const handleSiteMenuClick = (menuItem) => {
 
 tripPresenter.init();
 
-api
-  .getPoints()
-  .then((points) => {
+Promise.all([
+  api.getOffers(),
+  api.getDestinations(),
+  api.getPoints(),
+])
+  .then(([offers, destinations, points]) => {
+    pointsModel.setOffers(offers);
+    pointsModel.setDestinations(destinations);
     pointsModel.setPoints(UpdateType.INIT, points);
     headerPresenter.init();
     headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   })
   .catch(() => {
+    pointsModel.setOffers([]);
+    pointsModel.setDestinations([]);
     pointsModel.setPoints(UpdateType.INIT, []);
     headerPresenter.init();
     headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-  });
-
-api
-  .getOffers()
-  .then((offers) => {
-    pointsModel.setOffers(offers);
-  })
-  .catch(() => {
-    pointsModel.setOffers([]);
-  });
-
-api
-  .getDestinations()
-  .then((destinations) => {
-    pointsModel.setDestinations(destinations);
-  })
-  .catch(() => {
-    pointsModel.setDestinations([]);
   });
