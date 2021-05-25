@@ -85,7 +85,6 @@ export default class Statistics {
   }
 
   init() {
-    // @todo нужно оно тут?
     this._data = calcStatistics(this._pointsModel.getPoints());
     this._dataLength = this._data.length;
     this._clearStatistics();

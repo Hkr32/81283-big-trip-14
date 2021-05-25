@@ -28,16 +28,6 @@ export default class Abstract {
     this._element = null;
   }
 
-  // @todo удалить?
-  showElement(hiddenClass) {
-    this._element.classList.add(hiddenClass);
-  }
-
-  // @todo удалить?
-  hideElement(hiddenClass) {
-    this._element.classList.remove(hiddenClass);
-  }
-
   shake(callback) {
     this.getElement().style.animation = `shake ${ANIMATION_TIMEOUT / 1000}s`;
     setTimeout(() => {
