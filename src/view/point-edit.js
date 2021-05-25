@@ -73,9 +73,15 @@ const createOffersTemplate = (offers, offersExternal, isDisabled) => {
 };
 
 const createPointOffersTemplate = (offers = [], offersExternal = [], isDisabled = false) => {
+  if (!offersExternal.length) {
+    return '';
+  }
   const offersTemplate = createOffersTemplate(offers, offersExternal, isDisabled);
 
-  return `<div class="event__available-offers">${offersTemplate}</div>`;
+  return `<section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">${offersTemplate}</div>
+  </section>`;
 };
 
 const createPointPhotosTemplate = (photos) => {
@@ -159,10 +165,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
         </button>
       </header>
       <section class="event__details">
-        <section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-          ${offersTemplate}
-        </section>
+        ${offersTemplate}
 
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
