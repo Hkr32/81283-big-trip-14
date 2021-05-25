@@ -16,7 +16,6 @@ export default class PointNew {
 
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
-    this._handleDeleteEditClick = this._handleDeleteEditClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -30,7 +29,6 @@ export default class PointNew {
     this._pointEditComponent = new PointEditView(this._pointsModel.getDestinations(), this._pointsModel.getOffers());
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
-    this._pointEditComponent.setDeleteEditClickHandler(this._handleDeleteEditClick);
 
     render(this._pointListContainer, this._pointEditComponent, position.AFTER_BEGIN);
 
@@ -50,7 +48,6 @@ export default class PointNew {
     this._pointEditComponent = null;
 
     document.removeEventListener('keydown', this._escKeyDownHandler);
-    document.removeEventListener('click', this._handleDeleteEditClick);
   }
 
   setSaving() {
@@ -81,10 +78,6 @@ export default class PointNew {
   }
 
   _handleDeleteClick() {
-    this.destroy();
-  }
-
-  _handleDeleteEditClick() {
     this.destroy();
   }
 

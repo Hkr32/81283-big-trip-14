@@ -107,6 +107,16 @@ const createPointPhotosTemplate = (photos) => {
   </div>`;
 };
 
+const createRollUpBtnTemplate = (isCreate) => {
+  if (isCreate) {
+    return '';
+  }
+
+  return `<button class="event__rollup-btn" type="button">
+    <span class="visually-hidden">Open event</span>
+  </button>`;
+};
+
 const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}, isCreate = false) => {
   const {
     type = Type.TAXI,
@@ -137,6 +147,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
   const citiesTemplate = createPointCitiesTemplate(cities, city);
   const offersTemplate = createPointOffersTemplate(offers, offersExternalByType !== undefined ? offersExternalByType.offers : [], isDisabled);
   const destinationsTemplate = createPointDestinationsTemplate(description, pictures);
+  const rollUpBtnTemplate = createRollUpBtnTemplate(isCreate);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -176,9 +187,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
 
         <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
         <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isCreate ? 'Cancel' : isDeleting ? 'Deleting...' : 'Delete'}</button>
-        <button class="event__rollup-btn" type="button">
-          <span class="visually-hidden">Open event</span>
-        </button>
+        ${rollUpBtnTemplate}
       </header>
       <section class="event__details">
         ${offersTemplate}
@@ -201,7 +210,6 @@ export default class PointEdit extends SmartView {
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
-    this._formDeleteEditClickHandler = this._formDeleteEditClickHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._changeTypeHandler = this._changeTypeHandler.bind(this);
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
@@ -309,7 +317,6 @@ export default class PointEdit extends SmartView {
 
   _editClickHandler(evt) {
     evt.preventDefault();
-    // @todo при создании формы ошибка при клике на иконку свернуть
     this._callback.editClick();
   }
 
@@ -323,11 +330,6 @@ export default class PointEdit extends SmartView {
     this._callback.deleteClick(PointEdit.parseDataToPoint(this._data));
   }
 
-  _formDeleteEditClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.deleteEditClick(PointEdit.parseDataToPoint(this._data));
-  }
-
   _priceInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
@@ -338,9 +340,7 @@ export default class PointEdit extends SmartView {
   _setInnerHandlers() {
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setDeleteClickHandler(this._callback.deleteClick);
-    if (this._isCreate) {
-      this.setDeleteEditClickHandler(this._callback.deleteEditClick);
-    } else {
+    if (!this._isCreate) {
       this.setEditClickHandler(this._callback.editClick);
     }
     this.setChangePriceHandler();
@@ -382,11 +382,6 @@ export default class PointEdit extends SmartView {
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
-  }
-
-  setDeleteEditClickHandler(callback) {
-    this._callback.deleteEditClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formDeleteEditClickHandler);
   }
 
   setEditClickHandler(callback) {
