@@ -17,11 +17,11 @@ export const filterPointsPast = (points) => {
 };
 
 export const sortPointTime = (pointOne, pointSecond) => {
-  return dateDiffInMinutes(pointOne.dateFrom, pointOne.dateTo) - dateDiffInMinutes(pointSecond.dateFrom, pointSecond.dateTo);
+  return dateDiffInMinutes(pointSecond.dateFrom, pointSecond.dateTo) - dateDiffInMinutes(pointOne.dateFrom, pointOne.dateTo);
 };
 
 export const sortPointPrice = (pointOne, pointSecond) => {
-  return compareNumeric(pointOne.basePrice, pointSecond.basePrice);
+  return compareNumeric(pointSecond.basePrice, pointOne.basePrice);
 };
 
 export const getOfferId = (value) => value.replace(/\s+/g, '-').trim().toLowerCase();

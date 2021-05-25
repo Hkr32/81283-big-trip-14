@@ -72,7 +72,6 @@ export default class Trip {
         break;
     }
 
-    // @todo переделать сортировку, походу должно идти все от больше к меньшему???
     switch (this._currentSortType) {
       case SortType.TIME:
         points.sort(sortPointTime);
