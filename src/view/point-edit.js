@@ -243,10 +243,12 @@ export default class PointEdit extends SmartView {
 
   _startDateChangeHandler([dateFrom]) {
     this.updateData({ dateFrom }, true);
+    this._datePickerEnd.set('minDate', dateFrom);
   }
 
   _endDateChangeHandler([dateTo]) {
     this.updateData({ dateTo }, true);
+    this._datePickerStart.set('maxDate', dateTo);
   }
 
   _changeTypeHandler(evt) {
@@ -293,6 +295,7 @@ export default class PointEdit extends SmartView {
 
   _editClickHandler(evt) {
     evt.preventDefault();
+    // @todo при создании формы ошибка при клике на иконку свернуть
     this._callback.editClick();
   }
 
