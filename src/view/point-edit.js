@@ -84,6 +84,22 @@ const createPointOffersTemplate = (offers = [], offersExternal = [], isDisabled 
   </section>`;
 };
 
+const createPointDestinationsTemplate = (description, pictures) => {
+  if (description === '' || description === undefined) {
+    return '';
+  }
+  const photosTemplate = createPointPhotosTemplate(pictures);
+
+  return `<section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">${description}</p>
+
+    <div class="event__photos-container">
+      ${photosTemplate}
+    </div>
+  </section>`;
+};
+
 const createPointPhotosTemplate = (photos) => {
   return `<div class="event__photos-tape">
     ${photos.reduce((str, photo) => `${str}
@@ -120,7 +136,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
   const typesTemplate = createPointTypesTemplate(types, type);
   const citiesTemplate = createPointCitiesTemplate(cities, city);
   const offersTemplate = createPointOffersTemplate(offers, offersExternalByType !== undefined ? offersExternalByType.offers : [], isDisabled);
-  const photosTemplate = createPointPhotosTemplate(pictures);
+  const destinationsTemplate = createPointDestinationsTemplate(description, pictures);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -166,15 +182,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
       </header>
       <section class="event__details">
         ${offersTemplate}
-
-        <section class="event__section  event__section--destination">
-          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${description}</p>
-
-          <div class="event__photos-container">
-            ${photosTemplate}
-          </div>
-        </section>
+        ${destinationsTemplate}
       </section>
     </form>
   </li>`;
