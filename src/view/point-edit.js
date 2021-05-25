@@ -190,6 +190,7 @@ export default class PointEdit extends SmartView {
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._formDeleteEditClickHandler = this._formDeleteEditClickHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._changeTypeHandler = this._changeTypeHandler.bind(this);
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
@@ -309,6 +310,11 @@ export default class PointEdit extends SmartView {
     this._callback.deleteClick(PointEdit.parseDataToPoint(this._data));
   }
 
+  _formDeleteEditClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteEditClick(PointEdit.parseDataToPoint(this._data));
+  }
+
   _priceInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
@@ -319,11 +325,15 @@ export default class PointEdit extends SmartView {
   _setInnerHandlers() {
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setDeleteClickHandler(this._callback.deleteClick);
+    if (this._isCreate) {
+      this.setDeleteEditClickHandler(this._callback.deleteEditClick);
+    } else {
+      this.setEditClickHandler(this._callback.editClick);
+    }
     this.setChangePriceHandler();
     this.setChangeTypeHandler();
     this.setChangeDestinationHandler();
     this.setChangeOffersHandler();
-    this.setEditClickHandler(this._callback.editClick);
   }
 
   restoreHandlers() {
@@ -359,6 +369,11 @@ export default class PointEdit extends SmartView {
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
+  }
+
+  setDeleteEditClickHandler(callback) {
+    this._callback.deleteEditClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formDeleteEditClickHandler);
   }
 
   setEditClickHandler(callback) {
