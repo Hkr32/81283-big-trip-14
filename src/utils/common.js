@@ -16,3 +16,8 @@ export const getRandomInteger = (min = 0, max = 1, coefficient = 1) => {
 export const isEscKey = (keyType) => {
   return (keyType === KeyType.ESCAPE || keyType === KeyType.ESC);
 };
+
+// Проверка статуса (онлайн/оффлайн)
+export const isOnline = () => {
+  return window.navigator.onLine;
+};

@@ -1,12 +1,17 @@
 import {
   AUTHORIZATION,
   END_POINT,
+  STORE_NAME,
   MenuItem,
   UpdateType,
   FilterType
 } from './utils/const.js';
+import { isOnline } from './utils/common.js';
+import { toast } from './utils/toast.js';
 
 import Api from './api/api.js';
+import Store from './api/store.js';
+import Provider from './api/provider.js';
 
 import HeaderMenuView from './view/header/menu.js';
 
@@ -20,11 +25,13 @@ import HeaderModel from './model/header.js';
 const headerMenuComponent = new HeaderMenuView();
 
 const api = new Api(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 const pointsModel = new PointModel();
 const headerModel = new HeaderModel();
 
-const tripPresenter = new TripPresenter(document.querySelector('.page-body .trip-events'), headerModel, pointsModel, api);
+const tripPresenter = new TripPresenter(document.querySelector('.page-body .trip-events'), headerModel, pointsModel, apiWithProvider);
 const statisticsPresenter = new StatisticsPresenter(document.querySelector('.page-body section.statistics'), pointsModel);
 
 const handlePointNewFormClose = () => {
@@ -46,6 +53,11 @@ const handleSiteMenuClick = (menuItem) => {
       tripPresenter.destroy();
       headerModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripPresenter.init();
+      if (!isOnline()) {
+        toast('You can\'t create new task offline');
+        headerMenuComponent.setMenuItem(MenuItem.TABLE);
+        break;
+      }
       tripPresenter.createPoint(handlePointNewFormClose);
       document.querySelector('.trip-main__event-add-btn').disabled = true;
       break;
@@ -68,10 +80,11 @@ const handleSiteMenuClick = (menuItem) => {
 
 tripPresenter.init();
 
+// @todo all to apiWithProvider
 Promise.all([
   api.getOffers(),
   api.getDestinations(),
-  api.getPoints(),
+  apiWithProvider.getPoints(),
 ])
   .then(([offers, destinations, points]) => {
     pointsModel.setOffers(offers);
@@ -87,3 +100,16 @@ Promise.all([
     headerPresenter.init();
     headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
+
+window.addEventListener('load', () => {
+  navigator.serviceWorker.register('/sw.js');
+});
+
+window.addEventListener('online', () => {
+  document.title = document.title.replace(' [offline]', '');
+  apiWithProvider.sync();
+});
+
+window.addEventListener('offline', () => {
+  document.title += ' [offline]';
+});

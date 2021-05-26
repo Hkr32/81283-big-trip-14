@@ -1,7 +1,14 @@
-// Количество точек на главной
-export const POINT_COUNTER = 10;
+// Для хранилища
+const STORE_PREFIX = 'bigtrip-localstorage';
+const STORE_VER = 'v14';
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+// Для API
 export const AUTHORIZATION = 'Basic pba6mmpddLUvMGZPPuAq';
 export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+
+// Количество точек на главной
+export const POINT_COUNTER = 10;
 
 // Перечисление возможных позиций добавляемого элемента относительно элемента
 export const position = {
