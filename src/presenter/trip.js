@@ -6,7 +6,7 @@ import MainSortingView from '../view/sorting.js';
 import PointListView from '../view/point-list.js';
 import PointEmptyListView from '../view/point-list-empty.js';
 
-import { SortType, FilterType, UpdateType, UserAction } from '../utils/const.js';
+import { SortType, FilterType, UpdateType, UserAction, position } from '../utils/const.js';
 import { sortPointTime, sortPointPrice, filterPointsFuture, filterPointsPast } from '../utils/point.js';
 import { render, remove } from '../utils/render.js';
 
@@ -55,8 +55,7 @@ export default class Trip {
   createPoint(callback) {
     this._currentSortType = SortType.DAY;
     if (this._pointListComponent._element === null) {
-      remove(this._pointEmptyListComponent);
-      render(this._tripMainContainer, this._pointListComponent);
+      render(this._tripMainContainer, this._pointListComponent, position.AFTER_BEGIN);
     }
     this._pointNewPresenter.init(callback);
   }
