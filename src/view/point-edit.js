@@ -165,16 +165,16 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1" ${isDisabled ? 'disabled' : ''}>
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1" ${isDisabled ? 'disabled' : ''} required>
           ${citiesTemplate}
         </div>
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFormat(dateFrom, 'YY/MM/DD HH:mm')}" ${isDisabled ? 'disabled' : ''}>
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFormat(dateFrom, 'YY/MM/DD HH:mm')}" ${isDisabled ? 'disabled' : ''} required>
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFormat(dateTo, 'YY/MM/DD HH:mm')}" ${isDisabled ? 'disabled' : ''}>
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFormat(dateTo, 'YY/MM/DD HH:mm')}" ${isDisabled ? 'disabled' : ''} required>
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -182,7 +182,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
+          <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''} required>
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
@@ -234,14 +234,19 @@ export default class PointEdit extends SmartView {
     this._datePickerStart = flatpickr(
       this.getElement().querySelector('.event__input--time[name=event-start-time]'),
       {
+        allowInvalidPreload: true,
         enableTime: true,
         time_24hr: true,
         dateFormat: 'y/m/d H:i',
+        altInput: true,
+        altFormat: 'd/m/y H:i',
         defaultDate: this._data.dateFrom,
         maxDate: this._data.dateFrom,
         onChange: this._startDateChangeHandler,
       },
     );
+    this._datePickerStart.input.setAttribute('required', true);
+    this._datePickerStart.altInput.setAttribute('required', true);
   }
 
   _endDateInputHandler() {
@@ -256,11 +261,15 @@ export default class PointEdit extends SmartView {
         enableTime: true,
         time_24hr: true,
         dateFormat: 'y/m/d H:i',
+        altInput: true,
+        altFormat: 'd/m/y H:i',
         defaultDate: this._data.dateTo,
         minDate: this._data.dateTo,
         onChange: this._endDateChangeHandler,
       },
     );
+    this._datePickerEnd.input.setAttribute('required', true);
+    this._datePickerEnd.altInput.setAttribute('required', true);
   }
 
   _startDateChangeHandler([dateFrom]) {

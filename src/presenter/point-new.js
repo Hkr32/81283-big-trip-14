@@ -70,11 +70,15 @@ export default class PointNew {
   }
 
   _handleFormSubmit(point) {
-    this._changeData(
-      UserAction.ADD_POINT,
-      UpdateType.MAJOR,
-      point,
-    );
+    if (this._validate(point)) {
+      this._changeData(
+        UserAction.ADD_POINT,
+        UpdateType.MAJOR,
+        point,
+      );
+    } else {
+      this.setAborting();
+    }
   }
 
   _handleDeleteClick() {
@@ -86,5 +90,23 @@ export default class PointNew {
       evt.preventDefault();
       this.destroy();
     }
+  }
+
+  _validate(point) {
+    let errors = 0;
+    if (!point.destination.name) {
+      errors++;
+    }
+    if (!point.dateFrom) {
+      errors++;
+    }
+    if (!point.dateTo) {
+      errors++;
+    }
+    if (point.basePrice < 1) {
+      errors++;
+    }
+
+    return !errors;
   }
 }
