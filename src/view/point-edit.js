@@ -231,10 +231,8 @@ export default class PointEdit extends SmartView {
       this._datePickerStart = null;
     }
 
-    const inputDate = this.getElement().querySelector('.event__input--time[name=event-start-time]');
-
     this._datePickerStart = flatpickr(
-      inputDate,
+      this.getElement().querySelector('.event__input--time[name=event-start-time]'),
       {
         allowInvalidPreload: true,
         enableTime: true,
@@ -249,28 +247,6 @@ export default class PointEdit extends SmartView {
     );
     this._datePickerStart.input.setAttribute('required', true);
     this._datePickerStart.altInput.setAttribute('required', true);
-
-    console.log(this._datePickerStart.input.value, this._datePickerStart.altInput.value);
-    inputDate.addEventListener('invalid', () => {
-      if (inputDate.value == '' || this._datePickerStart.input.value == '' || this._datePickerStart.altInput.value == '' || inputDate.value == ' ' || this._datePickerStart.input.value == ' ' || this._datePickerStart.altInput.value == ' ' || !inputDate.value || !this._datePickerStart.input.value || !this._datePickerStart.altInput.value) {
-        console.log('validate');
-        inputDate.setCustomValidity('Обязательное поле!');
-        this._datePickerStart.input.setCustomValidity('Обязательное поле!');
-        this._datePickerStart.altInput.setCustomValidity('Обязательное поле!');
-      } else {
-        inputDate.setCustomValidity('');
-      }
-    });
-    this._datePickerStart.input.addEventListener('invalid', () => {
-      if (inputDate.value == '' || this._datePickerStart.input.value == '' || this._datePickerStart.altInput.value == '' || inputDate.value == ' ' || this._datePickerStart.input.value == ' ' || this._datePickerStart.altInput.value == ' ' || !inputDate.value || !this._datePickerStart.input.value || !this._datePickerStart.altInput.value) {
-        console.log('validate');
-        inputDate.setCustomValidity('Обязательное поле!');
-        this._datePickerStart.input.setCustomValidity('Обязательное поле!');
-        this._datePickerStart.altInput.setCustomValidity('Обязательное поле!');
-      } else {
-        inputDate.setCustomValidity('');
-      }
-    });
   }
 
   _endDateInputHandler() {
@@ -279,10 +255,8 @@ export default class PointEdit extends SmartView {
       this._datePickerEnd = null;
     }
 
-    const inputDate = this.getElement().querySelector('.event__input--time[name=event-end-time]');
-
     this._datePickerEnd = flatpickr(
-      inputDate,
+      this.getElement().querySelector('.event__input--time[name=event-end-time]'),
       {
         enableTime: true,
         time_24hr: true,
@@ -294,6 +268,8 @@ export default class PointEdit extends SmartView {
         onChange: this._endDateChangeHandler,
       },
     );
+    this._datePickerEnd.input.setAttribute('required', true);
+    this._datePickerEnd.altInput.setAttribute('required', true);
   }
 
   _startDateChangeHandler([dateFrom]) {
