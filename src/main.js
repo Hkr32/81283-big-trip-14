@@ -50,18 +50,18 @@ const handleSiteMenuClick = (menuItem) => {
       document.querySelector('.trip-main__event-add-btn').disabled = true;
       break;
     case MenuItem.TABLE:
-      document.querySelector('.trip-main__event-add-btn').disabled = false;
       tripPresenter.destroy();
       headerModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripPresenter.init();
       headerPresenter.setDisabled(false);
       statisticsPresenter.destroy();
+      document.querySelector('.trip-main__event-add-btn').disabled = false;
       break;
     case MenuItem.STATISTICS:
-      document.querySelector('.trip-main__event-add-btn').disabled = true;
       headerPresenter.setDisabled(true);
       tripPresenter.destroy();
       statisticsPresenter.init();
+      document.querySelector('.trip-main__event-add-btn').disabled = true;
       break;
   }
 };
