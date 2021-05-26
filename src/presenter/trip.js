@@ -54,6 +54,7 @@ export default class Trip {
 
   createPoint(callback) {
     this._currentSortType = SortType.DAY;
+    // if (!this._getPoints().length) {
     if (this._pointListComponent._element === null) {
       remove(this._pointEmptyListComponent);
       render(this._tripMainContainer, this._pointListComponent);

@@ -2,6 +2,7 @@ import PointEditView from '../view/point-edit.js';
 
 import { remove, render } from '../utils/render.js';
 import { UserAction, UpdateType, position } from '../utils/const.js';
+import { toast } from '../utils/toast.js';
 
 export default class PointNew {
   constructor(pointListContainer, changeData, pointsModel) {
@@ -96,15 +97,19 @@ export default class PointNew {
     let errors = 0;
     if (!point.destination.name) {
       errors++;
+      toast('City is required!', 10000);
     }
     if (!point.dateFrom) {
       errors++;
+      toast('Date from is required!', 10000);
     }
     if (!point.dateTo) {
       errors++;
+      toast('Date to is required!', 10000);
     }
     if (point.basePrice < 1) {
       errors++;
+      toast('Price is required and above zero!', 10000);
     }
 
     return !errors;
