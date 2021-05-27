@@ -4,7 +4,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 import SmartView from './smart.js';
 
-import { dateFormat } from '../utils/date.js';
+import { dateFormat, DateFormatStr, startOfDate, endOfDate } from '../utils/date.js';
 import { Type, types, defaultPoint } from '../utils/const.js';
 import { getOfferId } from '../utils/point.js';
 
@@ -203,6 +203,10 @@ export default class PointEdit extends SmartView {
 
     this._data = PointEdit.parsePointToData(point || defaultPoint);
     this._isCreate = point ? false : true;
+    if (this._isCreate) {
+      this._data.dateFrom = startOfDate();
+      this._data.dateTo = endOfDate();
+    }
     this._datePickerStart = null;
     this._datePickerEnd = null;
     this._destinations = destinations;
@@ -237,10 +241,10 @@ export default class PointEdit extends SmartView {
         allowInvalidPreload: true,
         enableTime: true,
         time_24hr: true,
-        dateFormat: 'y/m/d H:i',
+        dateFormat: DateFormatStr.HUMAN,
         altInput: true,
-        altFormat: 'd/m/y H:i',
-        defaultDate: this._data.dateFrom,
+        altFormat: DateFormatStr.ALT,
+        defaultDate: this._isCreate ? startOfDate() : this._data.dateFrom,
         maxDate: this._data.dateFrom,
         onChange: this._startDateChangeHandler,
       },
@@ -260,10 +264,10 @@ export default class PointEdit extends SmartView {
       {
         enableTime: true,
         time_24hr: true,
-        dateFormat: 'y/m/d H:i',
+        dateFormat: DateFormatStr.HUMAN,
         altInput: true,
-        altFormat: 'd/m/y H:i',
-        defaultDate: this._data.dateTo,
+        altFormat: DateFormatStr.ALT,
+        defaultDate: this._isCreate ? endOfDate() : this._data.dateTo,
         minDate: this._data.dateTo,
         onChange: this._endDateChangeHandler,
       },

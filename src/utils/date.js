@@ -6,6 +6,22 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(duration);
 
+// Формат дат для отображения и вывода
+export const DateFormatStr = {
+  HUMAN: 'y/m/d H:i',
+  ALT: 'd/m/y H:i',
+};
+
+// Возвращает начало текущего дня
+export const startOfDate = (start = 'day') => {
+  return dayjs().startOf(start).toDate();
+};
+
+// Возвращает конец текущего дня
+export const endOfDate = (end = 'day') => {
+  return dayjs().endOf(end).toDate();
+};
+
 // Приведение минут к строке
 export const dateToDurationString = (minutes) => {
   const MINUTE_IN_DAY = 1440;
