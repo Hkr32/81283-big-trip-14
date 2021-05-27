@@ -1,11 +1,6 @@
-import {
-  AUTHORIZATION,
-  END_POINT,
-  STORE_NAME,
-  MenuItem,
-  UpdateType,
-  FilterType
-} from './utils/const.js';
+import { MenuItem, UpdateType, FilterType } from './utils/const.js';
+import { STORE_NAME } from './utils/store.js';
+import { AUTHORIZATION, END_POINT } from './utils/api.js';
 import { isOnline } from './utils/common.js';
 import { toast } from './utils/toast.js';
 
@@ -54,7 +49,7 @@ const handleSiteMenuClick = (menuItem) => {
       headerModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripPresenter.init();
       if (!isOnline()) {
-        toast('You can\'t create new task offline');
+        toast('You can\'t create new point offline');
         headerMenuComponent.setMenuItem(MenuItem.TABLE);
         break;
       }
@@ -82,8 +77,8 @@ tripPresenter.init();
 
 // @todo all to apiWithProvider
 Promise.all([
-  api.getOffers(),
-  api.getDestinations(),
+  apiWithProvider.getOffers(),
+  apiWithProvider.getDestinations(),
   apiWithProvider.getPoints(),
 ])
   .then(([offers, destinations, points]) => {
