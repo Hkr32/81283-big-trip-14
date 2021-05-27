@@ -1,15 +1,16 @@
 import PointsModel from '../model/points.js';
 import { isOnline } from '../utils/common.js';
+import { DataPostfix, DataIds } from '../utils/store.js';
 
 const getSyncedPoints = (items) => {
   return items.filter(({success}) => success)
     .map(({payload}) => payload.point);
 };
 
-const createStoreStructure = (items) => {
+const createStoreStructure = (items, id = DataIds.POINTS) => {
   return items.reduce((acc, current) => {
     return Object.assign({}, acc, {
-      [current.id]: current,
+      [current[id]]: current,
     });
   }, {});
 };
@@ -20,50 +21,50 @@ export default class Provider {
     this._store = store;
   }
 
-  // getOffers() {
-  //   if (isOnline()) {
-  //     return this._api.getOffers()
-  //       .then((offers) => {
-  //         const items = createStoreStructure(offers);
-  //         this._store.setItems(items);
+  getOffers() {
+    if (isOnline()) {
+      return this._api.getOffers()
+        .then((offers) => {
+          const items = createStoreStructure(offers, DataIds.OFFERS);
+          this._store.setItems(items, DataPostfix.OFFERS);
 
-  //         return offers;
-  //       });
-  //   }
+          return offers;
+        });
+    }
 
-  //   const storeOffers = Object.values(this._store.getItems());
+    const storeOffers = Object.values(this._store.getItems());
 
-  //   return Promise.resolve(storeOffers);
-  // }
+    return Promise.resolve(storeOffers);
+  }
 
-  // getDestinations() {
-  //   if (isOnline()) {
-  //     return this._api.getDestinations()
-  //       .then((destinations) => {
-  //         const items = createStoreStructure(destinations);
-  //         this._store.setItems(items);
+  getDestinations() {
+    if (isOnline()) {
+      return this._api.getDestinations()
+        .then((destinations) => {
+          const items = createStoreStructure(destinations, DataIds.DESTINATIONS);
+          this._store.setItems(items, DataPostfix.DESTINATIONS);
 
-  //         return destinations;
-  //       });
-  //   }
+          return destinations;
+        });
+    }
 
-  //   const storeDestinations = Object.values(this._store.getItems());
+    const storeDestinations = Object.values(this._store.getItems(DataPostfix.DESTINATIONS));
 
-  //   return Promise.resolve(storeDestinations);
-  // }
+    return Promise.resolve(storeDestinations);
+  }
 
   getPoints() {
     if (isOnline()) {
       return this._api.getPoints()
         .then((points) => {
-          const items = createStoreStructure(points.map(PointsModel.adaptToServer));
-          this._store.setItems(items);
+          const items = createStoreStructure(points.map(PointsModel.adaptToServer), DataIds.POINTS);
+          this._store.setItems(items, DataPostfix.POINTS);
 
           return points;
         });
     }
 
-    const storePoints = Object.values(this._store.getItems());
+    const storePoints = Object.values(this._store.getItems(DataPostfix.POINTS));
 
     return Promise.resolve(storePoints.map(PointsModel.adaptToClient));
   }
@@ -115,9 +116,9 @@ export default class Provider {
           const createdPoints = getSyncedPoints(response.created);
           const updatedPoints = getSyncedPoints(response.updated);
 
-          const items = createStoreStructure([...createdPoints, ...updatedPoints]);
+          const items = createStoreStructure([...createdPoints, ...updatedPoints], DataIds.POINTS);
 
-          this._store.setItems(items);
+          this._store.setItems(items, DataPostfix.POINTS);
         });
     }
 
