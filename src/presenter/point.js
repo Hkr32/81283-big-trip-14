@@ -4,6 +4,7 @@ import PointEditView from '../view/point-edit.js';
 import { isEscKey, isOnline } from '../utils/common.js';
 import { render, replace, remove } from '../utils/render.js';
 import { UserAction, UpdateType } from '../utils/const.js';
+import { validatePoint, setAborting } from '../utils/point.js';
 import { toast } from '../utils/toast.js';
 
 const Mode = {
@@ -134,6 +135,11 @@ export default class Point {
   }
 
   _handleEditClick() {
+    if (!isOnline()) {
+      toast('You can\'t edit task offline');
+
+      return;
+    }
     this._replacePointToForm();
   }
 
@@ -157,16 +163,30 @@ export default class Point {
   }
 
   _handleFormSubmit(update) {
-    this._changeData(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
-      update,
-    );
+    if (!isOnline()) {
+      toast('You can\'t save task offline');
+      setAborting(this._pointEditComponent);
+
+      return;
+    }
+
+    if (validatePoint(update)) {
+      this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        update,
+      );
+    } else {
+      setAborting(this._pointEditComponent);
+    }
+
   }
 
   _handleDeleteClick(point) {
     if (!isOnline()) {
       toast('You can\'t delete point offline');
+      setAborting(this._pointEditComponent);
+
       return;
     }
 

@@ -1,4 +1,5 @@
-import { dateDiffInMinutes, isSameOrAfterDate, isSameOrBeforeDate } from '../utils/date.js';
+import { dateDiffInMinutes, dateInFuture, dateInPast } from '../utils/date.js';
+import { toast } from '../utils/toast.js';
 
 const compareNumeric = (onePrice, secondPrice) => {
   return onePrice - secondPrice;
@@ -6,13 +7,13 @@ const compareNumeric = (onePrice, secondPrice) => {
 
 export const filterPointsFuture = (points) => {
   return points.filter((point) => {
-    return isSameOrAfterDate(point.dateFrom);
+    return dateInFuture(point.dateFrom, point.dateTo);
   });
 };
 
 export const filterPointsPast = (points) => {
   return points.filter((point) => {
-    return isSameOrBeforeDate(point.dateFrom);
+    return dateInPast(point.dateFrom, point.dateTo);
   });
 };
 
@@ -29,3 +30,38 @@ export const sortPointPrice = (pointOne, pointSecond) => {
 };
 
 export const getOfferId = (value) => value.replace(/\s+/g, '-').trim().toLowerCase();
+
+export const validatePoint = (point) => {
+  const TOAST_TIME = 10000;
+  let errors = 0;
+  if (!point.destination.name) {
+    errors++;
+    toast('City is required!', TOAST_TIME);
+  }
+  if (!point.dateFrom) {
+    errors++;
+    toast('Date from is required!', TOAST_TIME);
+  }
+  if (!point.dateTo) {
+    errors++;
+    toast('Date to is required!', TOAST_TIME);
+  }
+  if (point.basePrice < 1) {
+    errors++;
+    toast('Price is required and above zero!', TOAST_TIME);
+  }
+
+  return !errors;
+};
+
+export const setAborting = (component) => {
+  const resetFormState = () => {
+    component.updateData({
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    });
+  };
+
+  component.shake(resetFormState);
+};

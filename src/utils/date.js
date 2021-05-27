@@ -52,14 +52,14 @@ export const dateDiffInMinutes = (dateFrom, dateTo) => {
   return dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
 };
 
-// Проверяет совпадает ли дата или она после
-export const isSameOrAfterDate = (date) => {
-  return dayjs(date).isSameOrAfter(dayjs());
+// Проверяет даты из интервала точки, что они еще НЕ завершены
+export const dateInFuture = (dateFrom, dateTo, date = dayjs()) => {
+  return dayjs(dateFrom).isSameOrAfter(date) || dayjs(dateTo).isSameOrAfter(date);
 };
 
-// Проверяет совпадает ли дата или она раньше
-export const isSameOrBeforeDate = (date) => {
-  return dayjs(date).isSameOrBefore(dayjs());
+// Проверяет даты из интервала точки, что они УЖЕ завершены
+export const dateInPast = (dateFrom, dateTo, date = dayjs()) => {
+  return dayjs(dateTo).isSameOrBefore(date) || dayjs(dateFrom).isSameOrBefore(date);
 };
 
 // Получение разницы дат

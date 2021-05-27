@@ -2,6 +2,8 @@ import PointEditView from '../view/point-edit.js';
 
 import { remove, render } from '../utils/render.js';
 import { UserAction, UpdateType, position } from '../utils/const.js';
+import { isEscKey, isOnline } from '../utils/common.js';
+import { validatePoint, setAborting } from '../utils/point.js';
 import { toast } from '../utils/toast.js';
 
 export default class PointNew {
@@ -58,27 +60,22 @@ export default class PointNew {
     });
   }
 
-  setAborting() {
-    const resetFormState = () => {
-      this._pointEditComponent.updateData({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    this._pointEditComponent.shake(resetFormState);
-  }
-
   _handleFormSubmit(point) {
-    if (this._validate(point)) {
+    if (!isOnline()) {
+      toast('You can\'t save task offline');
+      setAborting(this._pointEditComponent);
+
+      return;
+    }
+
+    if (validatePoint(point)) {
       this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MAJOR,
         point,
       );
     } else {
-      this.setAborting();
+      setAborting(this._pointEditComponent);
     }
   }
 
@@ -87,31 +84,9 @@ export default class PointNew {
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscKey(evt.key)) {
       evt.preventDefault();
       this.destroy();
     }
-  }
-
-  _validate(point) {
-    let errors = 0;
-    if (!point.destination.name) {
-      errors++;
-      toast('City is required!', 10000);
-    }
-    if (!point.dateFrom) {
-      errors++;
-      toast('Date from is required!', 10000);
-    }
-    if (!point.dateTo) {
-      errors++;
-      toast('Date to is required!', 10000);
-    }
-    if (point.basePrice < 1) {
-      errors++;
-      toast('Price is required and above zero!', 10000);
-    }
-
-    return !errors;
   }
 }

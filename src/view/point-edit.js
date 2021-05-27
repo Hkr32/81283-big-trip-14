@@ -204,8 +204,8 @@ export default class PointEdit extends SmartView {
     this._data = PointEdit.parsePointToData(point || defaultPoint);
     this._isCreate = point ? false : true;
     if (this._isCreate) {
-      this._data.dateFrom = startOfDate();
-      this._data.dateTo = endOfDate();
+      this._data.dateFrom = this._data.dateFrom ? this._data.dateFrom : startOfDate();
+      this._data.dateTo = this._data.dateTo ? this._data.dateTo : endOfDate();
     }
     this._datePickerStart = null;
     this._datePickerEnd = null;
@@ -244,13 +244,11 @@ export default class PointEdit extends SmartView {
         dateFormat: DateFormatStr.HUMAN,
         altInput: true,
         altFormat: DateFormatStr.ALT,
-        defaultDate: this._isCreate ? startOfDate() : this._data.dateFrom,
-        maxDate: this._data.dateFrom,
+        defaultDate: this._data.dateFrom ? this._data.dateFrom : startOfDate(),
+        maxDate: this._data.dateTo,
         onChange: this._startDateChangeHandler,
       },
     );
-    this._datePickerStart.input.setAttribute('required', true);
-    this._datePickerStart.altInput.setAttribute('required', true);
   }
 
   _endDateInputHandler() {
@@ -267,13 +265,11 @@ export default class PointEdit extends SmartView {
         dateFormat: DateFormatStr.HUMAN,
         altInput: true,
         altFormat: DateFormatStr.ALT,
-        defaultDate: this._isCreate ? endOfDate() : this._data.dateTo,
-        minDate: this._data.dateTo,
+        defaultDate: this._data.dateTo ? this._data.dateTo : endOfDate(),
+        minDate: this._data.dateFrom,
         onChange: this._endDateChangeHandler,
       },
     );
-    this._datePickerEnd.input.setAttribute('required', true);
-    this._datePickerEnd.altInput.setAttribute('required', true);
   }
 
   _startDateChangeHandler([dateFrom]) {

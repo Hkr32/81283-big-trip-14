@@ -67,22 +67,18 @@ export default class Trip {
     switch (filterType) {
       case FilterType.FUTURE:
         points = filterPointsFuture(points);
-
         break;
       case FilterType.PAST:
         points = filterPointsPast(points);
-
         break;
     }
 
     switch (this._currentSortType) {
       case SortType.TIME:
         points.sort(sortPointTime);
-
         break;
       case SortType.PRICE:
         points.sort(sortPointPrice);
-
         break;
     }
 
