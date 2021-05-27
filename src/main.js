@@ -75,7 +75,6 @@ const handleSiteMenuClick = (menuItem) => {
 
 tripPresenter.init();
 
-// @todo all to apiWithProvider
 Promise.all([
   apiWithProvider.getOffers(),
   apiWithProvider.getDestinations(),
