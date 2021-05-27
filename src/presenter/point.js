@@ -134,11 +134,6 @@ export default class Point {
   }
 
   _handleEditClick() {
-    if (!isOnline()) {
-      toast('You can\'t save task offline');
-      return;
-    }
-
     this._replacePointToForm();
   }
 
@@ -171,7 +166,7 @@ export default class Point {
 
   _handleDeleteClick(point) {
     if (!isOnline()) {
-      toast('You can\'t delete task offline');
+      toast('You can\'t delete point offline');
       return;
     }
 
