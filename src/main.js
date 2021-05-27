@@ -1,7 +1,12 @@
-// @todo Удалить после того как будут реальные данные
-import { generatePoint } from './mock/point.js';
+import {
+  AUTHORIZATION,
+  END_POINT,
+  MenuItem,
+  UpdateType,
+  FilterType
+} from './utils/const.js';
 
-import { POINT_COUNTER, MenuItem, UpdateType, FilterType } from './utils/const.js';
+import Api from './api/api.js';
 
 import HeaderMenuView from './view/header/menu.js';
 
@@ -14,25 +19,26 @@ import HeaderModel from './model/header.js';
 
 const headerMenuComponent = new HeaderMenuView();
 
-// Генерируем случайный набор точек
-const points = new Array(POINT_COUNTER).fill().map(generatePoint);
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointModel();
-pointsModel.setPoints(points);
 const headerModel = new HeaderModel();
 
-// Trip
-const tripPresenter = new TripPresenter(document.querySelector('.page-body'), headerModel, pointsModel);
-tripPresenter.init();
-
-// Statistics
+const tripPresenter = new TripPresenter(document.querySelector('.page-body .trip-events'), headerModel, pointsModel, api);
 const statisticsPresenter = new StatisticsPresenter(document.querySelector('.page-body section.statistics'), pointsModel);
-// statisticsPresenter.init();
 
 const handlePointNewFormClose = () => {
   document.querySelector('.trip-main__event-add-btn').disabled = false;
   headerMenuComponent.setMenuItem(MenuItem.TABLE);
 };
+
+// Header
+const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  handleSiteMenuClick(MenuItem.ADD_NEW_POINT);
+});
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -44,38 +50,40 @@ const handleSiteMenuClick = (menuItem) => {
       document.querySelector('.trip-main__event-add-btn').disabled = true;
       break;
     case MenuItem.TABLE:
-      document.querySelector('.trip-main__event-add-btn').disabled = false;
       tripPresenter.destroy();
       headerModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripPresenter.init();
+      headerPresenter.setDisabled(false);
       statisticsPresenter.destroy();
+      document.querySelector('.trip-main__event-add-btn').disabled = false;
       break;
     case MenuItem.STATISTICS:
-      document.querySelector('.trip-main__event-add-btn').disabled = true;
-
-      // @todo Нет эффекта, все равно можно нажать на фильтры
-      const filters = document.querySelectorAll('.trip-filters input.trip-filters__filter-input');
-      const labels = document.querySelectorAll('.trip-filters label.trip-filters__filter-label');
-      filters.forEach((filter) => {
-        filter.disabled = true;
-      });
-      labels.forEach((label) => {
-        label.disabled = true;
-      });
-
+      headerPresenter.setDisabled(true);
       tripPresenter.destroy();
       statisticsPresenter.init();
+      document.querySelector('.trip-main__event-add-btn').disabled = true;
       break;
   }
 };
 
-// Header
-const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
-headerPresenter.init();
+tripPresenter.init();
 
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
-  evt.preventDefault();
-  handleSiteMenuClick(MenuItem.ADD_NEW_POINT);
-});
-
-headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+Promise.all([
+  api.getOffers(),
+  api.getDestinations(),
+  api.getPoints(),
+])
+  .then(([offers, destinations, points]) => {
+    pointsModel.setOffers(offers);
+    pointsModel.setDestinations(destinations);
+    pointsModel.setPoints(UpdateType.INIT, points);
+    headerPresenter.init();
+    headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  })
+  .catch(() => {
+    pointsModel.setOffers([]);
+    pointsModel.setDestinations([]);
+    pointsModel.setPoints(UpdateType.INIT, []);
+    headerPresenter.init();
+    headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  });

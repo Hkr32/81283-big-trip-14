@@ -16,8 +16,8 @@ import { renderChart } from '../utils/chart.js';
 export default class Statistics {
   constructor(container, pointsModel) {
     this._pointsModel = pointsModel;
-    this._data = calcStatistics(this._pointsModel.getPoints());
-    this._dataLength = this._data.length;
+    this._data = [];
+    this._dataLength = 0;
 
     this._statisticsContainer = container;
 
@@ -42,37 +42,51 @@ export default class Statistics {
     const moneyCtx = this._statisticsMoneyComponent.getElement().querySelector('.statistics__chart--money');
     moneyCtx.height = BAR_HEIGHT * this._dataLength;
     render(this._statisticsContainer, this._statisticsMoneyComponent);
-    const sortArray = this._data.sort(sortMoneyDown);
+    this._data.sort(sortMoneyDown);
     const data = {
-      labels: sortArray.map((item) => item[0]),
-      data: sortArray.map((item) => item[1].money),
+      labels: [],
+      data: [],
     };
+    this._data.map(([label, { money }]) => {
+      data.labels.push(label);
+      data.data.push(money);
+    });
     renderChart(moneyCtx, data, DiagramType.MONEY);
   }
   _renderStatisticsTransport() {
     const transportCtx = this._statisticsTransportComponent.getElement().querySelector('.statistics__chart--transport');
     transportCtx.height = BAR_HEIGHT * this._dataLength;
     render(this._statisticsContainer, this._statisticsTransportComponent);
-    const sortArray = this._data.sort(sortCountDown);
+    this._data.sort(sortCountDown);
     const data = {
-      labels: sortArray.map((item) => item[0]),
-      data: sortArray.map((item) => item[1].count),
+      labels: [],
+      data: [],
     };
+    this._data.map(([label, { count }]) => {
+      data.labels.push(label);
+      data.data.push(count);
+    });
     renderChart(transportCtx, data, DiagramType.TYPE);
   }
   _renderStatisticsTime() {
     const timeCtx = this._statisticsTimeComponent.getElement().querySelector('.statistics__chart--time');
     timeCtx.height = BAR_HEIGHT * this._dataLength;
     render(this._statisticsContainer, this._statisticsTimeComponent);
-    const sortArray = this._data.sort(sortDurationDown);
+    this._data.sort(sortDurationDown);
     const data = {
-      labels: sortArray.map((item) => item[0]),
-      data: sortArray.map((item) => item[1].duration),
+      labels: [],
+      data: [],
     };
+    this._data.map(([label, { duration }]) => {
+      data.labels.push(label);
+      data.data.push(duration);
+    });
     renderChart(timeCtx, data, DiagramType.TIME);
   }
 
   init() {
+    this._data = calcStatistics(this._pointsModel.getPoints());
+    this._dataLength = this._data.length;
     this._clearStatistics();
     this._renderStatistics();
   }

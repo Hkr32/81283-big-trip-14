@@ -54,7 +54,6 @@ export default class Header {
   }
 
   _renderMenu() {
-    //
     const menuContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__navigation');
     render(menuContainer, this._headerMenuComponent);
   }
@@ -96,5 +95,13 @@ export default class Header {
   init() {
     this._clearHeader();
     this._renderHeader();
+  }
+
+  setDisabled(status = true) {
+    if (!this._headerFilterComponent) {
+      return;
+    }
+
+    this._headerFilterComponent.setDisabledStatus(status);
   }
 }

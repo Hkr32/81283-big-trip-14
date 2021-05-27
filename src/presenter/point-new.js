@@ -1,16 +1,14 @@
 import PointEditView from '../view/point-edit.js';
 
-import { nanoid } from 'nanoid';
-
 import { remove, render } from '../utils/render.js';
-import { UserAction, UpdateType, position, Type } from '../utils/const.js';
-
-import { offers, destinations } from '../mock/const.js';
+import { UserAction, UpdateType, position } from '../utils/const.js';
 
 export default class PointNew {
-  constructor(pointListContainer, changeData) {
+  constructor(pointListContainer, changeData, pointsModel) {
     this._pointListContainer = pointListContainer;
     this._changeData = changeData;
+
+    this._pointsModel = pointsModel;
 
     this._destroyCallback = null;
 
@@ -28,7 +26,7 @@ export default class PointNew {
       return;
     }
 
-    this._pointEditComponent = new PointEditView(destinations, offers);
+    this._pointEditComponent = new PointEditView(this._pointsModel.getDestinations(), this._pointsModel.getOffers());
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
@@ -52,13 +50,35 @@ export default class PointNew {
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
+  setSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._pointEditComponent.shake(resetFormState);
+  }
+
   _handleFormSubmit(point) {
-    this._changeData(
-      UserAction.ADD_POINT,
-      UpdateType.MAJOR,
-      Object.assign({ id: nanoid() }, point),
-    );
-    this.destroy();
+    if (this._validate(point)) {
+      this._changeData(
+        UserAction.ADD_POINT,
+        UpdateType.MAJOR,
+        point,
+      );
+    } else {
+      this.setAborting();
+    }
   }
 
   _handleDeleteClick() {
@@ -70,5 +90,23 @@ export default class PointNew {
       evt.preventDefault();
       this.destroy();
     }
+  }
+
+  _validate(point) {
+    let errors = 0;
+    if (!point.destination.name) {
+      errors++;
+    }
+    if (!point.dateFrom) {
+      errors++;
+    }
+    if (!point.dateTo) {
+      errors++;
+    }
+    if (point.basePrice < 1) {
+      errors++;
+    }
+
+    return !errors;
   }
 }

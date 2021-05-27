@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
-const isSameOrBefore = require('dayjs/plugin/isSameOrBefore');
-const duration = require('dayjs/plugin/duration');
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import duration from 'dayjs/plugin/duration';
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(duration);
@@ -10,11 +10,8 @@ dayjs.extend(duration);
 export const dateToDurationString = (minutes) => {
   const MINUTE_IN_DAY = 1440;
   const MINUTE_IN_HOUR = 60;
-  const DAY_ZERO_MIN = 1;
-  const DAY_ZERO_MAX = 10;
-  const HOUR_ZERO_MIN = 1;
-  const HOUR_ZERO_MAX = 10;
-  const MINUTE_ZERO_MAX = 10;
+  const ZERO_MIN = 1;
+  const ZERO_MAX = 10;
 
   const d = Math.floor(minutes / MINUTE_IN_DAY);
   const remainder = minutes % MINUTE_IN_DAY;
@@ -23,18 +20,18 @@ export const dateToDurationString = (minutes) => {
 
   let diffStr = '';
 
-  if (d >= DAY_ZERO_MIN) {
-    diffStr += (d >= DAY_ZERO_MAX ? d : ('0' + d)) + 'D ';
+  if (d >= ZERO_MIN) {
+    diffStr += (d >= ZERO_MAX ? d : ('0' + d)) + 'D ';
   }
-  if (d >= DAY_ZERO_MIN || h >= HOUR_ZERO_MIN) {
-    diffStr += (h >= HOUR_ZERO_MAX ? h : ('0' + h)) + 'H ';
+  if (d >= ZERO_MIN || h >= ZERO_MIN) {
+    diffStr += (h >= ZERO_MAX ? h : ('0' + h)) + 'H ';
   }
-  diffStr += (m >= MINUTE_ZERO_MAX ? m : ('0' + m)) + 'M ';
+  diffStr += (m >= ZERO_MAX ? m : ('0' + m)) + 'M';
 
   return diffStr;
 };
 
-// Получен6ие разницы дат в минутах
+// Получение разницы дат в минутах
 export const dateDiffInMinutes = (dateFrom, dateTo) => {
   return dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
 };
@@ -65,5 +62,7 @@ export const dateFormat = (date, format = 'YYYY-MM-DD') => {
 
 // Приведение даты к формату ISO
 export const dateToISO = (date) => {
+  if (!date) return null;
+
   return dayjs(date).toISOString();
 };

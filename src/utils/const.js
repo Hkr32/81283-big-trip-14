@@ -1,5 +1,7 @@
 // Количество точек на главной
 export const POINT_COUNTER = 10;
+export const AUTHORIZATION = 'Basic pba6mmpddLUvMGZPPuAq';
+export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 
 // Перечисление возможных позиций добавляемого элемента относительно элемента
 export const position = {
@@ -70,6 +72,7 @@ export const defaultPoint = {
   basePrice: 0,
   dateFrom: null,
   dateTo: null,
+  isFavorite: false,
 };
 
 // Действия пользователя
@@ -84,4 +87,5 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
