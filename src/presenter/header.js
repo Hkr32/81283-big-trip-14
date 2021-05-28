@@ -46,7 +46,7 @@ export default class Header {
       this._headerFilterComponent = null;
     }
 
-    this._headerFilterComponent = new HeaderFilterView(this._headerModel.getFilter());
+    this._headerFilterComponent = new HeaderFilterView(this._headerModel.getFilter(), this._pointsModel.getFutureEmpty(), this._pointsModel.getPastEmpty());
     this._headerFilterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     const filterContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__filters');

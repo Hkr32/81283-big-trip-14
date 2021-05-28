@@ -1,12 +1,16 @@
 import Observer from '../utils/observer.js';
 import { sortPointDate } from '../utils/point.js';
+import { dateInFuture, dateInPast } from '../utils/date.js';
 
 export default class Points extends Observer {
   constructor() {
     super();
+
     this._points = [];
     this._offers = [];
     this._destinations = [];
+    this._isFutureEmpty = null;
+    this._isPastEmpty = null;
   }
 
   setOffers(offers) {
@@ -25,8 +29,30 @@ export default class Points extends Observer {
     return this._destinations.slice();
   }
 
+  getFutureEmpty() {
+    return this._isFutureEmpty;
+  }
+
+  checkFuturePoints() {
+    this._isFutureEmpty = !this._points.some((point) => {
+      return dateInFuture(point.dateFrom, point.dateTo);
+    });
+  }
+
+  getPastEmpty() {
+    return this._isPastEmpty;
+  }
+
+  checkPastPoints() {
+    this._isPastEmpty = !this._points.some((point) => {
+      return dateInPast(point.dateFrom, point.dateTo);
+    });
+  }
+
   setPoints(updateType, points) {
     this._points = points.slice();
+    this.checkFuturePoints();
+    this.checkPastPoints();
 
     this._notify(updateType);
   }
@@ -47,6 +73,8 @@ export default class Points extends Observer {
       update,
       ...this._points.slice(index + 1),
     ];
+    this.checkFuturePoints();
+    this.checkPastPoints();
 
     this._notify(updateType, update);
   }
@@ -56,6 +84,8 @@ export default class Points extends Observer {
       update,
       ...this._points,
     ];
+    this.checkFuturePoints();
+    this.checkPastPoints();
 
     this._notify(updateType, update);
   }
@@ -71,6 +101,8 @@ export default class Points extends Observer {
       ...this._points.slice(0, index),
       ...this._points.slice(index + 1),
     ];
+    this.checkFuturePoints();
+    this.checkPastPoints();
 
     this._notify(updateType);
   }
