@@ -44,7 +44,7 @@ export default class Trip {
   }
 
   destroy() {
-    this._clearTrip({ resetSortType: true, resetFilterType: true });
+    this._clearTrip({ resetSortType: true });
 
     remove(this._pointListComponent);
 
@@ -123,17 +123,14 @@ export default class Trip {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this._pointPresenter[data.id].init(data);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
         this._clearTrip();
         this._renderTrip();
         break;
       case UpdateType.MAJOR:
-        // - обновить всю доску (например, при переключении фильтра)
-        this._clearTrip({ resetSortType: true, resetFilterType: true });
+        this._clearTrip({ resetSortType: true });
         this._renderTrip();
         break;
       case UpdateType.INIT:
@@ -195,7 +192,7 @@ export default class Trip {
     points.forEach((point) => this._renderPoint(point));
   }
 
-  _clearTrip({ resetSortType = false, resetFilterType = false } = {}) {
+  _clearTrip({ resetSortType = false } = {}) {
     this._pointNewPresenter.destroy();
 
     Object
@@ -210,9 +207,6 @@ export default class Trip {
 
     if (resetSortType) {
       this._currentSortType = SortType.DAY;
-    }
-    if (resetFilterType) {
-      this._currentFilterType = FilterType.EVERYTHING;
     }
   }
 
