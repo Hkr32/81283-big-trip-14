@@ -83,14 +83,14 @@ Promise.all([
   .then(([offers, destinations, points]) => {
     pointsModel.setOffers(offers);
     pointsModel.setDestinations(destinations);
-    pointsModel.setPoints(UpdateType.INIT, points);
+    pointsModel.set(UpdateType.INIT, points);
     headerPresenter.init();
     headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   })
   .catch(() => {
     pointsModel.setOffers([]);
     pointsModel.setDestinations([]);
-    pointsModel.setPoints(UpdateType.INIT, []);
+    pointsModel.set(UpdateType.INIT, []);
     headerPresenter.init();
     headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });

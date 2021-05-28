@@ -62,7 +62,7 @@ export default class Trip {
 
   _getPoints() {
     const filterType = this._headerModel.getFilter();
-    let points = this._pointsModel.getPoints();
+    let points = this._pointsModel.get();
 
     switch (filterType) {
       case FilterType.FUTURE:
@@ -91,7 +91,7 @@ export default class Trip {
         this._pointPresenter[update.id].setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update)
           .then((response) => {
-            this._pointsModel.updatePoint(updateType, response);
+            this._pointsModel.update(updateType, response);
           })
           .catch(() => {
             this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
@@ -101,7 +101,7 @@ export default class Trip {
         this._pointNewPresenter.setSaving();
         this._api.addPoint(update)
           .then((response) => {
-            this._pointsModel.addPoint(updateType, response);
+            this._pointsModel.add(updateType, response);
           })
           .catch(() => {
             this._pointNewPresenter.setAborting();
@@ -111,7 +111,7 @@ export default class Trip {
         this._pointPresenter[update.id].setViewState(PointPresenterViewState.DELETING);
         this._api.deletePoint(update)
           .then(() => {
-            this._pointsModel.deletePoint(updateType, update);
+            this._pointsModel.delete(updateType, update);
           })
           .catch(() => {
             this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);

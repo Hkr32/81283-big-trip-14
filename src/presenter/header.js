@@ -71,7 +71,7 @@ export default class Header {
       this._headerCostComponent = null;
     }
 
-    const points = this._pointsModel.getPoints();
+    const points = this._pointsModel.get();
 
     this._headerNavigationComponent = new HeaderNavigationView(this._headerModel.generateTrip(points));
     this._headerCostComponent = new HeaderCostView(this._headerModel.getSumTrip(points));
