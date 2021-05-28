@@ -85,6 +85,71 @@ export default class Trip {
     return points;
   }
 
+  _renderLoading() {
+    render(this._tripMainContainer, this._loadingComponent);
+  }
+
+  _renderSort() {
+    if (this._pointSortComponent !== null) {
+      this._pointSortComponent = null;
+    }
+
+    this._pointSortComponent = new MainSortingView(this._currentSortType);
+    this._pointSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    render(this._tripMainContainer, this._pointSortComponent);
+  }
+
+  _renderPoint(point) {
+    const pointPresenter = new PointPresenter(this._pointListComponent, this._handleViewAction, this._handleModeChange, this._pointsModel);
+    pointPresenter.init(point);
+    this._pointPresenter[point.id] = pointPresenter;
+  }
+
+  _renderNoPoints() {
+    render(this._tripMainContainer, this._pointEmptyListComponent);
+  }
+
+  _renderPoints(points) {
+    render(this._tripMainContainer, this._pointListComponent);
+    points.forEach((point) => this._renderPoint(point));
+  }
+
+  _clearTrip({ resetSortType = false } = {}) {
+    this._pointNewPresenter.destroy();
+
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
+
+    remove(this._loadingComponent);
+    remove(this._pointSortComponent);
+    remove(this._pointListComponent);
+    remove(this._pointEmptyListComponent);
+
+    if (resetSortType) {
+      this._currentSortType = SortType.DAY;
+    }
+  }
+
+  _renderTrip() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
+    const points = this._getPoints();
+
+    if (points.length === 0) {
+      this._renderNoPoints();
+
+      return;
+    }
+
+    this._renderSort();
+    this._renderPoints(points);
+  }
+
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
@@ -161,70 +226,5 @@ export default class Trip {
     this._currentSortType = sortType;
     this._clearTrip();
     this._renderTrip();
-  }
-
-  _renderLoading() {
-    render(this._tripMainContainer, this._loadingComponent);
-  }
-
-  _renderSort() {
-    if (this._pointSortComponent !== null) {
-      this._pointSortComponent = null;
-    }
-
-    this._pointSortComponent = new MainSortingView(this._currentSortType);
-    this._pointSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
-    render(this._tripMainContainer, this._pointSortComponent);
-  }
-
-  _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointListComponent, this._handleViewAction, this._handleModeChange, this._pointsModel);
-    pointPresenter.init(point);
-    this._pointPresenter[point.id] = pointPresenter;
-  }
-
-  _renderNoPoints() {
-    render(this._tripMainContainer, this._pointEmptyListComponent);
-  }
-
-  _renderPoints(points) {
-    render(this._tripMainContainer, this._pointListComponent);
-    points.forEach((point) => this._renderPoint(point));
-  }
-
-  _clearTrip({ resetSortType = false } = {}) {
-    this._pointNewPresenter.destroy();
-
-    Object
-      .values(this._pointPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._pointPresenter = {};
-
-    remove(this._loadingComponent);
-    remove(this._pointSortComponent);
-    remove(this._pointListComponent);
-    remove(this._pointEmptyListComponent);
-
-    if (resetSortType) {
-      this._currentSortType = SortType.DAY;
-    }
-  }
-
-  _renderTrip() {
-    if (this._isLoading) {
-      this._renderLoading();
-      return;
-    }
-
-    const points = this._getPoints();
-
-    if (points.length === 0) {
-      this._renderNoPoints();
-
-      return;
-    }
-
-    this._renderSort();
-    this._renderPoints(points);
   }
 }

@@ -1,4 +1,5 @@
 import PointsModel from '../model/points.js';
+
 import { isOnline } from '../utils/common.js';
 import { DataPostfix, DataIds } from '../utils/store.js';
 

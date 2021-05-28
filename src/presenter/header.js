@@ -27,18 +27,17 @@ export default class Header {
     this._headerModel.addObserver(this._handleModelEvent);
   }
 
-  _handleModelEvent() {
-    this.init();
+  init() {
+    this._clearHeader();
+    this._renderHeader();
   }
 
-  _handleFilterTypeChange(filterType) {
-    if (this._headerModel.getFilter() === filterType) {
+  setDisabled(status = true) {
+    if (!this._headerFilterComponent) {
       return;
     }
 
-    this._headerModel.setFilter(UpdateType.MAJOR, filterType);
-    this._clearHeader();
-    this._renderHeader();
+    this._headerFilterComponent.setDisabledStatus(status);
   }
 
   _renderFilter() {
@@ -92,16 +91,17 @@ export default class Header {
     this._renderInfo();
   }
 
-  init() {
-    this._clearHeader();
-    this._renderHeader();
+  _handleModelEvent() {
+    this.init();
   }
 
-  setDisabled(status = true) {
-    if (!this._headerFilterComponent) {
+  _handleFilterTypeChange(filterType) {
+    if (this._headerModel.getFilter() === filterType) {
       return;
     }
 
-    this._headerFilterComponent.setDisabledStatus(status);
+    this._headerModel.setFilter(UpdateType.MAJOR, filterType);
+    this._clearHeader();
+    this._renderHeader();
   }
 }

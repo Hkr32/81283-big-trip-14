@@ -60,6 +60,10 @@ export default class PointNew {
     });
   }
 
+  _handleDeleteClick() {
+    this.destroy();
+  }
+
   _handleFormSubmit(point) {
     if (!isOnline()) {
       toast('You can\'t save task offline');
@@ -77,10 +81,6 @@ export default class PointNew {
     } else {
       setAborting(this._pointEditComponent);
     }
-  }
-
-  _handleDeleteClick() {
-    this.destroy();
   }
 
   _escKeyDownHandler(evt) {

@@ -37,16 +37,6 @@ export default class HeaderFilter extends AbstractView {
     return createHeaderFilterTemplate(this._currentFilterType, this._isDisableFuture, this._isDisablePast);
   }
 
-  _filterTypeChangeHandler(evt) {
-    if (evt.target.tagName !== 'LABEL' || (this._isDisableFuture && evt.target.dataset.filterType === FilterType.FUTURE) || (this._isDisablePast && evt.target.dataset.filterType === FilterType.PAST)) {
-      return;
-    }
-
-    evt.preventDefault();
-
-    this._callback.filterTypeChange(evt.target.dataset.filterType);
-  }
-
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
     this.getElement().addEventListener('click', this._filterTypeChangeHandler);
@@ -63,5 +53,15 @@ export default class HeaderFilter extends AbstractView {
         filter.addEventListener('click', this._filterTypeChangeHandler);
       }
     });
+  }
+
+  _filterTypeChangeHandler(evt) {
+    if (evt.target.tagName !== 'LABEL' || (this._isDisableFuture && evt.target.dataset.filterType === FilterType.FUTURE) || (this._isDisablePast && evt.target.dataset.filterType === FilterType.PAST)) {
+      return;
+    }
+
+    evt.preventDefault();
+
+    this._callback.filterTypeChange(evt.target.dataset.filterType);
   }
 }

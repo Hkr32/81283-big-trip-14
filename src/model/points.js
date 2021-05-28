@@ -33,20 +33,8 @@ export default class Points extends Observer {
     return this._isFutureEmpty;
   }
 
-  checkFuturePoints() {
-    this._isFutureEmpty = !this._points.some((point) => {
-      return dateInFuture(point.dateFrom, point.dateTo);
-    });
-  }
-
   getPastEmpty() {
     return this._isPastEmpty;
-  }
-
-  checkPastPoints() {
-    this._isPastEmpty = !this._points.some((point) => {
-      return dateInPast(point.dateFrom, point.dateTo);
-    });
   }
 
   set(updateType, points) {
@@ -145,5 +133,17 @@ export default class Points extends Observer {
     delete adaptedPoint.isFavorite;
 
     return adaptedPoint;
+  }
+
+  checkFuturePoints() {
+    this._isFutureEmpty = !this._points.some((point) => {
+      return dateInFuture(point.dateFrom, point.dateTo);
+    });
+  }
+
+  checkPastPoints() {
+    this._isPastEmpty = !this._points.some((point) => {
+      return dateInPast(point.dateFrom, point.dateTo);
+    });
   }
 }

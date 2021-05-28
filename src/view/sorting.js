@@ -43,6 +43,11 @@ export default class MainSorting extends AbstractView {
     return createMainSortingTemplate(this._currentSortType);
   }
 
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
+  }
+
   _sortTypeChangeHandler(evt) {
     if (evt.target.tagName !== 'LABEL' && evt.target.dataset.sortType === undefined) {
       return;
@@ -51,10 +56,5 @@ export default class MainSorting extends AbstractView {
     evt.preventDefault();
 
     this._callback.sortTypeChange(evt.target.dataset.sortType);
-  }
-
-  setSortTypeChangeHandler(callback) {
-    this._callback.sortTypeChange = callback;
-    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
   }
 }

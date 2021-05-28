@@ -229,6 +229,69 @@ export default class PointEdit extends SmartView {
     this._endDateInputHandler();
   }
 
+  getTemplate() {
+    return createPointEditTemplate(this._destinations, this._offers, this._data, this._isCreate);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this._startDateInputHandler();
+    this._endDateInputHandler();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datePickerStart) {
+      this._datePickerStart.destroy();
+      this._datePickerStart = null;
+    }
+    if (this._datePickerEnd) {
+      this._datePickerEnd.destroy();
+      this._datePickerEnd = null;
+    }
+  }
+
+  reset(point) {
+    this.updateData(
+      PointEdit.parsePointToData(point),
+    );
+  }
+
+  setChangePriceHandler() {
+    this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
+  }
+
+  setChangeTypeHandler() {
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._changeTypeHandler);
+  }
+
+  setChangeDestinationHandler() {
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._changeDestinationHandler);
+  }
+
+  setChangeOffersHandler() {
+    const offers = this.getElement().querySelectorAll('.event__available-offers input.event__offer-checkbox');
+    offers.forEach((offer) => {
+      offer.addEventListener('change', this._changeOfferHandler);
+    });
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
   _startDateInputHandler() {
     if (this._datePickerStart) {
       this._datePickerStart.destroy();
@@ -356,69 +419,6 @@ export default class PointEdit extends SmartView {
     this.setChangeTypeHandler();
     this.setChangeDestinationHandler();
     this.setChangeOffersHandler();
-  }
-
-  restoreHandlers() {
-    this._setInnerHandlers();
-    this._startDateInputHandler();
-    this._endDateInputHandler();
-  }
-
-  setChangePriceHandler() {
-    this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
-  }
-
-  setChangeTypeHandler() {
-    this.getElement().querySelector('.event__type-group').addEventListener('change', this._changeTypeHandler);
-  }
-
-  setChangeDestinationHandler() {
-    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._changeDestinationHandler);
-  }
-
-  setChangeOffersHandler() {
-    const offers = this.getElement().querySelectorAll('.event__available-offers input.event__offer-checkbox');
-    offers.forEach((offer) => {
-      offer.addEventListener('change', this._changeOfferHandler);
-    });
-  }
-
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
-  }
-
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
-    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
-  }
-
-  setEditClickHandler(callback) {
-    this._callback.editClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
-  }
-
-  removeElement() {
-    super.removeElement();
-
-    if (this._datePickerStart) {
-      this._datePickerStart.destroy();
-      this._datePickerStart = null;
-    }
-    if (this._datePickerEnd) {
-      this._datePickerEnd.destroy();
-      this._datePickerEnd = null;
-    }
-  }
-
-  reset(point) {
-    this.updateData(
-      PointEdit.parsePointToData(point),
-    );
-  }
-
-  getTemplate() {
-    return createPointEditTemplate(this._destinations, this._offers, this._data, this._isCreate);
   }
 
   static parsePointToData(point) {

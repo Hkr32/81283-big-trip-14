@@ -33,8 +33,6 @@ const handlePointNewFormClose = () => {
   document.querySelector('.trip-main__event-add-btn').disabled = false;
   headerMenuComponent.setMenuItem(MenuItem.TABLE);
 };
-
-// Header
 const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
