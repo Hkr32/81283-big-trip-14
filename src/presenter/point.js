@@ -31,11 +31,11 @@ export default class Point {
     this._pointComponent = null;
     this._pointEditComponent = null;
 
-    this._handleEditClick = this._handleEditClick.bind(this);
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._handleEditCloseClick = this._handleEditCloseClick.bind(this);
-    this._handleDeleteClick = this._handleDeleteClick.bind(this);
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._editCloseClickHandler = this._editCloseClickHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -48,11 +48,11 @@ export default class Point {
     this._pointComponent = new PointView(this._tripPoint);
     this._pointEditComponent = new PointEditView(this._pointsModel.getDestinations(), this._pointsModel.getOffers(), this._tripPoint);
 
-    this._pointComponent.setEditClickHandler(this._handleEditClick);
-    this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
-    this._pointEditComponent.setEditClickHandler(this._handleEditCloseClick);
-    this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._pointComponent.setEditClickHandler(this._editClickHandler);
+    this._pointComponent.setFavoriteClickHandler(this._favoriteClickHandler);
+    this._pointEditComponent.setFormSubmitHandler(this._formSubmitHandler);
+    this._pointEditComponent.setEditClickHandler(this._editCloseClickHandler);
+    this._pointEditComponent.setDeleteClickHandler(this._deleteClickHandler);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this._pointListContainer, this._pointComponent);
@@ -134,7 +134,7 @@ export default class Point {
     }
   }
 
-  _handleEditClick() {
+  _editClickHandler() {
     if (!isOnline()) {
       toast('You can\'t edit task offline');
 
@@ -143,7 +143,7 @@ export default class Point {
     this._replacePointToForm();
   }
 
-  _handleFavoriteClick() {
+  _favoriteClickHandler() {
     this._changeData(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
@@ -157,12 +157,12 @@ export default class Point {
     );
   }
 
-  _handleEditCloseClick() {
+  _editCloseClickHandler() {
     this._pointEditComponent.reset(this._tripPoint);
     this._replaceFormToPoint();
   }
 
-  _handleFormSubmit(update) {
+  _formSubmitHandler(update) {
     if (!isOnline()) {
       toast('You can\'t save task offline');
       setAborting(this._pointEditComponent);
@@ -182,7 +182,7 @@ export default class Point {
 
   }
 
-  _handleDeleteClick(point) {
+  _deleteClickHandler(point) {
     if (!isOnline()) {
       toast('You can\'t delete point offline');
       setAborting(this._pointEditComponent);

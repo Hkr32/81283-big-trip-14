@@ -28,19 +28,19 @@ export default class Trip {
     this._pointEmptyListComponent = new PointEmptyListView();
     this._loadingComponent = new LoadingView();
 
-    this._handleViewAction = this._handleViewAction.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleModeChange = this._handleModeChange.bind(this);
-    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._viewActionHandler = this._viewActionHandler.bind(this);
+    this._modelEventHandler = this._modelEventHandler.bind(this);
+    this._modeChangeHandler = this._modeChangeHandler.bind(this);
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
 
-    this._pointNewPresenter = new PointNewPresenter(this._pointListComponent, this._handleViewAction, this._pointsModel);
+    this._pointNewPresenter = new PointNewPresenter(this._pointListComponent, this._viewActionHandler, this._pointsModel);
   }
 
   init() {
     this._renderTrip();
 
-    this._headerModel.addObserver(this._handleModelEvent);
-    this._pointsModel.addObserver(this._handleModelEvent);
+    this._headerModel.addObserver(this._modelEventHandler);
+    this._pointsModel.addObserver(this._modelEventHandler);
   }
 
   destroy() {
@@ -48,8 +48,8 @@ export default class Trip {
 
     remove(this._pointListComponent);
 
-    this._headerModel.removeObserver(this._handleModelEvent);
-    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._headerModel.removeObserver(this._modelEventHandler);
+    this._pointsModel.removeObserver(this._modelEventHandler);
   }
 
   createPoint(callback) {
@@ -95,12 +95,12 @@ export default class Trip {
     }
 
     this._pointSortComponent = new MainSortingView(this._currentSortType);
-    this._pointSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._pointSortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
     render(this._tripMainContainer, this._pointSortComponent);
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointListComponent, this._handleViewAction, this._handleModeChange, this._pointsModel);
+    const pointPresenter = new PointPresenter(this._pointListComponent, this._viewActionHandler, this._modeChangeHandler, this._pointsModel);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
@@ -150,7 +150,7 @@ export default class Trip {
     this._renderPoints(points);
   }
 
-  _handleViewAction(actionType, updateType, update) {
+  _viewActionHandler(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this._pointPresenter[update.id].setViewState(PointPresenterViewState.SAVING);
@@ -185,7 +185,7 @@ export default class Trip {
     }
   }
 
-  _handleModelEvent(updateType, data) {
+  _modelEventHandler(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
         this._pointPresenter[data.id].init(data);
@@ -206,11 +206,7 @@ export default class Trip {
     }
   }
 
-  _handlePointChange(updatedPoint) {
-    this._pointPresenter[updatedPoint.id].init(updatedPoint);
-  }
-
-  _handleModeChange() {
+  _modeChangeHandler() {
     this._pointNewPresenter.destroy();
 
     Object
@@ -218,7 +214,7 @@ export default class Trip {
       .forEach((presenter) => presenter.resetView());
   }
 
-  _handleSortTypeChange(sortType) {
+  _sortTypeChangeHandler(sortType) {
     if (this._currentSortType === sortType) {
       return;
     }

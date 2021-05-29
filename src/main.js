@@ -29,7 +29,7 @@ const headerModel = new HeaderModel();
 const tripPresenter = new TripPresenter(document.querySelector('.page-body .trip-events'), headerModel, pointsModel, apiWithProvider);
 const statisticsPresenter = new StatisticsPresenter(document.querySelector('.page-body section.statistics'), pointsModel);
 
-const handlePointNewFormClose = () => {
+const pointNewFormCloseHandler = () => {
   document.querySelector('.trip-main__event-add-btn').disabled = false;
   headerMenuComponent.setMenuItem(MenuItem.TABLE);
 };
@@ -37,10 +37,10 @@ const headerPresenter = new HeaderPresenter(document.querySelector('.page-header
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
-  handleSiteMenuClick(MenuItem.ADD_NEW_POINT);
+  siteMenuClickHandler(MenuItem.ADD_NEW_POINT);
 });
 
-const handleSiteMenuClick = (menuItem) => {
+const siteMenuClickHandler = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
       tripPresenter.destroy();
@@ -51,7 +51,7 @@ const handleSiteMenuClick = (menuItem) => {
         headerMenuComponent.setMenuItem(MenuItem.TABLE);
         break;
       }
-      tripPresenter.createPoint(handlePointNewFormClose);
+      tripPresenter.createPoint(pointNewFormCloseHandler);
       document.querySelector('.trip-main__event-add-btn').disabled = true;
       break;
     case MenuItem.TABLE:
@@ -83,14 +83,14 @@ Promise.all([
     pointsModel.setDestinations(destinations);
     pointsModel.set(UpdateType.INIT, points);
     headerPresenter.init();
-    headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+    headerMenuComponent.setMenuClickHandler(siteMenuClickHandler);
   })
   .catch(() => {
     pointsModel.setOffers([]);
     pointsModel.setDestinations([]);
     pointsModel.set(UpdateType.INIT, []);
     headerPresenter.init();
-    headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+    headerMenuComponent.setMenuClickHandler(siteMenuClickHandler);
   });
 
 window.addEventListener('load', () => {

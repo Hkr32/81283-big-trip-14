@@ -17,8 +17,8 @@ export default class PointNew {
 
     this._pointEditComponent = null;
 
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);
-    this._handleDeleteClick = this._handleDeleteClick.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -30,8 +30,8 @@ export default class PointNew {
     }
 
     this._pointEditComponent = new PointEditView(this._pointsModel.getDestinations(), this._pointsModel.getOffers());
-    this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
-    this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._pointEditComponent.setFormSubmitHandler(this._formSubmitHandler);
+    this._pointEditComponent.setDeleteClickHandler(this._deleteClickHandler);
 
     render(this._pointListContainer, this._pointEditComponent, Position.AFTER_BEGIN);
 
@@ -60,11 +60,11 @@ export default class PointNew {
     });
   }
 
-  _handleDeleteClick() {
+  _deleteClickHandler() {
     this.destroy();
   }
 
-  _handleFormSubmit(point) {
+  _formSubmitHandler(point) {
     if (!isOnline()) {
       toast('You can\'t save task offline');
       setAborting(this._pointEditComponent);

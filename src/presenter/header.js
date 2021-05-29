@@ -20,11 +20,11 @@ export default class Header {
     this._headerMenuComponent = headerMenuComponent;
     this._headerInfoComponent = new HeaderInfoView();
 
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._modelEventHandler = this._modelEventHandler.bind(this);
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
 
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._headerModel.addObserver(this._handleModelEvent);
+    this._pointsModel.addObserver(this._modelEventHandler);
+    this._headerModel.addObserver(this._modelEventHandler);
   }
 
   init() {
@@ -46,7 +46,7 @@ export default class Header {
     }
 
     this._headerFilterComponent = new HeaderFilterView(this._headerModel.getFilter(), this._pointsModel.getFutureEmpty(), this._pointsModel.getPastEmpty());
-    this._headerFilterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._headerFilterComponent.setFilterTypeChangeHandler(this._filterTypeChangeHandler);
 
     const filterContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__filters');
     render(filterContainer, this._headerFilterComponent);
@@ -91,11 +91,11 @@ export default class Header {
     this._renderInfo();
   }
 
-  _handleModelEvent() {
+  _modelEventHandler() {
     this.init();
   }
 
-  _handleFilterTypeChange(filterType) {
+  _filterTypeChangeHandler(filterType) {
     if (this._headerModel.getFilter() === filterType) {
       return;
     }
