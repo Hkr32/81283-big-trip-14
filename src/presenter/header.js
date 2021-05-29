@@ -3,7 +3,7 @@ import HeaderInfoView from '../view/header/info.js';
 import HeaderNavigationView from '../view/header/navigation.js';
 import HeaderCostView from '../view/header/cost.js';
 
-import { position, UpdateType } from '../utils/const.js';
+import { Position, UpdateType } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
 export default class Header {
@@ -58,7 +58,7 @@ export default class Header {
   }
 
   _renderMain() {
-    render(this._tripHeaderTripMainContainer, this._headerInfoComponent, position.AFTER_BEGIN);
+    render(this._tripHeaderTripMainContainer, this._headerInfoComponent, Position.AFTER_BEGIN);
     this._tripHeaderInfoContainer = this._tripHeaderTripMainContainer.querySelector('.trip-info');
   }
 
@@ -74,7 +74,7 @@ export default class Header {
 
     this._headerNavigationComponent = new HeaderNavigationView(this._headerModel.generateTrip(points));
     this._headerCostComponent = new HeaderCostView(this._headerModel.getSumTrip(points));
-    render(this._tripHeaderInfoContainer, this._headerNavigationComponent, position.AFTER_BEGIN);
+    render(this._tripHeaderInfoContainer, this._headerNavigationComponent, Position.AFTER_BEGIN);
     render(this._tripHeaderInfoContainer, this._headerCostComponent);
   }
 

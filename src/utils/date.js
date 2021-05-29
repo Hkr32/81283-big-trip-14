@@ -10,6 +10,8 @@ dayjs.extend(duration);
 export const DateFormatStr = {
   HUMAN: 'y/m/d H:i',
   ALT: 'd/m/y H:i',
+  FULL: 'YY/MM/DD HH:mm',
+  DEFAULT: 'YYYY-MM-DD',
 };
 
 // Возвращает начало текущего дня
@@ -70,7 +72,7 @@ export const dateDiffStr = (dateFrom, dateTo) => {
 };
 
 // Форматирование даты
-export const dateFormat = (date, format = 'YYYY-MM-DD') => {
+export const dateFormat = (date, format = DateFormatStr.DEFAULT) => {
   if (!date) return '';
 
   return dayjs(date).format(format);

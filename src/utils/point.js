@@ -1,6 +1,9 @@
 import { dateDiffInMinutes, dateInFuture, dateInPast } from '../utils/date.js';
 import { toast } from '../utils/toast.js';
 
+const TOAST_TIME = 10000;
+const MIN_PRICE = 1;
+
 const compareNumeric = (onePrice, secondPrice) => {
   return onePrice - secondPrice;
 };
@@ -32,7 +35,6 @@ export const sortPointPrice = (pointOne, pointSecond) => {
 export const getOfferId = (value) => value.replace(/\s+/g, '-').trim().toLowerCase();
 
 export const validatePoint = (point) => {
-  const TOAST_TIME = 10000;
   let errors = 0;
   if (!point.destination.name) {
     errors++;
@@ -46,7 +48,7 @@ export const validatePoint = (point) => {
     errors++;
     toast('Date to is required!', TOAST_TIME);
   }
-  if (point.basePrice < 1) {
+  if (point.basePrice < MIN_PRICE) {
     errors++;
     toast('Price is required and above zero!', TOAST_TIME);
   }

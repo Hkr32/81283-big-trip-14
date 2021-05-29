@@ -5,7 +5,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import SmartView from './smart.js';
 
 import { dateFormat, DateFormatStr, startOfDate, endOfDate } from '../utils/date.js';
-import { Type, types, defaultPoint } from '../utils/const.js';
+import { Type, TYPES, DEFAULT_POINT } from '../utils/const.js';
 import { getOfferId } from '../utils/point.js';
 
 const createTypesTemplate = (types, currentType) => {
@@ -143,7 +143,7 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
     return offer.type === type;
   });
 
-  const typesTemplate = createPointTypesTemplate(types, type);
+  const typesTemplate = createPointTypesTemplate(TYPES, type);
   const citiesTemplate = createPointCitiesTemplate(cities, city);
   const offersTemplate = createPointOffersTemplate(offers, offersExternalByType !== undefined ? offersExternalByType.offers : [], isDisabled);
   const destinationsTemplate = createPointDestinationsTemplate(description, pictures);
@@ -171,10 +171,10 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFormat(dateFrom, 'YY/MM/DD HH:mm')}" ${isDisabled ? 'disabled' : ''} required>
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFormat(dateFrom, DateFormatStr.FULL)}" ${isDisabled ? 'disabled' : ''} required>
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFormat(dateTo, 'YY/MM/DD HH:mm')}" ${isDisabled ? 'disabled' : ''} required>
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFormat(dateTo, DateFormatStr.FULL)}" ${isDisabled ? 'disabled' : ''} required>
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -201,7 +201,7 @@ export default class PointEdit extends SmartView {
   constructor(destinations, offers, point) {
     super();
 
-    this._data = PointEdit.parsePointToData(point || defaultPoint);
+    this._data = PointEdit.parsePointToData(point || DEFAULT_POINT);
     this._isCreate = point ? false : true;
     if (this._isCreate) {
       this._data.dateFrom = this._data.dateFrom ? this._data.dateFrom : startOfDate();

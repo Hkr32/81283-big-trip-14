@@ -1,7 +1,7 @@
 import PointEditView from '../view/point-edit.js';
 
 import { remove, render } from '../utils/render.js';
-import { UserAction, UpdateType, position } from '../utils/const.js';
+import { UserAction, UpdateType, Position } from '../utils/const.js';
 import { isEscKey, isOnline } from '../utils/common.js';
 import { validatePoint, setAborting } from '../utils/point.js';
 import { toast } from '../utils/toast.js';
@@ -33,7 +33,7 @@ export default class PointNew {
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
-    render(this._pointListContainer, this._pointEditComponent, position.AFTER_BEGIN);
+    render(this._pointListContainer, this._pointEditComponent, Position.AFTER_BEGIN);
 
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
