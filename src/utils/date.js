@@ -6,6 +6,24 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(duration);
 
+// Формат дат для отображения и вывода
+export const DateFormatStr = {
+  HUMAN: 'y/m/d H:i',
+  ALT: 'd/m/y H:i',
+  FULL: 'YY/MM/DD HH:mm',
+  DEFAULT: 'YYYY-MM-DD',
+};
+
+// Возвращает начало текущего дня
+export const startOfDate = (start = 'day') => {
+  return dayjs().startOf(start).toDate();
+};
+
+// Возвращает конец текущего дня
+export const endOfDate = (end = 'day') => {
+  return dayjs().endOf(end).toDate();
+};
+
 // Приведение минут к строке
 export const dateToDurationString = (minutes) => {
   const MINUTE_IN_DAY = 1440;
@@ -36,14 +54,14 @@ export const dateDiffInMinutes = (dateFrom, dateTo) => {
   return dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
 };
 
-// Проверяет совпадает ли дата или она после
-export const isSameOrAfterDate = (date) => {
-  return dayjs(date).isSameOrAfter(dayjs());
+// Проверяет даты из интервала точки, что они еще НЕ завершены
+export const dateInFuture = (dateFrom, dateTo, date = dayjs()) => {
+  return dayjs(dateFrom).isSameOrAfter(date) || dayjs(dateTo).isSameOrAfter(date);
 };
 
-// Проверяет совпадает ли дата или она раньше
-export const isSameOrBeforeDate = (date) => {
-  return dayjs(date).isSameOrBefore(dayjs());
+// Проверяет даты из интервала точки, что они УЖЕ завершены
+export const dateInPast = (dateFrom, dateTo, date = dayjs()) => {
+  return dayjs(dateTo).isSameOrBefore(date) || dayjs(dateFrom).isSameOrBefore(date);
 };
 
 // Получение разницы дат
@@ -54,7 +72,7 @@ export const dateDiffStr = (dateFrom, dateTo) => {
 };
 
 // Форматирование даты
-export const dateFormat = (date, format = 'YYYY-MM-DD') => {
+export const dateFormat = (date, format = DateFormatStr.DEFAULT) => {
   if (!date) return '';
 
   return dayjs(date).format(format);

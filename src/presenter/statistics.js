@@ -26,6 +26,17 @@ export default class Statistics {
     this._statisticsTimeComponent = new StatisticsTimeView();
   }
 
+  init() {
+    this._data = calcStatistics(this._pointsModel.getPoints());
+    this._dataLength = this._data.length;
+    this._clearStatistics();
+    this._renderStatistics();
+  }
+
+  destroy() {
+    this._clearStatistics();
+  }
+
   _clearStatistics() {
     remove(this._statisticsMoneyComponent);
     remove(this._statisticsTransportComponent);
@@ -82,16 +93,5 @@ export default class Statistics {
       data.data.push(duration);
     });
     renderChart(timeCtx, data, DiagramType.TIME);
-  }
-
-  init() {
-    this._data = calcStatistics(this._pointsModel.getPoints());
-    this._dataLength = this._data.length;
-    this._clearStatistics();
-    this._renderStatistics();
-  }
-
-  destroy() {
-    this._clearStatistics();
   }
 }

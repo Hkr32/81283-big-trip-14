@@ -1,12 +1,12 @@
-import {
-  AUTHORIZATION,
-  END_POINT,
-  MenuItem,
-  UpdateType,
-  FilterType
-} from './utils/const.js';
+import { MenuItem, UpdateType, FilterType } from './utils/const.js';
+import { STORE_NAME } from './utils/store.js';
+import { AUTHORIZATION, END_POINT } from './utils/api.js';
+import { isOnline } from './utils/common.js';
+import { toast } from './utils/toast.js';
 
 import Api from './api/api.js';
+import Store from './api/store.js';
+import Provider from './api/provider.js';
 
 import HeaderMenuView from './view/header/menu.js';
 
@@ -20,33 +20,38 @@ import HeaderModel from './model/header.js';
 const headerMenuComponent = new HeaderMenuView();
 
 const api = new Api(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 const pointsModel = new PointModel();
 const headerModel = new HeaderModel();
 
-const tripPresenter = new TripPresenter(document.querySelector('.page-body .trip-events'), headerModel, pointsModel, api);
+const tripPresenter = new TripPresenter(document.querySelector('.page-body .trip-events'), headerModel, pointsModel, apiWithProvider);
 const statisticsPresenter = new StatisticsPresenter(document.querySelector('.page-body section.statistics'), pointsModel);
 
-const handlePointNewFormClose = () => {
+const pointNewFormCloseHandler = () => {
   document.querySelector('.trip-main__event-add-btn').disabled = false;
   headerMenuComponent.setMenuItem(MenuItem.TABLE);
 };
-
-// Header
 const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
-  handleSiteMenuClick(MenuItem.ADD_NEW_POINT);
+  siteMenuClickHandler(MenuItem.ADD_NEW_POINT);
 });
 
-const handleSiteMenuClick = (menuItem) => {
+const siteMenuClickHandler = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
       tripPresenter.destroy();
       headerModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripPresenter.init();
-      tripPresenter.createPoint(handlePointNewFormClose);
+      if (!isOnline()) {
+        toast('You can\'t create new point offline');
+        headerMenuComponent.setMenuItem(MenuItem.TABLE);
+        break;
+      }
+      tripPresenter.createPoint(pointNewFormCloseHandler);
       document.querySelector('.trip-main__event-add-btn').disabled = true;
       break;
     case MenuItem.TABLE:
@@ -69,21 +74,34 @@ const handleSiteMenuClick = (menuItem) => {
 tripPresenter.init();
 
 Promise.all([
-  api.getOffers(),
-  api.getDestinations(),
-  api.getPoints(),
+  apiWithProvider.getOffers(),
+  apiWithProvider.getDestinations(),
+  apiWithProvider.getPoints(),
 ])
   .then(([offers, destinations, points]) => {
     pointsModel.setOffers(offers);
     pointsModel.setDestinations(destinations);
-    pointsModel.setPoints(UpdateType.INIT, points);
+    pointsModel.set(UpdateType.INIT, points);
     headerPresenter.init();
-    headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+    headerMenuComponent.setMenuClickHandler(siteMenuClickHandler);
   })
   .catch(() => {
     pointsModel.setOffers([]);
     pointsModel.setDestinations([]);
-    pointsModel.setPoints(UpdateType.INIT, []);
+    pointsModel.set(UpdateType.INIT, []);
     headerPresenter.init();
-    headerMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+    headerMenuComponent.setMenuClickHandler(siteMenuClickHandler);
   });
+
+window.addEventListener('load', () => {
+  navigator.serviceWorker.register('/sw.js');
+});
+
+window.addEventListener('online', () => {
+  document.title = document.title.replace(' [offline]', '');
+  apiWithProvider.sync();
+});
+
+window.addEventListener('offline', () => {
+  document.title += ' [offline]';
+});

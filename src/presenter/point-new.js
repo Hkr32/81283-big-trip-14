@@ -1,7 +1,10 @@
 import PointEditView from '../view/point-edit.js';
 
 import { remove, render } from '../utils/render.js';
-import { UserAction, UpdateType, position } from '../utils/const.js';
+import { UserAction, UpdateType, Position } from '../utils/const.js';
+import { isEscKey, isOnline } from '../utils/common.js';
+import { validatePoint, setAborting } from '../utils/point.js';
+import { toast } from '../utils/toast.js';
 
 export default class PointNew {
   constructor(pointListContainer, changeData, pointsModel) {
@@ -14,8 +17,8 @@ export default class PointNew {
 
     this._pointEditComponent = null;
 
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);
-    this._handleDeleteClick = this._handleDeleteClick.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -27,10 +30,10 @@ export default class PointNew {
     }
 
     this._pointEditComponent = new PointEditView(this._pointsModel.getDestinations(), this._pointsModel.getOffers());
-    this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
-    this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._pointEditComponent.setFormSubmitHandler(this._formSubmitHandler);
+    this._pointEditComponent.setDeleteClickHandler(this._deleteClickHandler);
 
-    render(this._pointListContainer, this._pointEditComponent, position.AFTER_BEGIN);
+    render(this._pointListContainer, this._pointEditComponent, Position.AFTER_BEGIN);
 
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
@@ -57,56 +60,33 @@ export default class PointNew {
     });
   }
 
-  setAborting() {
-    const resetFormState = () => {
-      this._pointEditComponent.updateData({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    this._pointEditComponent.shake(resetFormState);
+  _deleteClickHandler() {
+    this.destroy();
   }
 
-  _handleFormSubmit(point) {
-    if (this._validate(point)) {
+  _formSubmitHandler(point) {
+    if (!isOnline()) {
+      toast('You can\'t save task offline');
+      setAborting(this._pointEditComponent);
+
+      return;
+    }
+
+    if (validatePoint(point)) {
       this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MAJOR,
         point,
       );
     } else {
-      this.setAborting();
+      setAborting(this._pointEditComponent);
     }
-  }
-
-  _handleDeleteClick() {
-    this.destroy();
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscKey(evt.key)) {
       evt.preventDefault();
       this.destroy();
     }
-  }
-
-  _validate(point) {
-    let errors = 0;
-    if (!point.destination.name) {
-      errors++;
-    }
-    if (!point.dateFrom) {
-      errors++;
-    }
-    if (!point.dateTo) {
-      errors++;
-    }
-    if (point.basePrice < 1) {
-      errors++;
-    }
-
-    return !errors;
   }
 }

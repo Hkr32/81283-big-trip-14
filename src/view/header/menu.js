@@ -19,15 +19,8 @@ export default class HeaderMenu extends AbstractView {
     this._menuClickHandler = this._menuClickHandler.bind(this);
   }
 
-  _menuClickHandler(evt) {
-    if (evt.target.tagName !== 'A' && evt.target.dataset.menu === undefined) {
-      return;
-    }
-
-    evt.preventDefault();
-
-    this._callback.menuClick(evt.target.dataset.menu);
-    this.setMenuItem(evt.target.dataset.menu);
+  getTemplate() {
+    return createHeaderMenuTemplate(this._menuItem, this._currentItem);
   }
 
   setMenuClickHandler(callback) {
@@ -51,7 +44,14 @@ export default class HeaderMenu extends AbstractView {
     }
   }
 
-  getTemplate() {
-    return createHeaderMenuTemplate(this._menuItem, this._currentItem);
+  _menuClickHandler(evt) {
+    if (evt.target.tagName !== 'A' && evt.target.dataset.menu === undefined) {
+      return;
+    }
+
+    evt.preventDefault();
+
+    this._callback.menuClick(evt.target.dataset.menu);
+    this.setMenuItem(evt.target.dataset.menu);
   }
 }

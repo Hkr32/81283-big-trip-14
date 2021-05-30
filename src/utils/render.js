@@ -1,4 +1,4 @@
-import { position } from './const.js';
+import { Position } from './const.js';
 import Abstract from '../view/abstract.js';
 
 // Создание элемента
@@ -10,7 +10,7 @@ export const createElement = (template) => {
 };
 
 // Рендер элемента
-export const render = (container, element, place = position.BEFORE_END) => {
+export const render = (container, element, place = Position.BEFORE_END) => {
   if (container instanceof Abstract) {
     container = container.getElement();
   }
@@ -20,10 +20,10 @@ export const render = (container, element, place = position.BEFORE_END) => {
   }
 
   switch (place) {
-    case position.AFTER_BEGIN:
+    case Position.AFTER_BEGIN:
       container.prepend(element);
       break;
-    case position.BEFORE_END:
+    case Position.BEFORE_END:
       container.append(element);
       break;
   }

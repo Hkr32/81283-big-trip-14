@@ -1,17 +1,6 @@
 import PointsModel from '../model/points.js';
 
-const Method = {
-  GET: 'GET',
-  POST: 'POST',
-  PUT: 'PUT',
-  PATCH: 'PATCH',
-  DELETE: 'DELETE',
-};
-
-const SuccessHTTPStatusRange = {
-  MIN: 200,
-  MAX: 299,
-};
+import { SuccessHTTPStatusRange, Method } from '../utils/api.js';
 
 export default class Api {
   constructor(endPoint, authorization) {
@@ -62,6 +51,17 @@ export default class Api {
       url: `points/${point.id}`,
       method: Method.DELETE,
     });
+  }
+
+  sync(data) {
+    return this.
+      _load({
+        url: 'points/sync',
+        method: Method.POST,
+        body: JSON.stringify(data),
+        headers: new Headers({'Content-Type': 'application/json'}),
+      })
+      .then(Api.toJSON);
   }
 
   _load({

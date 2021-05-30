@@ -1,10 +1,5 @@
-// Количество точек на главной
-export const POINT_COUNTER = 10;
-export const AUTHORIZATION = 'Basic pba6mmpddLUvMGZPPuAq';
-export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
-
 // Перечисление возможных позиций добавляемого элемента относительно элемента
-export const position = {
+export const Position = {
   BEFORE_BEGIN: 'beforebegin', // до самого element (до открывающего тега)
   AFTER_BEGIN: 'afterbegin', // сразу после открывающего тега  element (перед первым потомком)
   BEFORE_END: 'beforeend', // сразу перед закрывающим тегом element (после последнего потомка)
@@ -47,7 +42,7 @@ export const Type = {
 };
 
 // Типы путешествий
-export const types = [
+export const TYPES = [
   Type.TAXI,
   Type.BUS,
   Type.TRAIN,
@@ -61,7 +56,7 @@ export const types = [
 ];
 
 // Дефолтный объект
-export const defaultPoint = {
+export const DEFAULT_POINT = {
   type: Type.TAXI,
   offers: [],
   destination: {

@@ -3,7 +3,7 @@ import HeaderInfoView from '../view/header/info.js';
 import HeaderNavigationView from '../view/header/navigation.js';
 import HeaderCostView from '../view/header/cost.js';
 
-import { position, UpdateType } from '../utils/const.js';
+import { Position, UpdateType } from '../utils/const.js';
 import { render, remove } from '../utils/render.js';
 
 export default class Header {
@@ -20,25 +20,24 @@ export default class Header {
     this._headerMenuComponent = headerMenuComponent;
     this._headerInfoComponent = new HeaderInfoView();
 
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._modelEventHandler = this._modelEventHandler.bind(this);
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
 
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._headerModel.addObserver(this._handleModelEvent);
+    this._pointsModel.addObserver(this._modelEventHandler);
+    this._headerModel.addObserver(this._modelEventHandler);
   }
 
-  _handleModelEvent() {
-    this.init();
+  init() {
+    this._clearHeader();
+    this._renderHeader();
   }
 
-  _handleFilterTypeChange(filterType) {
-    if (this._headerModel.getFilter() === filterType) {
+  setDisabled(status = true) {
+    if (!this._headerFilterComponent) {
       return;
     }
 
-    this._headerModel.setFilter(UpdateType.MAJOR, filterType);
-    this._clearHeader();
-    this._renderHeader();
+    this._headerFilterComponent.setDisabledStatus(status);
   }
 
   _renderFilter() {
@@ -46,8 +45,8 @@ export default class Header {
       this._headerFilterComponent = null;
     }
 
-    this._headerFilterComponent = new HeaderFilterView(this._headerModel.getFilter());
-    this._headerFilterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._headerFilterComponent = new HeaderFilterView(this._headerModel.getFilter(), this._pointsModel.getFutureEmpty(), this._pointsModel.getPastEmpty());
+    this._headerFilterComponent.setFilterTypeChangeHandler(this._filterTypeChangeHandler);
 
     const filterContainer = this._tripHeaderTripMainContainer.querySelector('.trip-controls__filters');
     render(filterContainer, this._headerFilterComponent);
@@ -59,7 +58,7 @@ export default class Header {
   }
 
   _renderMain() {
-    render(this._tripHeaderTripMainContainer, this._headerInfoComponent, position.AFTER_BEGIN);
+    render(this._tripHeaderTripMainContainer, this._headerInfoComponent, Position.AFTER_BEGIN);
     this._tripHeaderInfoContainer = this._tripHeaderTripMainContainer.querySelector('.trip-info');
   }
 
@@ -71,11 +70,11 @@ export default class Header {
       this._headerCostComponent = null;
     }
 
-    const points = this._pointsModel.getPoints();
+    const points = this._pointsModel.get();
 
     this._headerNavigationComponent = new HeaderNavigationView(this._headerModel.generateTrip(points));
     this._headerCostComponent = new HeaderCostView(this._headerModel.getSumTrip(points));
-    render(this._tripHeaderInfoContainer, this._headerNavigationComponent, position.AFTER_BEGIN);
+    render(this._tripHeaderInfoContainer, this._headerNavigationComponent, Position.AFTER_BEGIN);
     render(this._tripHeaderInfoContainer, this._headerCostComponent);
   }
 
@@ -92,16 +91,17 @@ export default class Header {
     this._renderInfo();
   }
 
-  init() {
-    this._clearHeader();
-    this._renderHeader();
+  _modelEventHandler() {
+    this.init();
   }
 
-  setDisabled(status = true) {
-    if (!this._headerFilterComponent) {
+  _filterTypeChangeHandler(filterType) {
+    if (this._headerModel.getFilter() === filterType) {
       return;
     }
 
-    this._headerFilterComponent.setDisabledStatus(status);
+    this._headerModel.setFilter(UpdateType.MAJOR, filterType);
+    this._clearHeader();
+    this._renderHeader();
   }
 }
