@@ -17,6 +17,8 @@ import StatisticsPresenter from './presenter/statistics.js';
 import PointModel from './model/points.js';
 import HeaderModel from './model/header.js';
 
+const addButton = document.querySelector('.trip-main__event-add-btn');
+
 const headerMenuComponent = new HeaderMenuView();
 
 const api = new Api(END_POINT, AUTHORIZATION);
@@ -30,12 +32,12 @@ const tripPresenter = new TripPresenter(document.querySelector('.page-body .trip
 const statisticsPresenter = new StatisticsPresenter(document.querySelector('.page-body section.statistics'), pointsModel);
 
 const pointNewFormCloseHandler = () => {
-  document.querySelector('.trip-main__event-add-btn').disabled = false;
+  addButton.disabled = false;
   headerMenuComponent.setMenuItem(MenuItem.TABLE);
 };
 const headerPresenter = new HeaderPresenter(document.querySelector('.page-header .trip-main'), headerMenuComponent, headerModel, pointsModel);
 
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+addButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   siteMenuClickHandler(MenuItem.ADD_NEW_POINT);
 });
@@ -52,7 +54,7 @@ const siteMenuClickHandler = (menuItem) => {
         break;
       }
       tripPresenter.createPoint(pointNewFormCloseHandler);
-      document.querySelector('.trip-main__event-add-btn').disabled = true;
+      addButton.disabled = true;
       break;
     case MenuItem.TABLE:
       tripPresenter.destroy();
@@ -60,13 +62,13 @@ const siteMenuClickHandler = (menuItem) => {
       tripPresenter.init();
       headerPresenter.setDisabled(false);
       statisticsPresenter.destroy();
-      document.querySelector('.trip-main__event-add-btn').disabled = false;
+      addButton.disabled = false;
       break;
     case MenuItem.STATISTICS:
       headerPresenter.setDisabled(true);
       tripPresenter.destroy();
       statisticsPresenter.init();
-      document.querySelector('.trip-main__event-add-btn').disabled = true;
+      addButton.disabled = true;
       break;
   }
 };
