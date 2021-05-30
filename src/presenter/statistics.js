@@ -27,7 +27,7 @@ export default class Statistics {
   }
 
   init() {
-    this._data = calcStatistics(this._pointsModel.getPoints());
+    this._data = calcStatistics(this._pointsModel.get());
     this._dataLength = this._data.length;
     this._clearStatistics();
     this._renderStatistics();
