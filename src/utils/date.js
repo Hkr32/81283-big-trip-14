@@ -6,6 +6,11 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(duration);
 
+const MINUTE_IN_DAY = 1440;
+const MINUTE_IN_HOUR = 60;
+const ZERO_MIN = 1;
+const ZERO_MAX = 10;
+
 // Формат дат для отображения и вывода
 export const DateFormatStr = {
   HUMAN: 'y/m/d H:i',
@@ -26,11 +31,6 @@ export const getEndOfDate = (end = 'day') => {
 
 // Приведение минут к строке
 export const convertDateToDurationString = (minutes) => {
-  const MINUTE_IN_DAY = 1440;
-  const MINUTE_IN_HOUR = 60;
-  const ZERO_MIN = 1;
-  const ZERO_MAX = 10;
-
   const d = Math.floor(minutes / MINUTE_IN_DAY);
   const remainder = minutes % MINUTE_IN_DAY;
   const h = Math.floor(remainder / MINUTE_IN_HOUR);
