@@ -202,7 +202,7 @@ export default class PointEdit extends SmartView {
     super();
 
     this._data = PointEdit.parsePointToData(point || DEFAULT_POINT);
-    this._isCreate = !!point;
+    this._isCreate = point !== null;
     if (this._isCreate) {
       this._data.dateFrom = this._data.dateFrom ? this._data.dateFrom : getStartOfDate();
       this._data.dateTo = this._data.dateTo ? this._data.dateTo : getEndOfDate();
