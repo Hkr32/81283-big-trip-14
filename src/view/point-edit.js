@@ -4,7 +4,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 import SmartView from './smart.js';
 
-import { dateFormat, DateFormatStr, startOfDate, endOfDate } from '../utils/date.js';
+import { formatDate, DateFormatStr, getStartOfDate, getEndOfDate } from '../utils/date.js';
 import { Type, TYPES, DEFAULT_POINT } from '../utils/const.js';
 import { getOfferId } from '../utils/point.js';
 
@@ -171,10 +171,10 @@ const createPointEditTemplate = (destinationsExternal, offersExternal, data = {}
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFormat(dateFrom, DateFormatStr.FULL)}" ${isDisabled ? 'disabled' : ''} required>
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDate(dateFrom, DateFormatStr.FULL)}" ${isDisabled ? 'disabled' : ''} required>
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFormat(dateTo, DateFormatStr.FULL)}" ${isDisabled ? 'disabled' : ''} required>
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDate(dateTo, DateFormatStr.FULL)}" ${isDisabled ? 'disabled' : ''} required>
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -204,8 +204,8 @@ export default class PointEdit extends SmartView {
     this._data = PointEdit.parsePointToData(point || DEFAULT_POINT);
     this._isCreate = point ? false : true;
     if (this._isCreate) {
-      this._data.dateFrom = this._data.dateFrom ? this._data.dateFrom : startOfDate();
-      this._data.dateTo = this._data.dateTo ? this._data.dateTo : endOfDate();
+      this._data.dateFrom = this._data.dateFrom ? this._data.dateFrom : getStartOfDate();
+      this._data.dateTo = this._data.dateTo ? this._data.dateTo : getEndOfDate();
     }
     this._datePickerStart = null;
     this._datePickerEnd = null;
@@ -307,7 +307,7 @@ export default class PointEdit extends SmartView {
         dateFormat: DateFormatStr.HUMAN,
         altInput: true,
         altFormat: DateFormatStr.ALT,
-        defaultDate: this._data.dateFrom ? this._data.dateFrom : startOfDate(),
+        defaultDate: this._data.dateFrom ? this._data.dateFrom : getStartOfDate(),
         maxDate: this._data.dateTo,
         onChange: this._startDateChangeHandler,
       },
@@ -328,7 +328,7 @@ export default class PointEdit extends SmartView {
         dateFormat: DateFormatStr.HUMAN,
         altInput: true,
         altFormat: DateFormatStr.ALT,
-        defaultDate: this._data.dateTo ? this._data.dateTo : endOfDate(),
+        defaultDate: this._data.dateTo ? this._data.dateTo : getEndOfDate(),
         minDate: this._data.dateFrom,
         onChange: this._endDateChangeHandler,
       },

@@ -1,6 +1,6 @@
 import Observer from '../utils/observer.js';
 import { FilterType } from '../utils/const.js';
-import { dateFormat } from '../utils/date.js';
+import { formatDate } from '../utils/date.js';
 
 const Length = {
   ONE: 1,
@@ -57,8 +57,8 @@ export default class Header extends Observer {
     }
 
     date = lengthPoints === Length.ONE
-      ? dateFormat(first.dateFrom, 'D MMM')
-      : `${dateFormat(first.dateFrom, 'D MMM')}&nbsp;&mdash;&nbsp; ${dateFormat(points[lastPoint].dateTo, 'D MMM')}`;
+      ? formatDate(first.dateFrom, 'D MMM')
+      : `${formatDate(first.dateFrom, 'D MMM')}&nbsp;&mdash;&nbsp; ${formatDate(points[lastPoint].dateTo, 'D MMM')}`;
 
     return { title, date };
   }

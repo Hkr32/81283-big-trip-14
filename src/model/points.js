@@ -1,6 +1,6 @@
 import Observer from '../utils/observer.js';
 import { sortPointDate } from '../utils/point.js';
-import { dateInFuture, dateInPast } from '../utils/date.js';
+import { checkDateInFuture, checkDateInPast } from '../utils/date.js';
 
 export default class Points extends Observer {
   constructor() {
@@ -95,6 +95,18 @@ export default class Points extends Observer {
     this._notify(updateType);
   }
 
+  checkFuturePoints() {
+    this._isFutureEmpty = !this._points.some((point) => {
+      return checkDateInFuture(point.dateFrom, point.dateTo);
+    });
+  }
+
+  checkPastPoints() {
+    this._isPastEmpty = !this._points.some((point) => {
+      return checkDateInPast(point.dateFrom, point.dateTo);
+    });
+  }
+
   static adaptToClient(point) {
     const adaptedPoint = Object.assign(
       {},
@@ -133,17 +145,5 @@ export default class Points extends Observer {
     delete adaptedPoint.isFavorite;
 
     return adaptedPoint;
-  }
-
-  checkFuturePoints() {
-    this._isFutureEmpty = !this._points.some((point) => {
-      return dateInFuture(point.dateFrom, point.dateTo);
-    });
-  }
-
-  checkPastPoints() {
-    this._isPastEmpty = !this._points.some((point) => {
-      return dateInPast(point.dateFrom, point.dateTo);
-    });
   }
 }

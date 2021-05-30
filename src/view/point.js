@@ -1,6 +1,6 @@
 import AbstractView from './abstract.js';
 
-import { dateFormat, dateToISO, dateDiffStr } from '../utils/date.js';
+import { formatDate, convertDateToISO, getDateDiffStr } from '../utils/date.js';
 
 const createPointOffersTemplate = (offers) => {
   return `<h4 class="visually-hidden">Offers:</h4>
@@ -22,18 +22,18 @@ export const createPointTemplate = (point) => {
 
   return `<li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="${dateFormat(dateFrom)}">${ dateFormat(dateFrom, 'MMM D') }</time>
+      <time class="event__date" datetime="${formatDate(dateFrom)}">${ formatDate(dateFrom, 'MMM D') }</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
       </div>
       <h3 class="event__title">${type} ${destination.name}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="${dateToISO(dateFrom)}">${ dateFormat(dateFrom, 'HH:mm') }</time>
+          <time class="event__start-time" datetime="${convertDateToISO(dateFrom)}">${ formatDate(dateFrom, 'HH:mm') }</time>
           &mdash;
-          <time class="event__end-time" datetime="${dateToISO(dateTo)}">${dateFormat(dateTo, 'HH:mm')}</time>
+          <time class="event__end-time" datetime="${convertDateToISO(dateTo)}">${formatDate(dateTo, 'HH:mm')}</time>
         </p>
-        <p class="event__duration">${dateDiffStr(dateFrom, dateTo)}</p>
+        <p class="event__duration">${getDateDiffStr(dateFrom, dateTo)}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${ basePrice }</span>

@@ -2,7 +2,7 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import { DiagramType } from '../utils/statistics.js';
-import { dateToDurationString } from '../utils/date.js';
+import { convertDateToDurationString } from '../utils/date.js';
 
 // Отрисовка диаграммы
 export const renderChart = (ctx, data, title) => {
@@ -45,7 +45,7 @@ export const renderChart = (ctx, data, title) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          formatter: (val) => `${DiagramType.TIME === title ? dateToDurationString(val) : (params.left + val + params.right)}`,
+          formatter: (val) => `${DiagramType.TIME === title ? convertDateToDurationString(val) : (params.left + val + params.right)}`,
         },
       },
       title: {

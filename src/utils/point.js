@@ -1,4 +1,4 @@
-import { dateDiffInMinutes, dateInFuture, dateInPast } from '../utils/date.js';
+import { dateDiffInMinutes, checkDateInFuture, checkDateInPast } from '../utils/date.js';
 import { toast } from '../utils/toast.js';
 
 const TOAST_TIME = 10000;
@@ -10,13 +10,13 @@ const compareNumeric = (onePrice, secondPrice) => {
 
 export const filterPointsFuture = (points) => {
   return points.filter((point) => {
-    return dateInFuture(point.dateFrom, point.dateTo);
+    return checkDateInFuture(point.dateFrom, point.dateTo);
   });
 };
 
 export const filterPointsPast = (points) => {
   return points.filter((point) => {
-    return dateInPast(point.dateFrom, point.dateTo);
+    return checkDateInPast(point.dateFrom, point.dateTo);
   });
 };
 

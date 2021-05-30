@@ -15,17 +15,17 @@ export const DateFormatStr = {
 };
 
 // Возвращает начало текущего дня
-export const startOfDate = (start = 'day') => {
+export const getStartOfDate = (start = 'day') => {
   return dayjs().startOf(start).toDate();
 };
 
 // Возвращает конец текущего дня
-export const endOfDate = (end = 'day') => {
+export const getEndOfDate = (end = 'day') => {
   return dayjs().endOf(end).toDate();
 };
 
 // Приведение минут к строке
-export const dateToDurationString = (minutes) => {
+export const convertDateToDurationString = (minutes) => {
   const MINUTE_IN_DAY = 1440;
   const MINUTE_IN_HOUR = 60;
   const ZERO_MIN = 1;
@@ -55,24 +55,24 @@ export const dateDiffInMinutes = (dateFrom, dateTo) => {
 };
 
 // Проверяет даты из интервала точки, что они еще НЕ завершены
-export const dateInFuture = (dateFrom, dateTo, date = dayjs()) => {
+export const checkDateInFuture = (dateFrom, dateTo, date = dayjs()) => {
   return dayjs(dateFrom).isSameOrAfter(date) || dayjs(dateTo).isSameOrAfter(date);
 };
 
 // Проверяет даты из интервала точки, что они УЖЕ завершены
-export const dateInPast = (dateFrom, dateTo, date = dayjs()) => {
+export const checkDateInPast = (dateFrom, dateTo, date = dayjs()) => {
   return dayjs(dateTo).isSameOrBefore(date) || dayjs(dateFrom).isSameOrBefore(date);
 };
 
 // Получение разницы дат
-export const dateDiffStr = (dateFrom, dateTo) => {
+export const getDateDiffStr = (dateFrom, dateTo) => {
   const diffInMinutes = dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
 
-  return dateToDurationString(diffInMinutes);
+  return convertDateToDurationString(diffInMinutes);
 };
 
 // Форматирование даты
-export const dateFormat = (date, format = DateFormatStr.DEFAULT) => {
+export const formatDate = (date, format = DateFormatStr.DEFAULT) => {
   if (!date) {
     return '';
   }
@@ -81,7 +81,7 @@ export const dateFormat = (date, format = DateFormatStr.DEFAULT) => {
 };
 
 // Приведение даты к формату ISO
-export const dateToISO = (date) => {
+export const convertDateToISO = (date) => {
   if (!date) {
     return null;
   }
