@@ -73,14 +73,18 @@ export const dateDiffStr = (dateFrom, dateTo) => {
 
 // Форматирование даты
 export const dateFormat = (date, format = DateFormatStr.DEFAULT) => {
-  if (!date) return '';
+  if (!date) {
+    return '';
+  }
 
   return dayjs(date).format(format);
 };
 
 // Приведение даты к формату ISO
 export const dateToISO = (date) => {
-  if (!date) return null;
+  if (!date) {
+    return null;
+  }
 
   return dayjs(date).toISOString();
 };
