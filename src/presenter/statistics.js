@@ -44,54 +44,41 @@ export default class Statistics {
   }
 
   _renderStatistics() {
-    this._renderStatisticsMoney();
-    this._renderStatisticsTransport();
-    this._renderStatisticsTime();
+    this._renderChart(
+      this._statisticsMoneyComponent.getElement().querySelector('.statistics__chart--money'),
+      this._statisticsMoneyComponent,
+      sortMoneyDown,
+      DiagramType.MONEY,
+      'money',
+    );
+    this._renderChart(
+      this._statisticsTransportComponent.getElement().querySelector('.statistics__chart--transport'),
+      this._statisticsTransportComponent,
+      sortCountDown,
+      DiagramType.TYPE,
+      'count',
+    );
+    this._renderChart(
+      this._statisticsTimeComponent.getElement().querySelector('.statistics__chart--time'),
+      this._statisticsTimeComponent,
+      sortDurationDown,
+      DiagramType.TIME,
+      'duration',
+    );
   }
 
-  _renderStatisticsMoney() {
-    const moneyCtx = this._statisticsMoneyComponent.getElement().querySelector('.statistics__chart--money');
-    moneyCtx.height = BAR_HEIGHT * this._dataLength;
-    render(this._statisticsContainer, this._statisticsMoneyComponent);
-    this._data.sort(sortMoneyDown);
+  _renderChart(ctx, component, sortFunction, type, name) {
+    ctx.height = BAR_HEIGHT * this._dataLength;
+    render(this._statisticsContainer, component);
+    this._data.sort(sortFunction);
     const data = {
       labels: [],
       data: [],
     };
-    this._data.map(([label, { money }]) => {
+    this._data.map(([label, value]) => {
       data.labels.push(label);
-      data.data.push(money);
+      data.data.push(value[name]);
     });
-    renderChart(moneyCtx, data, DiagramType.MONEY);
-  }
-  _renderStatisticsTransport() {
-    const transportCtx = this._statisticsTransportComponent.getElement().querySelector('.statistics__chart--transport');
-    transportCtx.height = BAR_HEIGHT * this._dataLength;
-    render(this._statisticsContainer, this._statisticsTransportComponent);
-    this._data.sort(sortCountDown);
-    const data = {
-      labels: [],
-      data: [],
-    };
-    this._data.map(([label, { count }]) => {
-      data.labels.push(label);
-      data.data.push(count);
-    });
-    renderChart(transportCtx, data, DiagramType.TYPE);
-  }
-  _renderStatisticsTime() {
-    const timeCtx = this._statisticsTimeComponent.getElement().querySelector('.statistics__chart--time');
-    timeCtx.height = BAR_HEIGHT * this._dataLength;
-    render(this._statisticsContainer, this._statisticsTimeComponent);
-    this._data.sort(sortDurationDown);
-    const data = {
-      labels: [],
-      data: [],
-    };
-    this._data.map(([label, { duration }]) => {
-      data.labels.push(label);
-      data.data.push(duration);
-    });
-    renderChart(timeCtx, data, DiagramType.TIME);
+    renderChart(ctx, data, type);
   }
 }
