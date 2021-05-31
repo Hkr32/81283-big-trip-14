@@ -176,6 +176,7 @@ export default class Point {
         UpdateType.MINOR,
         update,
       );
+      document.removeEventListener('keydown', this._escKeyDownHandler);
     } else {
       setAborting(this._pointEditComponent);
     }
@@ -195,5 +196,6 @@ export default class Point {
       UpdateType.MINOR,
       point,
     );
+    document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 }
