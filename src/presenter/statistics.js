@@ -6,6 +6,7 @@ import { render, remove } from '../utils/render.js';
 import {
   BAR_HEIGHT,
   DiagramType,
+  DiagramName,
   calcStatistics,
   sortMoneyDown,
   sortCountDown,
@@ -45,25 +46,25 @@ export default class Statistics {
 
   _renderStatistics() {
     this._renderChart(
-      this._statisticsMoneyComponent.getElement().querySelector('.statistics__chart--money'),
+      this._statisticsMoneyComponent.getCanvasCtx('.statistics__chart--money'),
       this._statisticsMoneyComponent,
       sortMoneyDown,
       DiagramType.MONEY,
-      'money',
+      DiagramName.MONEY,
     );
     this._renderChart(
-      this._statisticsTransportComponent.getElement().querySelector('.statistics__chart--transport'),
+      this._statisticsTransportComponent.getCanvasCtx('.statistics__chart--transport'),
       this._statisticsTransportComponent,
       sortCountDown,
       DiagramType.TYPE,
-      'count',
+      DiagramName.COUNT,
     );
     this._renderChart(
-      this._statisticsTimeComponent.getElement().querySelector('.statistics__chart--time'),
+      this._statisticsTimeComponent.getCanvasCtx('.statistics__chart--time'),
       this._statisticsTimeComponent,
       sortDurationDown,
       DiagramType.TIME,
-      'duration',
+      DiagramName.DURATION,
     );
   }
 
@@ -75,7 +76,7 @@ export default class Statistics {
       labels: [],
       data: [],
     };
-    this._data.map(([label, value]) => {
+    this._data.forEach(([label, value]) => {
       data.labels.push(label);
       data.data.push(value[name]);
     });

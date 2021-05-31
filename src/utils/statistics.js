@@ -11,6 +11,13 @@ export const DiagramType = {
   TIME: 'TIME-SPEND',
 };
 
+// Имена диаграмм
+export const DiagramName = {
+  MONEY: 'money',
+  COUNT: 'count',
+  DURATION: 'duration',
+};
+
 // Сортировка по деньгам
 export const sortMoneyDown = ([, { money: moneyOne }], [, { money: moneySecond }]) => {
   return moneySecond - moneyOne;

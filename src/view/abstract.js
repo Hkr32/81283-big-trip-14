@@ -25,6 +25,10 @@ export default class Abstract {
     return this._element;
   }
 
+  getCanvasCtx(selector) {
+    return this.getElement().querySelector(selector);
+  }
+
   removeElement() {
     this._element = null;
   }
